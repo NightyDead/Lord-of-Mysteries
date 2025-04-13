@@ -3,13 +3,13 @@
 	"id": "lord-of-mysteries",
 	"version": "${version}",
 	"name": "Lord of Mysteries",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "This is a story about the Fool",
 	"authors": [
-		"Me!"
+		"NightyDeath"
 	],
 	"contact": {
 		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"sources": "https://gitee.com/nightydeath/Lord-of-Mysteries"
 	},
 	"license": "CC0-1.0",
 	"icon": "assets/lord-of-mysteries/icon.png",
@@ -20,6 +20,9 @@
 		],
 		"fabric-datagen": [
 			"com.nightydead.lordofmysteries.LordOfMysteriesDataGenerator"
+		],
+		"client": [
+			"com.nightydead.lordofmysteries.LordOfMysteriesClinet"
 		]
 	},
 	"mixins": [
