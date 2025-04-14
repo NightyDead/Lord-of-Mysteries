@@ -25,11 +25,11 @@ public class ModItemGroups {
 //                        }).build());
 //        LordOfMysteries.LOGGER.info("Registering Mod Item Groups");
 //    }
-    public static final ItemGroup LORD_GROUP = Registry.register(Registries.ITEM_GROUP, Identifier.of(LordOfMysteries.MOD_ID, "lord_group"),
-        ItemGroup.create(null,-1).displayName(Text.translatable("itemGroup.lord_group"))
-                .icon(() -> new ItemStack(ModItems.ICEICE))
+    public static final ItemGroup MOYAO_GROUP = Registry.register(Registries.ITEM_GROUP, Identifier.of(LordOfMysteries.MOD_ID, "moyao_group"),
+        ItemGroup.create(null,-1).displayName(Text.translatable("itemGroup.moyao_group"))
+                .icon(() -> new ItemStack(ModItems.MOYAO))
                 .entries((displayContext, entries) -> {
-                    entries.add(ModItems.ICEICE);
+                    entries.add(ModItems.MOYAO);
                 }).build());
 
     public static void registerModItemGroups() {

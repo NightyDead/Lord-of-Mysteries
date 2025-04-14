@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "lord-of-mysteries:item/iceice"
+    "layer0": "lord-of-mysteries:item/moyao"
   }
 }

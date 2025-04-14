@@ -12,7 +12,7 @@ import net.minecraft.util.Identifier;
 
 public class ModItems {
 
-    public static final Item ICEICE = registerItems("iceice", new Item(new Item.Settings()));
+    public static final Item MOYAO = registerItems("moyao", new Item(new Item.Settings()));
 
     private static Item registerItems(String id, Item item){
 //        return Registry.register(Registries.ITEM, RegistryKey.of(Registries.ITEM.getKey(), Identifier.of(LordOfMysteries.MOD_ID, id)), item);
@@ -20,7 +20,7 @@ public class ModItems {
     }
 
     private static void addItemToIG(FabricItemGroupEntries fabricItemGroupEntries){
-        fabricItemGroupEntries.add(ICEICE);
+        fabricItemGroupEntries.add(MOYAO);
     }
 
     public static void registerModItems(){
