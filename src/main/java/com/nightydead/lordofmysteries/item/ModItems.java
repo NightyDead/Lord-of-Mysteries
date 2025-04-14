@@ -1,7 +1,10 @@
 package com.nightydead.lordofmysteries.item;
 
 import com.nightydead.lordofmysteries.LordOfMysteries;
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroupEntries;
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroups;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
@@ -16,7 +19,12 @@ public class ModItems {
         return Registry.register(Registries.ITEM, Identifier.of(LordOfMysteries.MOD_ID, id), item);
     }
 
+    private static void addItemToIG(FabricItemGroupEntries fabricItemGroupEntries){
+        fabricItemGroupEntries.add(ICEICE);
+    }
+
     public static void registerModItems(){
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.INGREDIENTS).register(ModItems::addItemToIG);
         LordOfMysteries.LOGGER.info("Registering Items");
     }
 }

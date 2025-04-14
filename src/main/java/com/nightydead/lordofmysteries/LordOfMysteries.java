@@ -1,5 +1,6 @@
 package com.nightydead.lordofmysteries;
 
+import com.nightydead.lordofmysteries.item.ModItemGroups;
 import com.nightydead.lordofmysteries.item.ModItems;
 import net.fabricmc.api.ModInitializer;
 
@@ -21,6 +22,7 @@ public class LordOfMysteries implements ModInitializer {
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
 		ModItems.registerModItems();
+		ModItemGroups.registerModItemGroups();
 		LOGGER.info("Hello Fabric world!");
 	}
 }

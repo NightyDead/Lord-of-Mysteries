@@ -22,7 +22,7 @@
 			"com.nightydead.lordofmysteries.LordOfMysteriesDataGenerator"
 		],
 		"client": [
-			"com.nightydead.lordofmysteries.LordOfMysteriesClinet"
+			"com.nightydead.lordofmysteries.LordOfMysteriesClient"
 		]
 	},
 	"mixins": [
