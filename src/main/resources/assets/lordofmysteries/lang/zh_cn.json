@@ -1,0 +1,19 @@
+{
+  "item.lordofmysteries.seer_characteristic": "占卜家非凡特性",
+  "item.lordofmysteries.clown_characteristic": "小丑非凡特性",
+  "item.lordofmysteries.magician_characteristic": "魔术师非凡特性",
+  "item.lordofmysteries.faceless_characteristic": "无面人非凡特性",
+  "item.lordofmysteries.marionettist_characteristic": "秘偶大师非凡特性",
+  "item.lordofmysteries.bizarro_sorcerer_characteristic": "诡秘法师非凡特性",
+  "item.lordofmysteries.scholar_of_yore_characteristic": "古代学者非凡特性",
+  "item.lordofmysteries.miracle_invoker_characteristic": "奇迹师非凡特性",
+  "item.lordofmysteries.attendant_of_mysteries_characteristic": "诡秘侍者非凡特性",
+
+  "lordofmysteries.configuration.title": "诡秘之主配置",
+  "lordofmysteries.configuration.section.lordofmysteries.common.toml": "诡秘之主配置",
+  "lordofmysteries.configuration.section.lordofmysteries.common.toml.title": "诡秘之主配置",
+  "lordofmysteries.configuration.items": "物品列表",
+  "lordofmysteries.configuration.logDirtBlock": "日志记录泥土方块",
+  "lordofmysteries.configuration.magicNumberIntroduction": "特征码文本",
+  "lordofmysteries.configuration.magicNumber": "特征码"
+}
