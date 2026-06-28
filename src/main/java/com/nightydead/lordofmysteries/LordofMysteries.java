@@ -1,5 +1,6 @@
 package com.nightydead.lordofmysteries;
 
+import com.nightydead.lordofmysteries.item.ModCreativeModeTabs;
 import com.nightydead.lordofmysteries.item.ModItems;
 import org.slf4j.Logger;
 
@@ -72,6 +73,9 @@ public class LordofMysteries {
 
         // Register the Deferred Register to the mod event bus so blocks get registered
         ModItems.register(modEventBus);
+        // Register the Deferred Register to the mod event bus so items get registered
+        ModCreativeModeTabs.register(modEventBus);
+
 //        // Register the Deferred Register to the mod event bus so blocks get registered
 //        BLOCKS.register(modEventBus);
 //        // Register the Deferred Register to the mod event bus so items get registered
@@ -109,17 +113,7 @@ public class LordofMysteries {
 //        if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS) {
 //            event.accept(EXAMPLE_BLOCK_ITEM);
 //        }
-        if (event.getTabKey() == CreativeModeTabs.INGREDIENTS) {
-            event.accept(ModItems.SEER_CHARACTERISTIC);
-            event.accept(ModItems.CLOWN_CHARACTERISTIC);
-            event.accept(ModItems.MAGICIAN_CHARACTERISTIC);
-            event.accept(ModItems.FACELESS_CHARACTERISTIC);
-            event.accept(ModItems.MARIONETTIST_CHARACTERISTIC);
-            event.accept(ModItems.BIZARRO_SORCERER_CHARACTERISTIC);
-            event.accept(ModItems.SCHOLAR_OF_YORE_CHARACTERISTIC);
-            event.accept(ModItems.MIRACLE_INVOKER_CHARACTERISTIC);
-            event.accept(ModItems.ATTENDANT_OF_MYSTERIES_CHARACTERISTIC);
-        }
+
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call

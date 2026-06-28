@@ -31,6 +31,12 @@ public class ModItems {
             ITEMS.register("characteristic/attendant_of_mysteries_characteristic", () -> new Item(new Item.Properties().fireResistant()));
     //endregion
 
+    //魔药
+    //region 占卜家途径
+    public static final DeferredItem<Item> SEER_POTION =
+            ITEMS.register("potion/seer_potion", () -> new Item(new Item.Properties().fireResistant()));
+    //endregion
+
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
     }

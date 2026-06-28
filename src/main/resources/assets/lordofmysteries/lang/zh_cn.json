@@ -9,6 +9,11 @@
   "item.lordofmysteries.characteristic.miracle_invoker_characteristic": "奇迹师非凡特性",
   "item.lordofmysteries.characteristic.attendant_of_mysteries_characteristic": "诡秘侍者非凡特性",
 
+  "item.lordofmysteries.potion.seer_potion": "占卜家魔药",
+
+  "itemGroup.characteristic_tab": "非凡特性",
+  "itemGroup.potion_tab": "魔药",
+
   "lordofmysteries.configuration.title": "诡秘之主配置",
   "lordofmysteries.configuration.section.lordofmysteries.common.toml": "诡秘之主配置",
   "lordofmysteries.configuration.section.lordofmysteries.common.toml.title": "诡秘之主配置",
