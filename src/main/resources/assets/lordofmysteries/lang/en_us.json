@@ -1,0 +1,13 @@
+{
+  "itemGroup.lordofmysteries": "Example Mod Tab",
+  "block.lordofmysteries.example_block": "Example Block",
+  "item.lordofmysteries.example_item": "Example Item",
+
+  "lordofmysteries.configuration.title": "Lord of Mysteries Configs",
+  "lordofmysteries.configuration.section.lordofmysteries.common.toml": "Lord of Mysteries Configs",
+  "lordofmysteries.configuration.section.lordofmysteries.common.toml.title": "Lord of Mysteries Configs",
+  "lordofmysteries.configuration.items": "Item List",
+  "lordofmysteries.configuration.logDirtBlock": "Log Dirt Block",
+  "lordofmysteries.configuration.magicNumberIntroduction": "Magic Number Text",
+  "lordofmysteries.configuration.magicNumber": "Magic Number"
+}
