@@ -40,5 +40,5 @@ repo/
 !**/src/**/repo/
 
 ### Others
-TEMPLATE_LICENSE.txt
-TEMPLATE_README.md
+/TEMPLATE_LICENSE.txt
+/TEMPLATE_README.md
