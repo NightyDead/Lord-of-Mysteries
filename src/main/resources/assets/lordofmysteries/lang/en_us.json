@@ -1,14 +1,13 @@
 {
-  "item.lordofmysteries.seer_characteristic": "Seer Characteristic",
-
-  "item.lordofmysteries.clown_characteristic": "Clown Characteristic",
-  "item.lordofmysteries.magician_characteristic": "Magician Characteristic",
-  "item.lordofmysteries.faceless_characteristic": "Faceless Characteristic",
-  "item.lordofmysteries.marionettist_characteristic": "Marionettist Characteristic",
-  "item.lordofmysteries.bizarro_sorcerer_characteristic": "Bizarro Sorcerer Characteristic",
-  "item.lordofmysteries.scholar_of_yore_characteristic": "Scholar of Yore Characteristic",
-  "item.lordofmysteries.miracle_invoker_characteristic": "Miracle Invoker Characteristic",
-  "item.lordofmysteries.attendant_of_mysteries_characteristic": "Attendant of Mysteries Characteristic",
+  "item.lordofmysteries.characteristic.seer_characteristic": "Seer Characteristic",
+  "item.lordofmysteries.characteristic.clown_characteristic": "Clown Characteristic",
+  "item.lordofmysteries.characteristic.magician_characteristic": "Magician Characteristic",
+  "item.lordofmysteries.characteristic.faceless_characteristic": "Faceless Characteristic",
+  "item.lordofmysteries.characteristic.marionettist_characteristic": "Marionettist Characteristic",
+  "item.lordofmysteries.characteristic.bizarro_sorcerer_characteristic": "Bizarro Sorcerer Characteristic",
+  "item.lordofmysteries.characteristic.scholar_of_yore_characteristic": "Scholar of Yore Characteristic",
+  "item.lordofmysteries.characteristic.miracle_invoker_characteristic": "Miracle Invoker Characteristic",
+  "item.lordofmysteries.characteristic.attendant_of_mysteries_characteristic": "Attendant of Mysteries Characteristic",
 
   "lordofmysteries.configuration.title": "Lord of Mysteries Configs",
   "lordofmysteries.configuration.section.lordofmysteries.common.toml": "Lord of Mysteries Configs",
