@@ -162,12 +162,11 @@ public class IndestructibleItemEntity extends ItemEntity {
 
         return dx < 2.0 && dy < 5.0 && dz < 2.0;
     }
-
-    @Override
     /**
      * 检查实体是否低于世界边界，如果是则将其传送到出生点
      * 这个方法通常用于防止玩家或实体掉出世界底部
      */
+    @Override
     public void checkBelowWorld() {
         // 检查实体当前的Y坐标是否低于世界最小建造高度
         if (this.getY() < (double)(this.level().getMinBuildHeight())) {
