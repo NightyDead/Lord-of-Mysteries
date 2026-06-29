@@ -2,7 +2,6 @@ package com.nightydead.lordofmysteries.entity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
@@ -10,6 +9,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 public class IndestructibleItemEntity extends ItemEntity {
 
@@ -69,7 +69,7 @@ public class IndestructibleItemEntity extends ItemEntity {
      * 3. 免疫一切常规伤害
      */
     @Override
-    public boolean hurt(DamageSource damageSource, float damage) {
+    public boolean hurt(@NotNull DamageSource damageSource, float damage) {
         return false;
     }
 
