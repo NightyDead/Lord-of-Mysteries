@@ -2,6 +2,7 @@ package com.nightydead.lordofmysteries.entity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
@@ -9,34 +10,27 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
 public class IndestructibleItemEntity extends ItemEntity {
 
-    // 1. 系统/存档加载使用的构造函数
     public IndestructibleItemEntity(EntityType<? extends ItemEntity> type, Level level) {
         super(type, level);
-        this.setInvulnerable(true); // 基础无敌状态
+        this.setInvulnerable(true);
         this.setUnlimitedLifetime();
     }
 
-    // 2. 玩家扔出物品时使用的构造函数
     public IndestructibleItemEntity(Level level, double x, double y, double z, ItemStack stack) {
         super(level, x, y, z, stack);
         this.setInvulnerable(true);
         this.setUnlimitedLifetime();
-        this.setAbsoluteHovering(false);
     }
 
-    /*
-     * 【核心修复】利用 1.21.1 的 DataComponent 检查物品堆内是否带有神性悬浮标记
-     * 这样不论是在客户端还是服务端，读档还是网络同步，全部由原版组件机制完美代劳，永远不会报索引越界崩溃
-     */
     public boolean isAbsoluteHovering() {
         ItemStack stack = this.getItem();
         if (stack.isEmpty()) return false;
 
-        // 检查物品堆的自定义 NBT 组件中是否含有 "IsAbsoluteHovering" 标签
         CustomData customData = stack.get(DataComponents.CUSTOM_DATA);
         if (customData != null) {
             return customData.copyTag().getBoolean("IsAbsoluteHovering");
@@ -44,13 +38,9 @@ public class IndestructibleItemEntity extends ItemEntity {
         return false;
     }
 
-    /*
-     * 【核心修复】设置绝对悬浮标记
-     */
     public void setAbsoluteHovering(boolean hovering) {
         ItemStack stack = this.getItem();
         if (!stack.isEmpty()) {
-            // 通过 1.21.1 的组件机制修改物品的自定义数据
             stack.update(DataComponents.CUSTOM_DATA, CustomData.EMPTY, customData ->
                     customData.update(tag -> {
                         if (hovering) {
@@ -60,22 +50,79 @@ public class IndestructibleItemEntity extends ItemEntity {
                         }
                     })
             );
-            // 顺便更新原版的无重力物理状态
-            this.setNoGravity(hovering);
         }
+        this.setNoGravity(hovering);
     }
 
-    /*
-     * 3. 免疫一切常规伤害
-     */
     @Override
     public boolean hurt(@NotNull DamageSource damageSource, float damage) {
         return false;
     }
 
-    /*
-     * 4. 彻底免疫虚空（无论在哪个维度掉落，一律跨界聚合，悬浮于主世界出生点）
+    @Override
+    public void onSyncedDataUpdated(@NotNull EntityDataAccessor<?> key) {
+        super.onSyncedDataUpdated(key);
+        // 数据同步时，如果满足真实的悬浮环境，立刻锁死
+        if (this.isAbsoluteHovering() && isAtOverworldSpawn()) {
+            this.setDeltaMovement(Vec3.ZERO);
+            this.setNoGravity(true);
+            this.hasImpulse = false;
+        }
+    }
+
+    @Override
+    public void tick() {
+        // 核心修复：如果是玩家扔出来的（带标记，但是不在主世界出生点），立刻彻底擦除标记，让其正常下落
+        if (this.isAbsoluteHovering() && !isAtOverworldSpawn()) {
+            this.setAbsoluteHovering(false);
+            this.setNoGravity(false);
+        }
+
+        // 真正的虚空拯救静止状态（在主世界出生点且有标记）
+        if (this.isAbsoluteHovering()) {
+            this.setDeltaMovement(Vec3.ZERO);
+            this.setNoGravity(true);
+            this.hasImpulse = false;
+            this.xo = this.getX();
+            this.yo = this.getY();
+            this.zo = this.getZ();
+        }
+
+        super.tick();
+
+        if (this.isAbsoluteHovering()) {
+            this.setDeltaMovement(Vec3.ZERO);
+            this.hasImpulse = false;
+        }
+
+        if (!this.level().isClientSide()) {
+            if (this.tickCount % 20 == 0) {
+                this.setUnlimitedLifetime();
+            }
+        }
+    }
+
+    /**
+     * 【核心辅助方法】判断当前实体是否处于主世界的出生点聚合范围内
+     * 无论客户端还是服务端都可以安全调用
      */
+    private boolean isAtOverworldSpawn() {
+        // 1. 维度必须是主世界
+        if (this.level().dimension() != Level.OVERWORLD) {
+            return false;
+        }
+
+        // 2. 获取当前维度的出生点坐标
+        BlockPos spawnPos = this.level().getSharedSpawnPos();
+
+        // 3. 检查实体的坐标是否在出生点 X, Z 轴半径 2 格、Y 轴上下 5 格的范围内
+        double dx = Math.abs(this.getX() - (spawnPos.getX() + 0.5));
+        double dy = Math.abs(this.getY() - (spawnPos.getY() + 3.0));
+        double dz = Math.abs(this.getZ() - (spawnPos.getZ() + 0.5));
+
+        return dx < 2.0 && dy < 5.0 && dz < 2.0;
+    }
+
     @Override
     public void checkBelowWorld() {
         if (this.getY() < (double)(this.level().getMinBuildHeight())) {
@@ -90,6 +137,10 @@ public class IndestructibleItemEntity extends ItemEntity {
                     double targetY = spawnPos.getY() + 3.0; // 出生点上方 3 格
                     double targetZ = spawnPos.getZ() + 0.5;
 
+                    // 激活标记
+                    this.setAbsoluteHovering(true);
+                    this.setDeltaMovement(Vec3.ZERO);
+
                     if (currentLevel.dimension() != Level.OVERWORLD) {
                         this.changeDimension(new net.minecraft.world.level.portal.DimensionTransition(
                                 overworld,
@@ -101,36 +152,6 @@ public class IndestructibleItemEntity extends ItemEntity {
                         ));
                     } else {
                         this.teleportTo(targetX, targetY, targetZ);
-                    }
-
-                    // 激活悬浮状态：直接在ItemStack里刻下标记，网络数据打包会自动同步给客户端
-                    this.setAbsoluteHovering(true);
-                    this.setDeltaMovement(0, 0, 0);
-                }
-            }
-        }
-    }
-
-    @Override
-    public void tick() {
-        // 在 super.tick() 走原版重力物理（applyGravity）前进行强行拦截
-        if (this.isAbsoluteHovering()) {
-            this.setNoGravity(true);
-            this.setDeltaMovement(0, 0, 0);
-        }
-
-        super.tick();
-
-        if (!this.level().isClientSide()) {
-            // 每秒执行一次保险
-            if (this.tickCount % 20 == 0) {
-                this.setUnlimitedLifetime(); // 续命
-
-                if (this.isAbsoluteHovering()) {
-                    this.setDeltaMovement(0, 0, 0);
-                    // 强行把它的物理运动锁死
-                    if (!this.isNoGravity()) {
-                        this.setNoGravity(true);
                     }
                 }
             }
