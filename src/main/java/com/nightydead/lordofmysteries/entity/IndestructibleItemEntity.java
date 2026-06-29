@@ -39,7 +39,7 @@ public class IndestructibleItemEntity extends ItemEntity {
         // 检查物品堆的自定义 NBT 组件中是否含有 "IsAbsoluteHovering" 标签
         CustomData customData = stack.get(DataComponents.CUSTOM_DATA);
         if (customData != null) {
-            return customData.getUnsafe().getBoolean("IsAbsoluteHovering");
+            return customData.copyTag().getBoolean("IsAbsoluteHovering");
         }
         return false;
     }
