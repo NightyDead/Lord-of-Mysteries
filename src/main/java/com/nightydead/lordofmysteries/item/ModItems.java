@@ -12,23 +12,23 @@ public class ModItems {
     //非凡特性
     //region 占卜家途径
     public static final DeferredItem<Item> SEER_CHARACTERISTIC =
-            ITEMS.register("characteristic/seer_characteristic", () -> new Item(new Item.Properties().fireResistant()));
+            ITEMS.register("characteristic/seer_characteristic", Characteristic::new);
     public static final DeferredItem<Item> CLOWN_CHARACTERISTIC =
-            ITEMS.register("characteristic/clown_characteristic", () -> new Item(new Item.Properties().fireResistant()));
+            ITEMS.register("characteristic/clown_characteristic", Characteristic::new);
     public static final DeferredItem<Item> MAGICIAN_CHARACTERISTIC =
-            ITEMS.register("characteristic/magician_characteristic", () -> new Item(new Item.Properties().fireResistant()));
+            ITEMS.register("characteristic/magician_characteristic", Characteristic::new);
     public static final DeferredItem<Item> FACELESS_CHARACTERISTIC =
-            ITEMS.register("characteristic/faceless_characteristic", () -> new Item(new Item.Properties().fireResistant()));
+            ITEMS.register("characteristic/faceless_characteristic", Characteristic::new);
     public static final DeferredItem<Item> MARIONETTIST_CHARACTERISTIC =
-            ITEMS.register("characteristic/marionettist_characteristic", () -> new Item(new Item.Properties().fireResistant()));
+            ITEMS.register("characteristic/marionettist_characteristic", Characteristic::new);
     public static final DeferredItem<Item> BIZARRO_SORCERER_CHARACTERISTIC =
-            ITEMS.register("characteristic/bizarro_sorcerer_characteristic", () -> new Item(new Item.Properties().fireResistant()));
+            ITEMS.register("characteristic/bizarro_sorcerer_characteristic", Characteristic::new);
     public static final DeferredItem<Item> SCHOLAR_OF_YORE_CHARACTERISTIC =
-            ITEMS.register("characteristic/scholar_of_yore_characteristic", () -> new Item(new Item.Properties().fireResistant()));
+            ITEMS.register("characteristic/scholar_of_yore_characteristic", Characteristic::new);
     public static final DeferredItem<Item> MIRACLE_INVOKER_CHARACTERISTIC =
-            ITEMS.register("characteristic/miracle_invoker_characteristic", () -> new Item(new Item.Properties().fireResistant()));
+            ITEMS.register("characteristic/miracle_invoker_characteristic", Characteristic::new);
     public static final DeferredItem<Item> ATTENDANT_OF_MYSTERIES_CHARACTERISTIC =
-            ITEMS.register("characteristic/attendant_of_mysteries_characteristic", () -> new Item(new Item.Properties().fireResistant()));
+            ITEMS.register("characteristic/attendant_of_mysteries_characteristic", Characteristic::new);
     //endregion
 
     //魔药
