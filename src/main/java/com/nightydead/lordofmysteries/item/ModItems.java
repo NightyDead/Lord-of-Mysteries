@@ -6,7 +6,15 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
+/**
+ * ModItems类，用于注册模组中的所有物品
+ * 包含非凡特性和魔药等物品的注册
+ */
 public class ModItems {
+    /**
+     * 使用DeferredRegister创建物品注册表
+     * LordofMysteries.MODID是模组的唯一标识符
+     */
     public static final DeferredRegister.Items ITEMS =
             DeferredRegister.createItems(LordofMysteries.MODID);
     //非凡特性

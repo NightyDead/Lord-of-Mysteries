@@ -13,6 +13,9 @@
 
   "itemGroup.characteristic_tab": "非凡特性",
   "itemGroup.potion_tab": "魔药",
+  "itemGroup.mod_block_tab": "模组方块",
+
+  "block.lordofmysteries.example_block": "示例方块",
 
   "lordofmysteries.configuration.title": "诡秘之主配置",
   "lordofmysteries.configuration.section.lordofmysteries.common.toml": "诡秘之主配置",

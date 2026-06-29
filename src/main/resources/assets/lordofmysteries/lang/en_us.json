@@ -13,6 +13,9 @@
 
   "itemGroup.characteristic_tab": "Characteristic",
   "itemGroup.potion_tab": "Potion",
+  "itemGroup.mod_block_tab": "Block",
+
+  "block.lordofmysteries.example_block": "Example Block",
 
   "lordofmysteries.configuration.title": "Lord of Mysteries Configs",
   "lordofmysteries.configuration.section.lordofmysteries.common.toml": "Lord of Mysteries Configs",

@@ -1,5 +1,6 @@
 package com.nightydead.lordofmysteries;
 
+import com.nightydead.lordofmysteries.block.ModBlocks;
 import com.nightydead.lordofmysteries.item.ModCreativeModeTabs;
 import com.nightydead.lordofmysteries.item.ModItems;
 import org.slf4j.Logger;
@@ -71,10 +72,12 @@ public class LordofMysteries {
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
 
-        // Register the Deferred Register to the mod event bus so blocks get registered
+        //注册mod物品
         ModItems.register(modEventBus);
-        // Register the Deferred Register to the mod event bus so items get registered
+        //注册mod物品栏
         ModCreativeModeTabs.register(modEventBus);
+        //注册mod方块
+        ModBlocks.register(modEventBus);
 
 //        // Register the Deferred Register to the mod event bus so blocks get registered
 //        BLOCKS.register(modEventBus);
