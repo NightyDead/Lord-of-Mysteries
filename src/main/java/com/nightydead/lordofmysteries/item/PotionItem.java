@@ -42,11 +42,6 @@ public class PotionItem extends Item {
 
     @Override
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
-        // 🌟 【DEBUG 核心】：在第一行立刻打印日志
-        if (entity instanceof Player player) {
-            String side = level.isClientSide() ? "§b[客户端]" : "§c[服务端]";
-            player.sendSystemMessage(Component.literal(side + " §a检测到魔药成功咽下下去了！进度条已走满！"));
-        }
 
         // 调用父类，这会触发 LivingEntityUseItemEvent.Finish 事件去激活你的 ModMysticalMechanics
         ItemStack resultStack = super.finishUsingItem(stack, level, entity);
