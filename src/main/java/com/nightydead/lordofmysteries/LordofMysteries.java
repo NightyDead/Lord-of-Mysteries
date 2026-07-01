@@ -1,8 +1,12 @@
 package com.nightydead.lordofmysteries;
 
 import com.nightydead.lordofmysteries.block.ModBlocks;
+import com.nightydead.lordofmysteries.data.ModAttachments;
+import com.nightydead.lordofmysteries.data.ModDataComponents;
+import com.nightydead.lordofmysteries.entity.ModEntities;
 import com.nightydead.lordofmysteries.item.ModCreativeModeTabs;
 import com.nightydead.lordofmysteries.item.ModItems;
+import com.nightydead.lordofmysteries.network.ModMessages;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -78,6 +82,14 @@ public class LordofMysteries {
         ModCreativeModeTabs.register(modEventBus);
         //注册mod方块
         ModBlocks.register(modEventBus);
+        //注册mod组件
+        ModAttachments.register(modEventBus);
+        //注册mod数据组件
+        ModDataComponents.register(modEventBus);
+        //注册mod实体
+        ModEntities.register(modEventBus);
+        //注册网络包
+        ModMessages.register(modEventBus);
 
 //        // Register the Deferred Register to the mod event bus so blocks get registered
 //        BLOCKS.register(modEventBus);

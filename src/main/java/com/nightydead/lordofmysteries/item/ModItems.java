@@ -18,6 +18,8 @@ public class ModItems {
     public static final DeferredRegister.Items ITEMS =
             DeferredRegister.createItems(LordofMysteries.MODID);
     //非凡特性
+    public static final DeferredItem<Item> AGGREGATED_CHARACTERISTIC =
+            ITEMS.register("characteristic/aggregated_characteristic", Characteristic::new);
     //region 占卜家途径
     public static final DeferredItem<Item> SEER_CHARACTERISTIC =
             ITEMS.register("characteristic/seer_characteristic", Characteristic::new);
@@ -42,7 +44,7 @@ public class ModItems {
     //魔药
     //region 占卜家途径
     public static final DeferredItem<Item> SEER_POTION =
-            ITEMS.register("potion/seer_potion", () -> new Item(new Item.Properties().fireResistant()));
+            ITEMS.register("potion/seer_potion", PotionItem::new);
     //endregion
 
     public static void register(IEventBus eventBus) {

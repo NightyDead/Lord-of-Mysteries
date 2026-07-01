@@ -1,6 +1,9 @@
 package com.nightydead.lordofmysteries.item;
 
+import com.nightydead.lordofmysteries.data.ModDataComponents;
 import com.nightydead.lordofmysteries.entity.IndestructibleItemEntity;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -8,8 +11,11 @@ import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 /**
  * Characteristic 类，继承自 Item 类，代表游戏中的一个特殊物品
@@ -17,10 +23,6 @@ import org.jetbrains.annotations.Nullable;
  */
 public class Characteristic extends Item {
 
-    /**
-     * Characteristic 类的构造函数
-     * 初始化物品的各种属性，包括堆叠限制、耐火性、稀有度以及食用后的效果
-     */
     public Characteristic() {
         super(new Item.Properties()
                 .stacksTo(1)           // 设置物品最大堆叠数量为1
@@ -32,53 +34,60 @@ public class Characteristic extends Item {
                         .saturationModifier(0.1f)        // 设置饱和度修正为0.1
                         // 添加食用后的效果：虚弱效果，持续400 ticks（20秒），等级为0
                         .effect(() -> new MobEffectInstance(MobEffects.WEAKNESS, 400, 0), 1.0F)
-                        // 添加食用后的效果：减速效果，持续400 ticks（20秒），等级为0
                         .effect(() -> new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 400, 0), 1.0F)
-                        // 添加食用后的效果：混乱效果，持续400 ticks（20秒），等级为0
-                        .effect(() -> new MobEffectInstance(MobEffects.CONFUSION, 400, 0), 1.0F)
-                        .build()  // 构建食物属性
+                        .build()
                 )
         );
     }
 
-    /**
-    * hasCustomEntity 方法，用于检查物品是否需要自定义实体
-    * 在这个方法中，我们返回 true，表示该物品始终需要自定义实体逻辑
-    * @param stack 要检查的物品堆栈
-    * @return 总是返回true，表示该物品始终需要自定义实体逻辑
-    */
     @Override
     public boolean hasCustomEntity(ItemStack stack) {
-    // 直接返回true，表示该物品始终需要自定义实体逻辑
         return true;
     }
 
-    /**
-     * 用我们不灭的 IndestructibleItemEntity 替换掉原生的 ItemEntity
-     */
     @Nullable
     @Override
     public Entity createEntity(Level level, Entity location, ItemStack stack) {
-    // 创建 IndestructibleItemEntity 实例，使用原生物品的位置和物品堆栈
         IndestructibleItemEntity customEntity = new IndestructibleItemEntity(
                 level, location.getX(), location.getY(), location.getZ(), stack
         );
-        // 复制原生物品的运动状态（抛物线、速度等）
         customEntity.setDeltaMovement(location.getDeltaMovement());
         customEntity.setPickUpDelay(40); // 扔出后 2 秒内不能自己立马吸回来
         return customEntity;
     }
 
-    /**
-     * 检查物品是否为特殊版本(foil)的方法
-     * 在Minecraft中，foil物品通常指具有特殊光泽或效果的物品，如闪卡
-     * 此方法被重写以始终返回true，表示所有该类型的物品都是foil版本
-     *
-     * @param stack 要检查的物品堆栈
-     * @return 总是返回true，表示所有物品都是foil版本
-     */
     @Override
     public boolean isFoil(ItemStack stack) {
         return true;  // 直接返回true，表明所有该类型的物品都是foil版本
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+        // 1. 尝试获取单体特性组件（如果是单个特性）
+        String pathway = stack.get(ModDataComponents.PATHWAY.get());
+        Integer seq = stack.get(ModDataComponents.SEQUENCE.get());
+
+        if (pathway != null && seq != null) {
+            tooltipComponents.add(Component.literal("途径: " + pathway).withStyle(ChatFormatting.GOLD));
+            tooltipComponents.add(Component.literal("序列: " + seq).withStyle(ChatFormatting.RED));
+        }
+
+        // 2. ✨ 核心修复：尝试获取聚合特性列表组件（如果是析出的尸体掉落物）
+        List<String> history = stack.get(ModDataComponents.AGGREGATED_FEATURES.get());
+        if (history != null && !history.isEmpty()) {
+            tooltipComponents.add(Component.literal("--- 析出的非凡特性 ---").withStyle(ChatFormatting.DARK_PURPLE));
+
+            for (String record : history) {
+                // 格式化解析 "fool:9" 这种字符串
+                String[] parts = record.split(":");
+                if (parts.length == 2) {
+                    String p = parts[0];
+                    String s = parts[1];
+                    tooltipComponents.add(Component.literal("• " + p + " 序列" + s).withStyle(ChatFormatting.GRAY));
+                }
+            }
+        }
+
+        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
     }
 }
