@@ -12,7 +12,7 @@
 
   "item.lordofmysteries.potion.seer_potion": "占卜家魔药",
 
-  "item.lordofmysteries.characteristic.main_eye_of_a_lavos_squid": "拉瓦斯乌贼的主眼",
+  "item.lordofmysteries.material.main_eye_of_a_lavos_squid": "拉瓦斯乌贼的主眼",
 
   "itemGroup.characteristic_tab": "非凡特性",
   "itemGroup.potion_tab": "魔药",
@@ -38,6 +38,9 @@
   "tooltip.lordofmysteries.characteristic.law": "非凡特性不灭定律：不会减少，不会消灭。",
 
   "message.lordofmysteries.potion.consumed": "你服下了魔药！你已晋升为 %1$s途径 · 序列 %2$d！",
+
+  "tooltip.lordofmysteries.main_material.title": "非凡魔药主材",
+  "tooltip.lordofmysteries.main_material.usage": "这是调配【%s】途径序列 %d 魔药的核心基质。",
 
   "tooltip.lordofmysteries.potion.title": "--- 调配完成的魔药 ---",
   "tooltip.lordofmysteries.potion.pathway": "对应途径: %s",

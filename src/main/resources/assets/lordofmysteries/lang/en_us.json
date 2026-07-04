@@ -12,7 +12,7 @@
 
   "item.lordofmysteries.potion.seer_potion": "Seer Potion",
 
-  "item.lordofmysteries.characteristic.main_eye_of_a_lavos_squid": "Main Eye of a Lavos Squid",
+  "item.lordofmysteries.material.main_eye_of_a_lavos_squid": "Main Eye of a Lavos Squid",
 
   "itemGroup.characteristic_tab": "CharacteristicItem",
   "itemGroup.potion_tab": "Potion",
@@ -39,6 +39,9 @@
   "tooltip.lordofmysteries.characteristic.law": "The Law of Beyonder Characteristics Conservation: Indestructible.",
 
   "message.lordofmysteries.potion.consumed": "You have consumed the potion! You are now a Sequence %2$d: %1$s.",
+
+  "tooltip.lordofmysteries.main_material.title": "Fantastic Magic Main Material",
+  "tooltip.lordofmysteries.main_material.usage": "This is the core material used to formulate the potion of the %s pathway, sequence %d.",
 
   "tooltip.lordofmysteries.potion.title": "--- Formulated Potion ---",
   "tooltip.lordofmysteries.potion.pathway": "Pathway: %s",

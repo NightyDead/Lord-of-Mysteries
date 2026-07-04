@@ -3,10 +3,12 @@ package com.nightydead.lordofmysteries.event;
 import com.nightydead.lordofmysteries.LordofMysteries;
 import com.nightydead.lordofmysteries.data.ModAttachments;
 import com.nightydead.lordofmysteries.data.ModDataComponents;
-import com.nightydead.lordofmysteries.data.PlayerData;
 import com.nightydead.lordofmysteries.entity.IndestructibleItemEntity;
+import com.nightydead.lordofmysteries.entity.IndestructiblePotionEntity;
 import com.nightydead.lordofmysteries.item.ModItems;
 import com.nightydead.lordofmysteries.item.custom.CharacteristicItem;
+import com.nightydead.lordofmysteries.item.custom.MainMaterialItem;
+import com.nightydead.lordofmysteries.item.custom.PotionItem;
 import com.nightydead.lordofmysteries.pathway.PathwayRegistry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -146,20 +148,41 @@ public class ModEventHandlers {
 
     @SubscribeEvent
     public static void onEntityJoinLevel(EntityJoinLevelEvent event) {
-        if (!event.getLevel().isClientSide() && event.getEntity() instanceof ItemEntity itemEntity) {
+        // 🛡️ 权威防护 1：只在服务端执行数据操作，杜绝客户端幽灵闪烁分身
+        if (event.getLevel().isClientSide()) return;
+
+        if (event.getEntity() instanceof ItemEntity itemEntity) {
             ItemStack stack = itemEntity.getItem();
 
-            if (stack.getItem() instanceof CharacteristicItem) {
-                // 🛡️ 稳健的环境双重锁逻辑拦截指令流
-                if (itemEntity.getOwner() == null && itemEntity.tickCount == 0) return;
-                if (itemEntity instanceof IndestructibleItemEntity) return;
+            // 🛡️ 权威防护 2：严禁套娃！已经是我们定制的不灭实体对象直接放行
+            if (itemEntity instanceof IndestructibleItemEntity) return;
+            if (itemEntity.getOwner() == null && itemEntity.tickCount == 0) return;
 
+            // 🔮 1. 拦截魔药落地：将其安全转化为专属于魔药的【不灭实体】！
+            if (stack.getItem() instanceof PotionItem) {
+                event.setCanceled(true); // 终止原版实体的加载
+
+                IndestructiblePotionEntity customPotionEntity =
+                        new IndestructiblePotionEntity(
+                                event.getLevel(), itemEntity.getX(), itemEntity.getY(), itemEntity.getZ(), stack
+                        );
+                customPotionEntity.setDeltaMovement(itemEntity.getDeltaMovement());
+                customPotionEntity.setPickUpDelay(40);
+
+                event.getLevel().addFreshEntity(customPotionEntity); // 注入世界，完美享有魔药不灭与打捞因果
+                return;
+            }
+
+            // 🔮 2. 拦截特性和主材：依旧在此处安全转化为绝对免伤的 IndestructibleItemEntity
+            if (stack.getItem() instanceof CharacteristicItem || stack.getItem() instanceof MainMaterialItem) {
                 event.setCanceled(true);
+
                 IndestructibleItemEntity customEntity = new IndestructibleItemEntity(
                         event.getLevel(), itemEntity.getX(), itemEntity.getY(), itemEntity.getZ(), stack
                 );
                 customEntity.setDeltaMovement(itemEntity.getDeltaMovement());
-                customEntity.setPickUpDelay(10);
+                customEntity.setPickUpDelay(40);
+
                 event.getLevel().addFreshEntity(customEntity);
             }
         }
