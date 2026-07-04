@@ -1,0 +1,16 @@
+{
+  "type": "lordofmysteries:entity_drop",
+  "conditions": [
+    {
+      "condition": "minecraft:entity_properties",
+      "entity": "this",
+      "predicate": {
+        "type": "minecraft:glow_squid"
+      }
+    }
+  ],
+  "item": "lordofmysteries:characteristic/main_eye_of_a_lavos_squid",
+  "pathway": "fool",
+  "sequence": 9,
+  "chance": 0.3
+}
