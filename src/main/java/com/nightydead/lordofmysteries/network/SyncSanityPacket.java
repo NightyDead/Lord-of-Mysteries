@@ -9,18 +9,20 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 /**
- * 同步理智的网络数据包
- * 负责将服务端的当前理智值高效率地同步至客户端
+ * 同步理智值的网络数据包
+ * 将服务端的当前理智值同步至客户端，供 HUD 渲染理智进度条
+ *
+ * @param sanity 当前理智值（0~100）
  */
 public record SyncSanityPacket(int sanity) implements CustomPacketPayload {
 
-    // 数据包的唯一识别 ID
+    /** 数据包的唯一标识 ID，注册名为 "lordofmysteries:sync_sanity" */
     public static final Type<SyncSanityPacket> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath("lordofmysteries", "sync_sanity"));
 
-    // 流式编解码器（用于将数据写入网络缓冲区，或者从缓冲区读取）
+    /** 流式编解码器：写入/读取一个 int 值作为理智值 */
     public static final StreamCodec<FriendlyByteBuf, SyncSanityPacket> STREAM_CODEC = StreamCodec.of(
-            (buf, packet) -> buf.writeInt(packet.sanity), // 写入
-            buf -> new SyncSanityPacket(buf.readInt())    // 读取
+            (buf, packet) -> buf.writeInt(packet.sanity),
+            buf -> new SyncSanityPacket(buf.readInt())
     );
 
     @Override
@@ -29,15 +31,23 @@ public record SyncSanityPacket(int sanity) implements CustomPacketPayload {
     }
 
     /**
-     * 🔥 核心：客户端收到这个数据包时的处理逻辑
+     * 客户端接收处理：将理智值存入 {@link ClientDataCache}
+     * 通过 enqueueWork 确保在客户端主线程执行，避免多线程并发问题
+     *
+     * @param payload 接收到的数据包
+     * @param context 网络上下文
      */
     public static void handle(SyncSanityPacket payload, IPayloadContext context) {
-        // 确保在主线程（渲染/客户端线程）执行，避免多线程并发问题
         context.enqueueWork(() -> {
-            // 🌟 将收到的理智值存入客户端本地的缓存中
             ClientDataCache.setSanity(payload.sanity());
         });
     }
+
+    /**
+     * 注册数据包到网络通道（服务端 → 客户端方向）
+     *
+     * @param registrar 网络注册器
+     */
     public static void register(PayloadRegistrar registrar) {
         registrar.playToClient(TYPE, STREAM_CODEC, SyncSanityPacket::handle);
     }

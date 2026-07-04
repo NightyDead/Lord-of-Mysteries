@@ -12,11 +12,54 @@
 
   "item.lordofmysteries.potion.seer_potion": "占卜家魔药",
 
+  "item.lordofmysteries.characteristic.main_eye_of_a_lavos_squid": "拉瓦斯乌贼的主眼",
+
   "itemGroup.characteristic_tab": "非凡特性",
   "itemGroup.potion_tab": "魔药",
   "itemGroup.mod_block_tab": "模组方块",
+  "itemGroup.potion_material_tab": "魔药材料",
 
   "block.lordofmysteries.example_block": "示例方块",
+
+  "hud.lordofmysteries.identity.mortal": "凡人",
+  "hud.lordofmysteries.identity.format": "%s 途径 (序列 %s)",
+  "hud.lordofmysteries.sanity.text": "理智: %s / 100",
+  "hud.lordofmysteries.spirituality.text": "灵性: %s / %s",
+  "hud.lordofmysteries.digestion.text": "魔药消化度: %s / 100",
+
+  "pathway.lordofmysteries.none": "凡人",
+  "pathway.lordofmysteries.fool": "占卜家（愚者）",
+  "pathway.lordofmysteries.error": "偷盗者（错误）",
+  "pathway.lordofmysteries.door": "学徒（门）",
+  "pathway.lordofmysteries.morgany": "囚犯（欲望母树）",
+
+  "tooltip.lordofmysteries.characteristic.info": "非凡途径: %s（序列 %d）",
+  "tooltip.lordofmysteries.characteristic.unknown": "未知的非凡特性",
+  "tooltip.lordofmysteries.characteristic.law": "非凡特性不灭定律：不会减少，不会消灭。",
+
+  "message.lordofmysteries.potion.consumed": "你服下了魔药！你已晋升为 %1$s途径 · 序列 %2$d！",
+
+  "tooltip.lordofmysteries.potion.title": "--- 调配完成的魔药 ---",
+  "tooltip.lordofmysteries.potion.pathway": "对应途径: %s",
+  "tooltip.lordofmysteries.potion.sequence": "目标序列: 序列 %d",
+  "tooltip.lordofmysteries.potion.empty_warning": "⚠️ 警告: 该魔药不含任何非凡神性数据（NBT/Component为空）！",
+  "tooltip.lordofmysteries.characteristic.aggregated_title": "--- 析出的非凡特性 ---",
+  "message.lordofmysteries.absorption.start": "§d[特性容纳] §f你尝试强行吸收一团聚合的生鲜非凡特性...",
+  "message.lordofmysteries.sanity.collapse.irreversible": "§4[理智崩溃] §c残存的理智未能阻挡疯狂，你的失控变得不可逆转...",
+  "message.lordofmysteries.sanity.collapse.immediate": "§4[理智崩溃] §c魔药虽然成功容纳，但你的精神防线已彻底瓦解！你因理智归零而失控了！",
+  "message.lordofmysteries.rejection.mortal": "§c[神性排异] §4凡人之躯妄图窃取高位神职，且未举行对应的 %s 晋升仪式！",
+  "message.lordofmysteries.cross_pathway.miracle": "§4[异界错乱] §e奇迹发生了！你竟然强行容纳了异途径的魔药...",
+  "message.lordofmysteries.rejection.beyonder": "§c[神性失衡] §4你没有举行晋升序列 %d 所需的完整神秘学仪式！神性当场撕裂了你的躯壳！",
+  "message.lordofmysteries.upgrade.success": "§6[神性的共鸣] §f你成功跨入了新序列 %d！",
+  "message.lordofmysteries.characteristic.stack": "§e[特性堆积] §f虽然痛苦，但你扛住了神性超载（序列 %d）。",
+  "message.lordofmysteries.contamination.loss_of_control": "§c[不可直视的高维污染] §4你失控了！",
+  "message.lordofmysteries.madness.whisper": "§5你听到了无法理解的呢喃... 意识正在消散...",
+  "message.lordofmysteries.madness.failed": "§4你的理智彻底崩溃，你成为了失控的牺牲品。",
+  "message.lordofmysteries.characteristic.dropped": "§d[特性不灭] §5你体内的非凡特性已析出。",
+  "entity.lordofmysteries.madness_zombie": "§4失控的 %s",
+
+  "message.lordofmysteries.ritual.checking": "§d[仪式检查] §f你正在试图容纳 %s途径 · 序列 %d 的神性，法则正在审核周围的环境...",
+  "message.lordofmysteries.ritual.failed.bizarro_sorcerer": "§c[仪式失败] §4你周围的“观众”（活体生物）数量仅有 %d/15 个！无法交织出足以欺骗规律的盛大戏剧，仪式未成立！",
 
   "lordofmysteries.configuration.title": "诡秘之主配置",
   "lordofmysteries.configuration.section.lordofmysteries.common.toml": "诡秘之主配置",

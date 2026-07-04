@@ -12,11 +12,55 @@
 
   "item.lordofmysteries.potion.seer_potion": "Seer Potion",
 
-  "itemGroup.characteristic_tab": "Characteristic",
+  "item.lordofmysteries.characteristic.main_eye_of_a_lavos_squid": "Main Eye of a Lavos Squid",
+
+  "itemGroup.characteristic_tab": "CharacteristicItem",
   "itemGroup.potion_tab": "Potion",
   "itemGroup.mod_block_tab": "Block",
+  "itemGroup.potion_material_tab": "Potion Material",
+
 
   "block.lordofmysteries.example_block": "Example Block",
+
+  "hud.lordofmysteries.identity.mortal": "Mortal",
+  "hud.lordofmysteries.identity.format": "%s Pathway (Sequence %s)",
+  "hud.lordofmysteries.sanity.text": "Sanity: %s / 100",
+  "hud.lordofmysteries.spirituality.text": "Spirituality: %s / %s",
+  "hud.lordofmysteries.digestion.text": "Potion Digestion: %s / 100",
+
+  "pathway.lordofmysteries.none": "None",
+  "pathway.lordofmysteries.fool": "Seer (The Fool)",
+  "pathway.lordofmysteries.error": "Marauder (The Error)",
+  "pathway.lordofmysteries.door": "Apprentice (The Door)",
+  "pathway.lordofmysteries.morgany": "Prisoner (Mother Tree of Desire)",
+
+  "tooltip.lordofmysteries.characteristic.info": "Pathway: %s (Seq %d)",
+  "tooltip.lordofmysteries.characteristic.unknown": "Unknown Beyonder Characteristic",
+  "tooltip.lordofmysteries.characteristic.law": "The Law of Beyonder Characteristics Conservation: Indestructible.",
+
+  "message.lordofmysteries.potion.consumed": "You have consumed the potion! You are now a Sequence %2$d: %1$s.",
+
+  "tooltip.lordofmysteries.potion.title": "--- Formulated Potion ---",
+  "tooltip.lordofmysteries.potion.pathway": "Pathway: %s",
+  "tooltip.lordofmysteries.potion.sequence": "Sequence: %d",
+  "tooltip.lordofmysteries.potion.empty_warning": "⚠️ Warning: This potion contains no divine attributes!",
+  "tooltip.lordofmysteries.characteristic.aggregated_title": "--- Precipitated Characteristics ---",
+  "message.lordofmysteries.absorption.start": "§d[Characteristics] §fYou try to forcefully absorb a mass of freshly raw characteristics...",
+  "message.lordofmysteries.sanity.collapse.irreversible": "§4[Sanity Collapse] §cThe remnant sanity failed to stand against the madness. Your loss of control has become irreversible...",
+  "message.lordofmysteries.sanity.collapse.immediate": "§4[Sanity Collapse] §cAlthough the potion was successfully integrated, your mental defense line completely shattered! You lost control due to zero sanity!",
+  "message.lordofmysteries.rejection.mortal": "§c[Divine Rejection] §4A mortal flesh attempts to steal a high-order position without a proper ritual for %s!",
+  "message.lordofmysteries.cross_pathway.miracle": "§4[Aberration] §eA miracle happened! You managed to forcefully contain a potion from a foreign pathway...",
+  "message.lordofmysteries.rejection.beyonder": "§c[Divine Imbalance] §4You did not perform the proper ritual for Sequence %d! The divinity tore your flesh apart instantly!",
+  "message.lordofmysteries.upgrade.success": "§6[Divine Resonance] §fYou successfully advanced to Sequence %d!",
+  "message.lordofmysteries.characteristic.stack": "§e[Attribute Stacking] §fThough excruciating, you endured the divinity overload  (Seq %d).",
+  "message.lordofmysteries.contamination.loss_of_control": "§c[Incomprehensible Contamination] §4You have lost control!",
+  "message.lordofmysteries.madness.whisper": "§5You hear incomprehensible murmurs... Consciousness fading away...",
+  "message.lordofmysteries.madness.failed": "§4Your sanity completely collapsed. You became a victim of loss of control.",
+  "message.lordofmysteries.characteristic.dropped": "§d[Conservation] §5The Beyonder Characteristics within your body have precipitated.",
+  "entity.lordofmysteries.madness_zombie": "§4Lost Control: %s",
+
+  "message.lordofmysteries.ritual.checking": "§d[Ritual Checking] §fYou are attempting to contain the divinity of %s Pathway · Sequence %d. The law is verifying the surrounding environment...",
+  "message.lordofmysteries.ritual.failed.bizarro_sorcerer": "§c[Ritual Failed] §4The number of 'spectators' (living entities) around you is only %d/15! Failed to weave a grand drama capable of deceiving the laws, ritual unestablished!",
 
   "lordofmysteries.configuration.title": "Lord of Mysteries Configs",
   "lordofmysteries.configuration.section.lordofmysteries.common.toml": "Lord of Mysteries Configs",

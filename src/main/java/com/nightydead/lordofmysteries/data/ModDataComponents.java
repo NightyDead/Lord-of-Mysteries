@@ -12,11 +12,16 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import java.util.List;
 import java.util.function.Supplier;
 
+/**
+ * 模组数据组件（DataComponent）注册类
+ * 挂载自定义神秘学数据至 ItemStack，支持 1.21.1 自动持久化与网络同步
+ */
 public class ModDataComponents {
+
     public static final DeferredRegister<DataComponentType<?>> DATA_COMPONENT_TYPES =
             DeferredRegister.create(Registries.DATA_COMPONENT_TYPE, LordofMysteries.MODID);
 
-    // 注册非凡途径组件（存字符串，如 "fool", "error"）
+    /** 非凡途径组件 - 存储对应的途径 ID（如 "fool"） */
     public static final Supplier<DataComponentType<String>> PATHWAY = DATA_COMPONENT_TYPES.register(
             "pathway", () -> DataComponentType.<String>builder()
                     .persistent(ExtraCodecs.NON_EMPTY_STRING)
@@ -24,7 +29,7 @@ public class ModDataComponents {
                     .build()
     );
 
-    // 注册序列等级组件（存整数，0-9）
+    /** 序列等级组件 - 存储序列号（0-10） */
     public static final Supplier<DataComponentType<Integer>> SEQUENCE = DATA_COMPONENT_TYPES.register(
             "sequence", () -> DataComponentType.<Integer>builder()
                     .persistent(ExtraCodecs.POSITIVE_INT)
@@ -32,7 +37,7 @@ public class ModDataComponents {
                     .build()
     );
 
-    // 最大灵性值组件
+    /** 最大灵性值组件 - 存储吸收后赋予的灵性上限 */
     public static final Supplier<DataComponentType<Integer>> MAX_SPIRITUALITY = DATA_COMPONENT_TYPES.register(
             "max_spirituality", () -> DataComponentType.<Integer>builder()
                     .persistent(Codec.INT)
@@ -40,13 +45,11 @@ public class ModDataComponents {
                     .build()
     );
 
-    // ✨ 工业级优化：为特性聚合列表添加安全传输上限限制，彻底杜绝恶意大数据包或超长历史导致客户端断开连接
+    /** 聚合特性列表组件 - 存储死亡析出的全部特性历史记录（格式 "pathway:sequence"） */
     public static final Supplier<DataComponentType<List<String>>> AGGREGATED_FEATURES = DATA_COMPONENT_TYPES.register(
             "aggregated_features", () -> DataComponentType.<List<String>>builder()
-                    .persistent(ExtraCodecs.nonEmptyList(ExtraCodecs.NON_EMPTY_STRING.listOf())) // 存档编码
-                    // 📡 1.21.1 推荐的安全写法：显式指定列表的最大反序列化长度限制（例如最大允许 256 条特性记录）
-                    // 这样写不仅语义极度清晰，还能完美享受原版底层对底层 ByteBuf 的边界防过载保护
-                    .networkSynchronized(ByteBufCodecs.STRING_UTF8.apply(ByteBufCodecs.list(256)))
+                    .persistent(ExtraCodecs.nonEmptyList(ExtraCodecs.NON_EMPTY_STRING.listOf()))
+                    .networkSynchronized(ByteBufCodecs.STRING_UTF8.apply(ByteBufCodecs.list(256))) // 防极端封包注入
                     .build()
     );
 

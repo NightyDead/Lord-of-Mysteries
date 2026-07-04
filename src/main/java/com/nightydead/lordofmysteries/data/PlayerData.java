@@ -2,17 +2,14 @@ package com.nightydead.lordofmysteries.data;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * PlayerData 用于存储玩家的非凡属性与容纳的历史特性。
- * 1.21.1 现代化全数据 Codec 驱动架构，适配 NeoForge Attachment 全量克隆。
+ * 玩家非凡数据类 - 存储并持久化玩家的全部神秘学核心属性
  */
 public class PlayerData {
 
-    // ✨ 核心映射：与下方全参数构造函数完美像素级对齐
     public static final Codec<PlayerData> CODEC = RecordCodecBuilder.create(instance ->
             instance.group(
                     Codec.INT.fieldOf("sanity").forGetter(PlayerData::getSanity),
@@ -34,11 +31,16 @@ public class PlayerData {
     private int maxSpirituality;
     private String currentPathway;
     private int currentSequence;
-    private int sdcTicks = -1; // -1 表示稳定状态，无倒计时
+    private int sdcTicks;
+    private List<String> absorbedCharacteristics;
 
-    private List<String> absorbedCharacteristics = new ArrayList<>();
-
+    /** 初始凡人状态构造 */
     public PlayerData() {
+        reset();
+    }
+
+    /** 重置所有超凡状态为凡人 */
+    public void reset() {
         this.maxSanity = 100;
         this.sanity = 100;
         this.digestion = 0.0F;
@@ -50,44 +52,29 @@ public class PlayerData {
         this.absorbedCharacteristics = new ArrayList<>();
     }
 
-    public void reset() {
-        this.sanity = 100;
-        this.maxSanity = 100;
-        this.digestion = 0.0F;
-        this.spirituality = 20;
-        this.maxSpirituality = 20;
-        this.currentPathway = "none";
-        this.currentSequence = 10;
-        this.sdcTicks = -1;
-        this.absorbedCharacteristics.clear();
-    }
-
+    /** 全参数构造函数（Codec 反序列化与深拷贝底层驱动） */
     public PlayerData(int sanity, int maxSanity, float digestion, int spirituality, int maxSpirituality,
                       String currentPathway, int currentSequence, int sdcTicks, List<String> absorbedCharacteristics) {
-        // 先初始化上限，防止边界计算崩溃
         this.maxSanity = maxSanity;
         this.maxSpirituality = maxSpirituality;
-
-        this.sanity = Math.max(0, Math.min(sanity, maxSanity));
+        this.sanity = clamp(sanity, 0, maxSanity);
         this.digestion = Math.max(0.0F, Math.min(digestion, 1.0F));
-        this.spirituality = Math.max(0, Math.min(spirituality, maxSpirituality));
+        this.spirituality = clamp(spirituality, 0, maxSpirituality);
         this.currentPathway = currentPathway;
         this.currentSequence = currentSequence;
         this.sdcTicks = sdcTicks;
         this.absorbedCharacteristics = new ArrayList<>(absorbedCharacteristics);
     }
 
-    // --- 神秘学辅助工具 ---
+    // ==================== 神秘学辅助工具方法 ====================
 
     public void addAbsorbedRecord(String pathway, int sequence) {
         this.absorbedCharacteristics.add(pathway + ":" + sequence);
     }
 
     public PlayerData copy() {
-        return new PlayerData(this.sanity, this.maxSanity, this.digestion,
-                this.spirituality, this.maxSpirituality,
-                this.currentPathway, this.currentSequence,
-                this.sdcTicks, this.absorbedCharacteristics);
+        return new PlayerData(this.sanity, this.maxSanity, this.digestion, this.spirituality, this.maxSpirituality,
+                this.currentPathway, this.currentSequence, this.sdcTicks, this.absorbedCharacteristics);
     }
 
     public List<CharacteristicRecord> getParsedCharacteristics() {
@@ -97,12 +84,16 @@ public class PlayerData {
         }).toList();
     }
 
+    private int clamp(int val, int min, int max) {
+        return Math.max(min, Math.min(val, max));
+    }
+
     public record CharacteristicRecord(String pathway, int sequence) {}
 
-    // --- Getters & Setters ---
+    // ==================== Getters & Setters ====================
 
     public int getSanity() { return this.sanity; }
-    public void setSanity(int sanity) { this.sanity = Math.max(0, Math.min(sanity, this.maxSanity)); }
+    public void setSanity(int sanity) { this.sanity = clamp(sanity, 0, this.maxSanity); }
     public int getMaxSanity() { return this.maxSanity; }
     public void setMaxSanity(int maxSanity) { this.maxSanity = maxSanity; }
 
@@ -113,7 +104,7 @@ public class PlayerData {
     public void addDigestion(float amount) { setDigestion(this.digestion + amount); }
 
     public int getSpirituality() { return this.spirituality; }
-    public void setSpirituality(int spirituality) { this.spirituality = Math.max(0, Math.min(spirituality, this.maxSpirituality)); }
+    public void setSpirituality(int spirituality) { this.spirituality = clamp(spirituality, 0, this.maxSpirituality); }
 
     public int getMaxSpiritual() { return this.maxSpirituality; }
     public void setMaxSpirituality(int maxSpirituality) { this.maxSpirituality = maxSpirituality; }

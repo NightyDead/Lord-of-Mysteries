@@ -10,21 +10,36 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 
-// This class will not load on dedicated servers. Accessing client side code from here is safe.
+/**
+ * 模组客户端入口类 - 仅在客户端（Dist.CLIENT）加载，服务端不会加载此类
+ * 负责处理客户端专属的初始化逻辑，如配置界面注册、客户端事件监听等
+ * 使用 @EventBusSubscriber 注解自动注册类中所有带 @SubscribeEvent 的静态方法到客户端事件总线
+ */
 @Mod(value = LordofMysteries.MODID, dist = Dist.CLIENT)
-// You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
 @EventBusSubscriber(modid = LordofMysteries.MODID, value = Dist.CLIENT)
 public class LordofMysteriesClient {
+
+    /**
+     * 客户端模组构造函数
+     * 注册模组的配置界面扩展点，使玩家可以在模组列表中点击"配置"按钮进入配置界面
+     *
+     * @param container 模组容器，用于注册客户端扩展点
+     */
     public LordofMysteriesClient(ModContainer container) {
-        // Allows NeoForge to create a config screen for this mod's configs.
-        // The config screen is accessed by going to the Mods screen > clicking on your mod > clicking on config.
-        // Do not forget to add translations for your config options to the en_us.json file.
+        // 注册 NeoForge 内置的配置界面工厂
+        // 玩家可以通过 Mods 界面 > 选择本模组 > 点击 Config 按钮访问配置
+        // 注意：需要在 en_us.json 等语言文件中为配置项添加对应的翻译
         container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
     }
 
+    /**
+     * 客户端初始化回调 - 在 FMLClientSetupEvent 触发时执行
+     * 用于执行仅在客户端运行的初始化逻辑（如渲染器注册、键绑定注册等）
+     *
+     * @param event 客户端初始化事件
+     */
     @SubscribeEvent
     static void onClientSetup(FMLClientSetupEvent event) {
-        // Some client setup code
         LordofMysteries.LOGGER.info("HELLO FROM CLIENT SETUP");
         LordofMysteries.LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
     }
