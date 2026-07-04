@@ -41,6 +41,7 @@ public class ModItems {
     public static final DeferredItem<Item> ATTENDANT_OF_MYSTERIES_CHARACTERISTIC = registerCharacteristic("attendant_of_mysteries_characteristic", "fool", 1, 10000);
     // ==================== 占卜家途径主材料 ====================
     public static final DeferredItem<Item> MAIN_EYE_OF_A_LAVOS_SQUID = registerMainMaterial("main_eye_of_a_lavos_squid", "fool", 9); // 占卜家途径主材料
+    public static final DeferredItem<Item> STAR_CRYSTAL = registerMainMaterial("star_crystal", "fool", 9);
 
     // ==================== 占卜家途径魔药 ====================
     public static final DeferredItem<Item> SEER_POTION = ITEMS.register("potion/seer_potion",

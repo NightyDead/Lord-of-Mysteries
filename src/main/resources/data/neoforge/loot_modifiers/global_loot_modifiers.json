@@ -1,6 +1,7 @@
 {
   "replace": false,
   "entries": [
-    "lordofmysteries:seer_material_from_glow_squid"
+    "lordofmysteries:seer_material_from_glow_squid",
+    "lordofmysteries:add_star_crystal"
   ]
 }

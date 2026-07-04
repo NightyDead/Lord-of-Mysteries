@@ -13,6 +13,7 @@
   "item.lordofmysteries.potion.seer_potion": "Seer Potion",
 
   "item.lordofmysteries.material.main_eye_of_a_lavos_squid": "Main Eye of a Lavos Squid",
+  "item.lordofmysteries.material.star_crystal": "Star Crystal",
 
   "itemGroup.characteristic_tab": "CharacteristicItem",
   "itemGroup.potion_tab": "Potion",
@@ -29,13 +30,12 @@
   "hud.lordofmysteries.digestion.text": "Potion Digestion: %s / 100",
 
   "pathway.lordofmysteries.none": "None",
-  "pathway.lordofmysteries.fool": "Seer (The Fool)",
-  "pathway.lordofmysteries.error": "Marauder (The Error)",
-  "pathway.lordofmysteries.door": "Apprentice (The Door)",
-  "pathway.lordofmysteries.morgany": "Prisoner (Mother Tree of Desire)",
+  "pathway.lordofmysteries.fool": "The Fool",
+  "pathway.lordofmysteries.error": "The Error",
+  "pathway.lordofmysteries.door": "The Door",
+  "pathway.lordofmysteries.morgany": "Mother Tree of Desire",
 
   "tooltip.lordofmysteries.characteristic.info": "Pathway: %s (Seq %d)",
-  "tooltip.lordofmysteries.characteristic.unknown": "Unknown Beyonder Characteristic",
   "tooltip.lordofmysteries.characteristic.law": "The Law of Beyonder Characteristics Conservation: Indestructible.",
 
   "message.lordofmysteries.potion.consumed": "You have consumed the potion! You are now a Sequence %2$d: %1$s.",

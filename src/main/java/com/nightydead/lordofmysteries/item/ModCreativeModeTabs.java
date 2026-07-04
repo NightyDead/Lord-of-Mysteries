@@ -73,6 +73,7 @@ public class ModCreativeModeTabs {
                     .displayItems((parameters, output) -> {
                         // 🚀 直接接受带组件的注册单例
                         output.accept(ModItems.MAIN_EYE_OF_A_LAVOS_SQUID.get());
+                        output.accept(ModItems.STAR_CRYSTAL.get());
                     }).withTabsBefore(ResourceLocation.fromNamespaceAndPath(LordofMysteries.MODID, "mod_block_tab"))
                     .build());
 
