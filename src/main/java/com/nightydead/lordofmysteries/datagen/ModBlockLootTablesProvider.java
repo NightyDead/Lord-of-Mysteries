@@ -18,6 +18,11 @@ public class ModBlockLootTablesProvider extends BlockLootSubProvider {
     @Override
     protected void generate() {
         dropSelf(ModBlocks.EXAMPLE_BLOCK.get());
+
+        dropSelf(ModBlocks.NIGHT_PERFUME_HERB.get());
+        dropSelf(ModBlocks.GOLD_MINT_HERB.get());
+        dropSelf(ModBlocks.POISON_HEMLOCK_HERB.get());
+        dropSelf(ModBlocks.DRAGON_BLOOD_HERB.get());
     }
     @Override
     protected Iterable<Block> getKnownBlocks() {

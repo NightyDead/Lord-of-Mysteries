@@ -34,6 +34,12 @@ public class ModEnUsLangProvider extends LanguageProvider {
 
         add(ModBlocks.EXAMPLE_BLOCK.get(), "Example Block");
 
+        // 添加这四个植物方块的英文翻译
+        add(ModBlocks.NIGHT_PERFUME_HERB.get(), "Night Perfume Herb");
+        add(ModBlocks.GOLD_MINT_HERB.get(), "Gold Mint Herb");
+        add(ModBlocks.POISON_HEMLOCK_HERB.get(), "Poison Hemlock");
+        add(ModBlocks.DRAGON_BLOOD_HERB.get(), "Dragon Blood Herb");
+
         add("itemGroup.characteristic_tab", "Characteristic");
         add("itemGroup.potion_tab", "Potion");
         add("itemGroup.mod_block_tab", "Block");

@@ -2,10 +2,14 @@ package com.nightydead.lordofmysteries.block;
 
 import com.nightydead.lordofmysteries.LordofMysteries;
 import com.nightydead.lordofmysteries.item.ModItems;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.FlowerBlock;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.PushReaction;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -30,6 +34,26 @@ public class ModBlocks {
     public static final DeferredBlock<Block> EXAMPLE_BLOCK =
             registerBlock("example_block", () -> new Block(BlockBehaviour.Properties.of().strength(1.5F, 6.0F)
                     .requiresCorrectToolForDrops()));
+
+    // 夜香草（吃掉或神秘学互动时可赋予幸运效果，持续5秒/100刻）
+    public static final DeferredBlock<Block> NIGHT_PERFUME_HERB =
+            registerBlock("night_perfume_herb",
+                    () -> new FlowerBlock(MobEffects.LUCK, 5.0F, BlockBehaviour.Properties.of().noCollission().instabreak().sound(SoundType.GRASS).pushReaction(PushReaction.DESTROY)));
+
+    // 金薄荷
+    public static final DeferredBlock<Block> GOLD_MINT_HERB =
+            registerBlock("gold_mint_herb",
+                    () -> new FlowerBlock(MobEffects.LUCK, 5.0F, BlockBehaviour.Properties.of().noCollission().instabreak().sound(SoundType.GRASS).pushReaction(PushReaction.DESTROY)));
+
+    // 毒堇（带有一点毒性效果）
+    public static final DeferredBlock<Block> POISON_HEMLOCK_HERB =
+            registerBlock("poison_hemlock_herb",
+                    () -> new FlowerBlock(MobEffects.POISON, 5.0F, BlockBehaviour.Properties.of().noCollission().instabreak().sound(SoundType.GRASS).pushReaction(PushReaction.DESTROY)));
+
+    // 龙血草
+    public static final DeferredBlock<Block> DRAGON_BLOOD_HERB =
+            registerBlock("dragon_blood_herb",
+                    () -> new FlowerBlock(MobEffects.LUCK, 5.0F, BlockBehaviour.Properties.of().noCollission().instabreak().sound(SoundType.GRASS).pushReaction(net.minecraft.world.level.material.PushReaction.DESTROY)));
 
     /**
      * 注册方块对应的方块物品（使方块可以被拾取和放置在物品栏中）

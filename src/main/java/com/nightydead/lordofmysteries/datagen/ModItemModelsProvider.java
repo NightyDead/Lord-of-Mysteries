@@ -28,5 +28,17 @@ public class ModItemModelsProvider extends ItemModelProvider {
         // basicItem(ModItems.STAR_CRYSTAL.get());                   // 缺少 textures/item/material/star_crystal.png
         basicItem(ModItems.PURE_WATER.get());
         basicItem(ModItems.SEER_POTION.get());
+
+        // 为植物的 BlockItem 生成 2D 物品模型，指向 textures/block/ 目录下的贴图
+        makeBlockItemModel("night_perfume_herb");
+        makeBlockItemModel("gold_mint_herb");
+        makeBlockItemModel("poison_hemlock_herb");
+        makeBlockItemModel("dragon_blood_herb");
+    }
+
+    // 辅助方法：生成 BlockItem 使用的扁平生成的物品模型
+    private void makeBlockItemModel(String name) {
+        withExistingParent(name, mcLoc("item/generated"))
+                .texture("layer0", modLoc("block/" + name));
     }
 }

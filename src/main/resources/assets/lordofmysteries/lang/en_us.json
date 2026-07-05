@@ -33,6 +33,10 @@
 
 
   "block.lordofmysteries.example_block": "Example Block",
+  "block.lordofmysteries.dragon_blood_herb": "Dragon Blood Herb",
+  "block.lordofmysteries.gold_mint_herb": "Gold Mint Herb",
+  "block.lordofmysteries.night_perfume_herb": "Night Perfume Herb",
+  "block.lordofmysteries.poison_hemlock_herb": "Poison Hemlock Herb",
 
   "hud.lordofmysteries.identity.mortal": "Mortal",
   "hud.lordofmysteries.identity.format": "%s Pathway (Sequence %s)",

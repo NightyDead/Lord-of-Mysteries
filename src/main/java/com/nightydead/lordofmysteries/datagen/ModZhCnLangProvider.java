@@ -34,6 +34,12 @@ public class ModZhCnLangProvider extends LanguageProvider {
 
         add(ModBlocks.EXAMPLE_BLOCK.get(), " 示例方块");
 
+        // 添加这四个植物方块的中文翻译
+        add(ModBlocks.NIGHT_PERFUME_HERB.get(), "夜香草");
+        add(ModBlocks.GOLD_MINT_HERB.get(), "金薄荷");
+        add(ModBlocks.POISON_HEMLOCK_HERB.get(), "毒堇");
+        add(ModBlocks.DRAGON_BLOOD_HERB.get(), "龙血草");
+
         add("itemGroup.characteristic_tab", "非凡特性");
         add("itemGroup.potion_tab", "魔药");
         add("itemGroup.mod_block_tab", "模组方块");

@@ -90,17 +90,17 @@ public class ModCreativeModeTabs {
                     }).withTabsBefore(ResourceLocation.fromNamespaceAndPath(LordofMysteries.MODID, "potion_material_tab"))
                     .build());
 
-//    public static final Supplier<CreativeModeTab> NATURAL_ITEM_TAB =
-//            CREATIVE_MODE_TABS.register("natural_item_tab", () -> CreativeModeTab.builder()
-//                    .icon(() -> new ItemStack(ModItems.NIGHT_PERFUME_HERB.get()))
-//                    .title(Component.translatable("itemGroup.natural_item_tab"))
-//                    .displayItems((parameters, output) -> {
-//                        output.accept(ModItems.NIGHT_PERFUME_HERB.get());
-//                        output.accept(ModItems.GOLD_MINT_HERB.get());
-//                        output.accept(ModItems.POISON_HEMLOCK_HERB.get());
-//                        output.accept(ModItems.DRAGON_BLOOD_HERB.get());
-//                    }).withTabsBefore(ResourceLocation.fromNamespaceAndPath(LordofMysteries.MODID, "potion_auxiliary_materials"))
-//                    .build());
+    public static final Supplier<CreativeModeTab> NATURAL_ITEM_TAB =
+            CREATIVE_MODE_TABS.register("natural_item_tab", () -> CreativeModeTab.builder()
+                    .icon(() -> new ItemStack(ModBlocks.NIGHT_PERFUME_HERB.get()))
+                    .title(Component.translatable("itemGroup.natural_item_tab"))
+                    .displayItems((parameters, output) -> {
+                        output.accept(ModBlocks.NIGHT_PERFUME_HERB.get());
+                        output.accept(ModBlocks.GOLD_MINT_HERB.get());
+                        output.accept(ModBlocks.POISON_HEMLOCK_HERB.get());
+                        output.accept(ModBlocks.DRAGON_BLOOD_HERB.get());
+                    }).withTabsBefore(ResourceLocation.fromNamespaceAndPath(LordofMysteries.MODID, "potion_auxiliary_materials"))
+                    .build());
 
     public static void register(IEventBus eventBus) {
         CREATIVE_MODE_TABS.register(eventBus);

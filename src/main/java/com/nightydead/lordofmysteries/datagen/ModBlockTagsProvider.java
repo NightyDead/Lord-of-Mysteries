@@ -20,5 +20,12 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
     protected void addTags(HolderLookup.Provider provider) {
         tag(BlockTags.MINEABLE_WITH_PICKAXE)
         .add(ModBlocks.EXAMPLE_BLOCK.get());
+
+        // 添加植物到小花标签，允许它们种植在泥土、草方块上
+        tag(BlockTags.SMALL_FLOWERS)
+                .add(ModBlocks.NIGHT_PERFUME_HERB.get())
+                .add(ModBlocks.GOLD_MINT_HERB.get())
+                .add(ModBlocks.POISON_HEMLOCK_HERB.get())
+                .add(ModBlocks.DRAGON_BLOOD_HERB.get());
     }
 }

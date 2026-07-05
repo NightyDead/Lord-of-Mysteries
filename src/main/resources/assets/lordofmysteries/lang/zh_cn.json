@@ -15,9 +15,9 @@
   "item.lordofmysteries.main_material.lava_octopus_blood": "拉瓦章鱼血液",
   "item.lordofmysteries.main_material.star_crystal": "星水晶",
 
-  "item.lordofmysteries.auxiliary_material.night_perfume_juice": "夜香水果汁",
+  "item.lordofmysteries.auxiliary_material.night_perfume_juice": "夜香草汁",
   "item.lordofmysteries.auxiliary_material.gold_mint_leaf": "金薄荷叶",
-  "item.lordofmysteries.auxiliary_material.poison_hemlock_juice": "毒水仙果汁",
+  "item.lordofmysteries.auxiliary_material.poison_hemlock_juice": "毒堇汁",
   "item.lordofmysteries.auxiliary_material.dragon_blood_powder": "龙血粉",
 
   "item.lordofmysteries.pure_water.pure_water.effect.empty": "纯水",
@@ -32,6 +32,10 @@
   "itemGroup.natural_item_tab": "自然物品",
 
   "block.lordofmysteries.example_block": "示例方块",
+  "block.lordofmysteries.dragon_blood_herb": "龙血草",
+  "block.lordofmysteries.gold_mint_herb": "金薄荷",
+  "block.lordofmysteries.night_perfume_herb": "夜香草",
+  "block.lordofmysteries.poison_hemlock_herb": "毒堇",
 
   "hud.lordofmysteries.identity.mortal": "凡人",
   "hud.lordofmysteries.identity.format": "%s 途径 (序列 %s)",

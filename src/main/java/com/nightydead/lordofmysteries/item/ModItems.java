@@ -50,15 +50,6 @@ public class ModItems {
     // ==================== 占卜家途径魔药 ====================
     public static final DeferredItem<Item> SEER_POTION = registerPotion("seer_potion", "fool", 9, 50);
 
-    // ==================== 凡俗神秘学植物 ====================
-//    public static final DeferredItem<Item> NIGHT_PERFUME_HERB = ITEMS.register("night_perfume_herb",
-//            () -> new Item(new Item.Properties())); // 夜香草（植物）
-//    public static final DeferredItem<Item> GOLD_MINT_HERB = ITEMS.register("gold_mint_herb",
-//            () -> new Item(new Item.Properties())); // 金薄荷（植物/叶子，原著魔药直接用叶子）
-//    public static final DeferredItem<Item> POISON_HEMLOCK_HERB = ITEMS.register("poison_hemlock_herb",
-//            () -> new Item(new Item.Properties())); // 毒堇（植物）
-//    public static final DeferredItem<Item> DRAGON_BLOOD_HERB = ITEMS.register("dragon_blood_herb",
-//            () -> new Item(new Item.Properties()));     // 龙血草
 
     // ==================== 魔药辅助材料 ====================
     public static final DeferredItem<Item> NIGHT_PERFUME_JUICE = registerAuxiliaryMaterial("night_perfume_juice");
