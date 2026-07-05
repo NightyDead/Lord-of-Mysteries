@@ -8,7 +8,7 @@ import com.nightydead.lordofmysteries.entity.IndestructiblePotionEntity;
 import com.nightydead.lordofmysteries.item.ModItems;
 import com.nightydead.lordofmysteries.item.custom.CharacteristicItem;
 import com.nightydead.lordofmysteries.item.custom.MainMaterialItem;
-import com.nightydead.lordofmysteries.item.custom.PotionItem;
+import com.nightydead.lordofmysteries.item.custom.ModPotionItem;
 import com.nightydead.lordofmysteries.pathway.PathwayRegistry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -159,7 +159,7 @@ public class ModEventHandlers {
             if (itemEntity.getOwner() == null && itemEntity.tickCount == 0) return;
 
             // 🔮 1. 拦截魔药落地：将其安全转化为专属于魔药的【不灭实体】！
-            if (stack.getItem() instanceof PotionItem) {
+            if (stack.getItem() instanceof ModPotionItem) {
                 event.setCanceled(true); // 终止原版实体的加载
 
                 IndestructiblePotionEntity customPotionEntity =

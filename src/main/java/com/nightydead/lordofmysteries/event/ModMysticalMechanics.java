@@ -4,7 +4,7 @@ import com.nightydead.lordofmysteries.LordofMysteries;
 import com.nightydead.lordofmysteries.data.ModAttachments;
 import com.nightydead.lordofmysteries.data.ModDataComponents;
 import com.nightydead.lordofmysteries.data.PlayerData;
-import com.nightydead.lordofmysteries.item.custom.PotionItem;
+import com.nightydead.lordofmysteries.item.custom.ModPotionItem;
 import com.nightydead.lordofmysteries.network.*;
 import com.nightydead.lordofmysteries.ritual.MysticalRitualManager;
 import net.minecraft.network.chat.Component;
@@ -63,7 +63,7 @@ public class ModMysticalMechanics {
         // 提取动态灵性上限逻辑
         int maxSp = stack.has(ModDataComponents.MAX_SPIRITUALITY.get()) ?
         stack.get(ModDataComponents.MAX_SPIRITUALITY.get()) : calculateDefaultMaxSp(itemSequence);
-        boolean isPotion = stack.getItem() instanceof PotionItem;
+        boolean isPotion = stack.getItem() instanceof ModPotionItem;
 
         executeAbsorptionLogic(player, data, itemPathway, itemSequence, maxSp, isPotion);
     }

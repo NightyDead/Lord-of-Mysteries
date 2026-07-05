@@ -6,7 +6,7 @@
       "loot_table_id": "minecraft:blocks/amethyst_cluster"
     }
   ],
-  "item": "lordofmysteries:material/star_crystal",
+  "item": "lordofmysteries:main_material/star_crystal",
   "pathway": "fool",
   "sequence": 9,
   "chance": 0.30

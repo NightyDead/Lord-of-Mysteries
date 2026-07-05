@@ -20,13 +20,13 @@ import java.util.List;
 /**
  * 魔药物品类 - 虚空原样打捞与物理碎裂双全版
  */
-public class PotionItem extends Item {
+public class ModPotionItem extends Item {
 
-    public PotionItem(Properties customProperties) {
+    public ModPotionItem(Properties customProperties) {
         super(customProperties);
     }
 
-    public PotionItem() {
+    public ModPotionItem() {
         this(createDefaultProperties());
     }
 

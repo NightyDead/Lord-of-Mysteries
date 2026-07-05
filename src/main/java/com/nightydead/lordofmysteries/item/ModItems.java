@@ -4,7 +4,8 @@ import com.nightydead.lordofmysteries.LordofMysteries;
 import com.nightydead.lordofmysteries.data.ModDataComponents;
 import com.nightydead.lordofmysteries.item.custom.CharacteristicItem;
 import com.nightydead.lordofmysteries.item.custom.MainMaterialItem;
-import com.nightydead.lordofmysteries.item.custom.PotionItem;
+import com.nightydead.lordofmysteries.item.custom.ModPotionItem;
+import com.nightydead.lordofmysteries.item.custom.PureWaterItem;
 import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
@@ -40,15 +41,39 @@ public class ModItems {
     public static final DeferredItem<Item> MIRACLE_INVOKER_CHARACTERISTIC = registerCharacteristic("miracle_invoker_characteristic", "fool", 2, 5000);
     public static final DeferredItem<Item> ATTENDANT_OF_MYSTERIES_CHARACTERISTIC = registerCharacteristic("attendant_of_mysteries_characteristic", "fool", 1, 10000);
     // ==================== 占卜家途径主材料 ====================
-    public static final DeferredItem<Item> MAIN_EYE_OF_A_LAVOS_SQUID = registerMainMaterial("main_eye_of_a_lavos_squid", "fool", 9); // 占卜家途径主材料
+    public static final DeferredItem<Item> LAVA_OCTOPUS_BLOOD = registerMainMaterial("lava_octopus_blood", "fool", 9); // 占卜家途径主材料
     public static final DeferredItem<Item> STAR_CRYSTAL = registerMainMaterial("star_crystal", "fool", 9);
 
+    // ==================== 纯水（炼药基底溶剂） ====================
+    public static final DeferredItem<Item> PURE_WATER = registerPureWater("pure_water");
+
     // ==================== 占卜家途径魔药 ====================
-    public static final DeferredItem<Item> SEER_POTION = ITEMS.register("potion/seer_potion",
-            () -> new PotionItem(PotionItem.createDefaultProperties()
-                    .component(ModDataComponents.PATHWAY.get(), "fool")
-                    .component(ModDataComponents.SEQUENCE.get(), 9)
-                    .component(ModDataComponents.MAX_SPIRITUALITY.get(), 50)));
+    public static final DeferredItem<Item> SEER_POTION = registerPotion("seer_potion", "fool", 9, 50);
+
+    // ==================== 凡俗神秘学植物 ====================
+//    public static final DeferredItem<Item> NIGHT_PERFUME_HERB = ITEMS.register("night_perfume_herb",
+//            () -> new Item(new Item.Properties())); // 夜香草（植物）
+//    public static final DeferredItem<Item> GOLD_MINT_HERB = ITEMS.register("gold_mint_herb",
+//            () -> new Item(new Item.Properties())); // 金薄荷（植物/叶子，原著魔药直接用叶子）
+//    public static final DeferredItem<Item> POISON_HEMLOCK_HERB = ITEMS.register("poison_hemlock_herb",
+//            () -> new Item(new Item.Properties())); // 毒堇（植物）
+//    public static final DeferredItem<Item> DRAGON_BLOOD_HERB = ITEMS.register("dragon_blood_herb",
+//            () -> new Item(new Item.Properties()));     // 龙血草
+
+    // ==================== 魔药辅助材料 ====================
+    public static final DeferredItem<Item> NIGHT_PERFUME_JUICE = registerAuxiliaryMaterial("night_perfume_juice");
+    public static final DeferredItem<Item> GOLD_MINT_LEAF = registerAuxiliaryMaterial("gold_mint_leaf");
+    public static final DeferredItem<Item> POISON_HEMLOCK_JUICE = registerAuxiliaryMaterial("poison_hemlock_juice");
+    public static final DeferredItem<Item> DRAGON_BLOOD_POWDER = registerAuxiliaryMaterial("dragon_blood_powder");
+
+
+    private static DeferredItem<Item> registerPureWater(String name) {
+        return ITEMS.register("pure_water/" + name, () -> new PureWaterItem(PureWaterItem.createDefaultProperties()));
+    }
+
+    private static DeferredItem<Item> registerAuxiliaryMaterial(String name) {
+        return ITEMS.register("auxiliary_material/" + name, () -> new Item(new Item.Properties()));
+    }
 
     /**
      * 🧠 工业级封装快捷注册函数：全自动注入特定途径、序列与灵性组件，并登记进特性映射表
@@ -69,7 +94,7 @@ public class ModItems {
      * 🧠 🚀 新增封装：全自动注册魔药主材，并自动登记到主材寻址字典中
      */
     private static DeferredItem<Item> registerMainMaterial(String name, String pathway, int sequence) {
-        return ITEMS.register("material/" + name, () -> new MainMaterialItem(
+        return ITEMS.register("main_material/" + name, () -> new MainMaterialItem(
                 MainMaterialItem.createDefaultProperties()
                         .component(ModDataComponents.PATHWAY.get(), pathway)
                         .component(ModDataComponents.SEQUENCE.get(), sequence)
@@ -80,8 +105,8 @@ public class ModItems {
      * 🧠 工业级封装快捷注册函数：全自动注入特定途径、序列与灵性组件，并登记进魔药映射表
      */
     private static DeferredItem<Item> registerPotion(String name, String pathway, int sequence, int maxSpiritual) {
-        DeferredItem<Item> item = ITEMS.register("potion/" + name, () -> new PotionItem(
-                PotionItem.createDefaultProperties()
+        DeferredItem<Item> item = ITEMS.register("potion/" + name, () -> new ModPotionItem(
+                ModPotionItem.createDefaultProperties()
                         .component(ModDataComponents.PATHWAY.get(), pathway)
                         .component(ModDataComponents.SEQUENCE.get(), sequence)
                         .component(ModDataComponents.MAX_SPIRITUALITY.get(), maxSpiritual)

@@ -12,13 +12,24 @@
 
   "item.lordofmysteries.potion.seer_potion": "Seer Potion",
 
-  "item.lordofmysteries.material.main_eye_of_a_lavos_squid": "Main Eye of a Lavos Squid",
-  "item.lordofmysteries.material.star_crystal": "Star Crystal",
+  "item.lordofmysteries.main_material.lava_octopus_blood": "Lava Octopus Blood",
+  "item.lordofmysteries.main_material.star_crystal": "Star Crystal",
+
+  "item.lordofmysteries.auxiliary_material.night_perfume_juice": "Night Perfume Juice",
+  "item.lordofmysteries.auxiliary_material.gold_mint_leaf": "Gold Mint Leaf",
+  "item.lordofmysteries.auxiliary_material.poison_hemlock_juice": "Poison Hemlock Juice",
+  "item.lordofmysteries.auxiliary_material.dragon_blood_powder": "Dragon Blood Powder",
+
+  "item.lordofmysteries.pure_water.pure_water.effect.empty": "Pure Water",
+
+  "tooltip.lordofmysteries.pure_water.desc": "The base solvent for potion brewing, pure and impurity-free.",
 
   "itemGroup.characteristic_tab": "CharacteristicItem",
   "itemGroup.potion_tab": "Potion",
   "itemGroup.mod_block_tab": "Block",
-  "itemGroup.potion_material_tab": "Potion Material",
+  "itemGroup.potion_main_material_tab": "Potion Main Material",
+  "itemGroup.potion_auxiliary_materials_tab": "Potion Auxiliary Materials",
+  "itemGroup.natural_item_tab": "Natural Item",
 
 
   "block.lordofmysteries.example_block": "Example Block",

@@ -1,6 +1,6 @@
 package com.nightydead.lordofmysteries.entity;
 
-import com.nightydead.lordofmysteries.item.custom.PotionItem;
+import com.nightydead.lordofmysteries.item.custom.ModPotionItem;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.EntityType;
@@ -40,7 +40,7 @@ public class IndestructiblePotionEntity extends IndestructibleItemEntity {
 
         if (!damageSource.is(DamageTypes.IN_WALL)) {
             this.markHurt();
-            if (this.getItem().getItem() instanceof PotionItem potion) {
+            if (this.getItem().getItem() instanceof ModPotionItem potion) {
                 potion.onDestroyed(this, damageSource);
             }
             this.discard();

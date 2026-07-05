@@ -4,7 +4,7 @@
   "item.lordofmysteries.characteristic.magician_characteristic": "魔术师非凡特性",
   "item.lordofmysteries.characteristic.faceless_characteristic": "无面人非凡特性",
   "item.lordofmysteries.characteristic.marionettist_characteristic": "秘偶大师非凡特性",
-  "item.lordofmysteries.characteristic.bizarro_sorcerer_characteristic": "诡秘法师非凡特性",
+  "item.lordofmysteries.characteristic.bizarro_sorcerer_characteristic": "诡法师非凡特性",
   "item.lordofmysteries.characteristic.scholar_of_yore_characteristic": "古代学者非凡特性",
   "item.lordofmysteries.characteristic.miracle_invoker_characteristic": "奇迹师非凡特性",
   "item.lordofmysteries.characteristic.attendant_of_mysteries_characteristic": "诡秘侍者非凡特性",
@@ -12,13 +12,24 @@
 
   "item.lordofmysteries.potion.seer_potion": "占卜家魔药",
 
-  "item.lordofmysteries.material.main_eye_of_a_lavos_squid": "拉瓦斯乌贼的主眼",
-  "item.lordofmysteries.material.star_crystal": "星水晶",
+  "item.lordofmysteries.main_material.lava_octopus_blood": "拉瓦章鱼血液",
+  "item.lordofmysteries.main_material.star_crystal": "星水晶",
+
+  "item.lordofmysteries.auxiliary_material.night_perfume_juice": "夜香水果汁",
+  "item.lordofmysteries.auxiliary_material.gold_mint_leaf": "金薄荷叶",
+  "item.lordofmysteries.auxiliary_material.poison_hemlock_juice": "毒水仙果汁",
+  "item.lordofmysteries.auxiliary_material.dragon_blood_powder": "龙血粉",
+
+  "item.lordofmysteries.pure_water.pure_water.effect.empty": "纯水",
+
+  "tooltip.lordofmysteries.pure_water.desc": "炼药的基础溶剂，纯净无杂质。",
 
   "itemGroup.characteristic_tab": "非凡特性",
   "itemGroup.potion_tab": "魔药",
   "itemGroup.mod_block_tab": "模组方块",
-  "itemGroup.potion_material_tab": "魔药材料",
+  "itemGroup.potion_main_material_tab": "魔药主材",
+  "itemGroup.potion_auxiliary_materials_tab": "魔药辅材",
+  "itemGroup.natural_item_tab": "自然物品",
 
   "block.lordofmysteries.example_block": "示例方块",
 

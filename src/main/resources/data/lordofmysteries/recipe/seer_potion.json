@@ -1,0 +1,15 @@
+{
+  "type": "lordofmysteries:potion_brewing",
+  "auxiliary_ingredients": [
+    { "item": "lordofmysteries:pure_water" },
+    { "item": "lordofmysteries:auxiliary_material/night_perfume_juice" },
+    { "item": "lordofmysteries:auxiliary_material/poison_hemlock_juice" },
+    { "item": "lordofmysteries:auxiliary_material/gold_mint_leaf" }
+  ],
+  "main_ingredients_order": [
+    { "item": "lordofmysteries:main_material/star_crystal" },
+    { "item": "lordofmysteries:main_eye_of_a_lavos_squid" }
+  ],
+  "pathway": "fool",
+  "sequence": 9
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "lordofmysteries:item/auxiliary_material/dragon_blood_powder"
+  }
+}

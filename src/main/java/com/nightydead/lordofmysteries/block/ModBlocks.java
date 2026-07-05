@@ -28,7 +28,8 @@ public class ModBlocks {
      * 硬度 1.5（挖掘时间参考石头），爆炸抗性 6.0
      */
     public static final DeferredBlock<Block> EXAMPLE_BLOCK =
-            registerBlock("example_block", () -> new Block(BlockBehaviour.Properties.of().strength(1.5F, 6.0F)));
+            registerBlock("example_block", () -> new Block(BlockBehaviour.Properties.of().strength(1.5F, 6.0F)
+                    .requiresCorrectToolForDrops()));
 
     /**
      * 注册方块对应的方块物品（使方块可以被拾取和放置在物品栏中）

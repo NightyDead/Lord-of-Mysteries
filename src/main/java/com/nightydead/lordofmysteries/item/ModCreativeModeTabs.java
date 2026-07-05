@@ -68,14 +68,39 @@ public class ModCreativeModeTabs {
 
     public static final Supplier<CreativeModeTab> POTION_MATERIAL_TAB =
             CREATIVE_MODE_TABS.register("potion_material_tab", () -> CreativeModeTab.builder()
-                    .icon(() -> new ItemStack(ModItems.MAIN_EYE_OF_A_LAVOS_SQUID.get()))
-                    .title(Component.translatable("itemGroup.potion_material_tab"))
+                    .icon(() -> new ItemStack(ModItems.LAVA_OCTOPUS_BLOOD.get()))
+                    .title(Component.translatable("itemGroup.potion_main_material_tab"))
                     .displayItems((parameters, output) -> {
                         // 🚀 直接接受带组件的注册单例
-                        output.accept(ModItems.MAIN_EYE_OF_A_LAVOS_SQUID.get());
+                        output.accept(ModItems.LAVA_OCTOPUS_BLOOD.get());
                         output.accept(ModItems.STAR_CRYSTAL.get());
                     }).withTabsBefore(ResourceLocation.fromNamespaceAndPath(LordofMysteries.MODID, "mod_block_tab"))
                     .build());
+
+    public static final Supplier<CreativeModeTab> POTION_AUXILIARY_MATERIALS =
+            CREATIVE_MODE_TABS.register("potion_auxiliary_materials", () -> CreativeModeTab.builder()
+                    .icon(() -> new ItemStack(ModItems.NIGHT_PERFUME_JUICE.get()))
+                    .title(Component.translatable("itemGroup.potion_auxiliary_materials_tab"))
+                    .displayItems((parameters, output) -> {
+                        output.accept(ModItems.NIGHT_PERFUME_JUICE.get());
+                        output.accept(ModItems.PURE_WATER.get());
+                        output.accept(ModItems.POISON_HEMLOCK_JUICE.get());
+                        output.accept(ModItems.GOLD_MINT_LEAF.get());
+                        output.accept(ModItems.DRAGON_BLOOD_POWDER.get());
+                    }).withTabsBefore(ResourceLocation.fromNamespaceAndPath(LordofMysteries.MODID, "potion_material_tab"))
+                    .build());
+
+//    public static final Supplier<CreativeModeTab> NATURAL_ITEM_TAB =
+//            CREATIVE_MODE_TABS.register("natural_item_tab", () -> CreativeModeTab.builder()
+//                    .icon(() -> new ItemStack(ModItems.NIGHT_PERFUME_HERB.get()))
+//                    .title(Component.translatable("itemGroup.natural_item_tab"))
+//                    .displayItems((parameters, output) -> {
+//                        output.accept(ModItems.NIGHT_PERFUME_HERB.get());
+//                        output.accept(ModItems.GOLD_MINT_HERB.get());
+//                        output.accept(ModItems.POISON_HEMLOCK_HERB.get());
+//                        output.accept(ModItems.DRAGON_BLOOD_HERB.get());
+//                    }).withTabsBefore(ResourceLocation.fromNamespaceAndPath(LordofMysteries.MODID, "potion_auxiliary_materials"))
+//                    .build());
 
     public static void register(IEventBus eventBus) {
         CREATIVE_MODE_TABS.register(eventBus);
