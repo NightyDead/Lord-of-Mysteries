@@ -30,9 +30,19 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 import java.util.ArrayList;
 
+/**
+ * 模组事件处理器类
+ * 统一处理玩家登录、Tick调度、死亡、掉落物、实体生成等核心游戏事件
+ * 通过 @EventBusSubscriber 注解自动注册到模组事件总线
+ */
 @EventBusSubscriber(modid = LordofMysteries.MODID)
 public class ModEventHandlers {
 
+    /**
+     * 玩家登录事件 - 在玩家加入世界时同步所有神秘学数据到客户端
+     *
+     * @param event 玩家登录事件
+     */
     @SubscribeEvent
     public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
         if (!event.getEntity().level().isClientSide && event.getEntity() instanceof ServerPlayer serverPlayer) {
@@ -40,6 +50,12 @@ public class ModEventHandlers {
         }
     }
 
+    /**
+     * 玩家 Tick 事件 - 每游戏刻执行神秘学系统调度
+     * 包括：序列能力调度、失控倒计时、自然恢复机制、定期数据同步
+     *
+     * @param event 玩家 Tick 事件
+     */
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Post event) {
         Player player = event.getEntity();
@@ -92,6 +108,11 @@ public class ModEventHandlers {
         }
     }
 
+    /**
+     * 玩家死亡事件 - 处理失控倒计时触发的疯狂怪物生成
+     *
+     * @param event 生物死亡事件
+     */
     @SubscribeEvent
     public static void onPlayerDeath(LivingDeathEvent event) {
         if (event.getEntity() instanceof Player player && !player.level().isClientSide()) {
@@ -104,6 +125,11 @@ public class ModEventHandlers {
         }
     }
 
+    /**
+     * 玩家掉落物事件 - 玩家死亡时析出已吸收的非凡特性为聚合特性物品
+     *
+     * @param event 生物掉落物事件
+     */
     @SubscribeEvent
     public static void onPlayerDrops(LivingDropsEvent event) {
         if (!(event.getEntity() instanceof Player player) || player.level().isClientSide() || player.isAlive()) return;
@@ -121,6 +147,11 @@ public class ModEventHandlers {
         }
     }
 
+    /**
+     * 玩家克隆事件 - 在玩家重生或维度转移时复制神秘学数据到新实例
+     *
+     * @param event 玩家克隆事件
+     */
     @SubscribeEvent
     public static void onPlayerClone(PlayerEvent.Clone event) {
         var oldData = event.getOriginal().getData(ModAttachments.PLAYER_DATA.get());
@@ -146,6 +177,12 @@ public class ModEventHandlers {
         }
     }
 
+    /**
+     * 实体加入世界事件 - 拦截原版物品实体，将其替换为自定义不灭实体
+     * 魔药、非凡特性、魔药主材均在此处转化为不可破坏的实体形式
+     *
+     * @param event 实体加入世界事件
+     */
     @SubscribeEvent
     public static void onEntityJoinLevel(EntityJoinLevelEvent event) {
         // 🛡️ 权威防护 1：只在服务端执行数据操作，杜绝客户端幽灵闪烁分身
@@ -188,6 +225,12 @@ public class ModEventHandlers {
         }
     }
 
+    /**
+     * 生成疯狂怪物 - 玩家失控倒计时归零后在玩家位置生成强化僵尸
+     * 怪物拥有力量提升和速度提升的永久效果，并显示玩家名称
+     *
+     * @param player 失控的玩家
+     */
     private static void spawnMadnessMonster(Player player) {
         Level level = player.level();
         Zombie zombie = EntityType.ZOMBIE.create(level);

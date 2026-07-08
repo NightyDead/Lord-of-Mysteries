@@ -33,6 +33,12 @@ public class CharacteristicItem extends Item {
         super(createDefaultProperties());
     }
 
+    /**
+     * 创建非凡特性的默认属性
+     * 不可堆叠、抗火、罕见品质、可食用并附带负面效果
+     *
+     * @return 配置好的物品属性
+     */
     public static Properties createDefaultProperties() {
         return new Item.Properties()
                 .stacksTo(1)
@@ -48,9 +54,14 @@ public class CharacteristicItem extends Item {
                 );
     }
 
+    /** 非凡特性始终显示附魔光芒效果 */
     @Override
     public boolean isFoil(ItemStack stack) { return true; }
 
+    /**
+     * 添加物品悬停提示文本
+     * 显示特性所属途径、序列信息，以及聚合特性的历史记录列表
+     */
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
         String pathway = stack.get(ModDataComponents.PATHWAY.get());

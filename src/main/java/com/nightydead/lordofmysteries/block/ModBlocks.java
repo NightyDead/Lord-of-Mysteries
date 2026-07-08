@@ -35,22 +35,22 @@ public class ModBlocks {
             registerBlock("example_block", () -> new Block(BlockBehaviour.Properties.of().strength(1.5F, 6.0F)
                     .requiresCorrectToolForDrops()));
 
-    // 夜香草（吃掉或神秘学互动时可赋予幸运效果，持续5秒/100刻）
+    /** 夜香草 - 吃掉或神秘学互动时可赋予幸运效果，持续5秒/100刻 */
     public static final DeferredBlock<Block> NIGHT_PERFUME_HERB =
             registerBlock("night_perfume_herb",
                     () -> new FlowerBlock(MobEffects.LUCK, 5.0F, BlockBehaviour.Properties.of().noCollission().instabreak().sound(SoundType.GRASS).pushReaction(PushReaction.DESTROY)));
 
-    // 金薄荷
+    /** 金薄荷 - 魔药辅助材料来源植物 */
     public static final DeferredBlock<Block> GOLD_MINT_HERB =
             registerBlock("gold_mint_herb",
                     () -> new FlowerBlock(MobEffects.LUCK, 5.0F, BlockBehaviour.Properties.of().noCollission().instabreak().sound(SoundType.GRASS).pushReaction(PushReaction.DESTROY)));
 
-    // 毒堇（带有一点毒性效果）
+    /** 毒堇 - 带有一点毒性效果的魔药辅助材料来源植物 */
     public static final DeferredBlock<Block> POISON_HEMLOCK_HERB =
             registerBlock("poison_hemlock_herb",
                     () -> new FlowerBlock(MobEffects.POISON, 5.0F, BlockBehaviour.Properties.of().noCollission().instabreak().sound(SoundType.GRASS).pushReaction(PushReaction.DESTROY)));
 
-    // 龙血草
+    /** 龙血草 - 魔药辅助材料来源植物 */
     public static final DeferredBlock<Block> DRAGON_BLOOD_HERB =
             registerBlock("dragon_blood_herb",
                     () -> new FlowerBlock(MobEffects.LUCK, 5.0F, BlockBehaviour.Properties.of().noCollission().instabreak().sound(SoundType.GRASS).pushReaction(net.minecraft.world.level.material.PushReaction.DESTROY)));

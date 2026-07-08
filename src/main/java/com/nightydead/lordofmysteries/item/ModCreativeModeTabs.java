@@ -15,11 +15,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
+/**
+ * 创造模式标签页注册类
+ * 管理模组所有创造模式标签页的注册与内容填充
+ * 每个标签页对应游戏中一个独立的物品分组，方便玩家浏览和查找模组物品
+ */
 public class ModCreativeModeTabs {
 
+    /** 创造模式标签页延迟注册表，使用模组 ID 作为命名空间 */
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS =
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, LordofMysteries.MODID);
 
+    /** 非凡特性标签页 - 包含所有序列的非凡特性和聚合特性 */
     public static final Supplier<CreativeModeTab> CHARACTERISTIC_TAB =
             CREATIVE_MODE_TABS.register("characteristic_tab", () -> CreativeModeTab.builder()
                     .icon(() -> new ItemStack(ModItems.SEER_CHARACTERISTIC.get()))
@@ -46,6 +53,7 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.ATTENDANT_OF_MYSTERIES_CHARACTERISTIC.get());
                     }).build());
 
+    /** 魔药标签页 - 包含所有途径的魔药 */
     public static final Supplier<CreativeModeTab> POTION_TAB =
             CREATIVE_MODE_TABS.register("potion_tab", () -> CreativeModeTab.builder()
                     .icon(() -> new ItemStack(ModItems.SEER_POTION.get()))
@@ -57,6 +65,7 @@ public class ModCreativeModeTabs {
                     .withTabsBefore(ResourceLocation.fromNamespaceAndPath(LordofMysteries.MODID, "characteristic_tab"))
                     .build());
 
+    /** 模组方块标签页 - 包含模组自定义方块 */
     public static final Supplier<CreativeModeTab> MOD_BLOCK_TAB =
             CREATIVE_MODE_TABS.register("mod_block_tab", () -> CreativeModeTab.builder()
                     .icon(() -> new ItemStack(ModBlocks.EXAMPLE_BLOCK.get()))
@@ -66,6 +75,7 @@ public class ModCreativeModeTabs {
                     }).withTabsBefore(ResourceLocation.fromNamespaceAndPath(LordofMysteries.MODID, "potion_tab"))
                     .build());
 
+    /** 魔药主材标签页 - 包含拉瓦章鱼血液、星水晶等核心合成材料 */
     public static final Supplier<CreativeModeTab> POTION_MATERIAL_TAB =
             CREATIVE_MODE_TABS.register("potion_material_tab", () -> CreativeModeTab.builder()
                     .icon(() -> new ItemStack(ModItems.LAVA_OCTOPUS_BLOOD.get()))
@@ -77,6 +87,7 @@ public class ModCreativeModeTabs {
                     }).withTabsBefore(ResourceLocation.fromNamespaceAndPath(LordofMysteries.MODID, "mod_block_tab"))
                     .build());
 
+    /** 魔药辅助材料标签页 - 包含纯水、夜香果汁等辅助合成材料 */
     public static final Supplier<CreativeModeTab> POTION_AUXILIARY_MATERIALS =
             CREATIVE_MODE_TABS.register("potion_auxiliary_materials", () -> CreativeModeTab.builder()
                     .icon(() -> new ItemStack(ModItems.NIGHT_PERFUME_JUICE.get()))
@@ -90,6 +101,7 @@ public class ModCreativeModeTabs {
                     }).withTabsBefore(ResourceLocation.fromNamespaceAndPath(LordofMysteries.MODID, "potion_material_tab"))
                     .build());
 
+    /** 自然物品标签页 - 包含四种神秘学草药方块 */
     public static final Supplier<CreativeModeTab> NATURAL_ITEM_TAB =
             CREATIVE_MODE_TABS.register("natural_item_tab", () -> CreativeModeTab.builder()
                     .icon(() -> new ItemStack(ModBlocks.NIGHT_PERFUME_HERB.get()))
@@ -102,6 +114,11 @@ public class ModCreativeModeTabs {
                     }).withTabsBefore(ResourceLocation.fromNamespaceAndPath(LordofMysteries.MODID, "potion_auxiliary_materials"))
                     .build());
 
+    /**
+     * 将创造模式标签页注册表绑定到模组事件总线
+     *
+     * @param eventBus 模组事件总线
+     */
     public static void register(IEventBus eventBus) {
         CREATIVE_MODE_TABS.register(eventBus);
     }

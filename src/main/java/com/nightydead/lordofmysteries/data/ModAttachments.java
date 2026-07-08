@@ -14,6 +14,7 @@ import java.util.function.Supplier;
  */
 public class ModAttachments {
 
+    /** Attachment 类型延迟注册表，使用模组 ID 作为命名空间 */
     public static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES =
             DeferredRegister.create(NeoForgeRegistries.Keys.ATTACHMENT_TYPES, LordofMysteries.MODID);
 

@@ -25,6 +25,7 @@ import java.util.function.Supplier;
  */
 public class BlockLootModifier extends LootModifier {
 
+    /** Codec 编解码器：用于序列化/反序列化方块掉落修饰器的配置数据 */
     public static final Supplier<MapCodec<BlockLootModifier>> CODEC = Suppliers.memoize(() ->
             RecordCodecBuilder.mapCodec(inst -> codecStart(inst)
                     .and(BuiltInRegistries.ITEM.byNameCodec().fieldOf("item").forGetter(m -> m.item))
@@ -35,11 +36,24 @@ public class BlockLootModifier extends LootModifier {
             )
     );
 
+    /** 掉落物品引用 */
     private final Item item;
+    /** 掉落物品对应的途径 ID */
     private final String pathway;
+    /** 掉落物品对应的序列号 */
     private final int sequence;
+    /** 基础掉落概率 */
     private final float chance;
 
+    /**
+     * 构造方块掉落修饰器
+     *
+     * @param conditionsIn 战利品条件数组
+     * @param item         掉落物品
+     * @param pathway      途径 ID
+     * @param sequence     序列号
+     * @param chance       基础掉落概率
+     */
     public BlockLootModifier(LootItemCondition[] conditionsIn, Item item, String pathway, int sequence, float chance) {
         super(conditionsIn);
         this.item = item;

@@ -12,11 +12,29 @@ import net.neoforged.neoforge.common.conditions.IConditionBuilder;
 
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * 配方数据提供者
+ * 负责为模组物品生成合成配方 JSON 文件
+ * 实现 IConditionBuilder 接口以支持条件配方的构建
+ */
 public class ModRecipesProvider extends RecipeProvider implements IConditionBuilder {
+
+    /**
+     * 构造配方提供者
+     *
+     * @param output     数据包输出目录
+     * @param registries 注册表查找器的异步Future
+     */
     public ModRecipesProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, registries);
     }
 
+    /**
+     * 注册所有合成配方
+     * 当前包含金薄荷方块分解为金薄荷叶的无形状配方
+     *
+     * @param recipeOutput 配方输出接口，用于保存生成的配方
+     */
     @Override
     protected void buildRecipes(RecipeOutput recipeOutput) {
         // 金薄荷方块 → 2个金薄荷叶（无形状配方）

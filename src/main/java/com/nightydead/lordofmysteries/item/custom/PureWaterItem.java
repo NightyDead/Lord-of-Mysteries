@@ -19,6 +19,12 @@ public class PureWaterItem extends PotionItem {
         super(properties);
     }
 
+    /**
+     * 创建纯水的默认属性
+     * 不可堆叠
+     *
+     * @return 配置好的物品属性
+     */
     public static Properties createDefaultProperties() {
         return new Properties()
                 .stacksTo(1);

@@ -21,10 +21,12 @@ import java.util.function.Supplier;
  */
 public class ModItems {
 
+    /** 物品延迟注册表，使用模组 ID 作为命名空间 */
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(LordofMysteries.MODID);
 
-    // 🧠 核心扩展：自动化检索字典 (途径 -> (序列 -> 物品))
+    /** 特性物品检索字典 (途径 -> (序列 -> 物品))，用于动态查找对应途径和序列的特性物品 */
     public static final Map<String, Map<Integer, Supplier<Item>>> CHARACTERISTIC_MAP = new HashMap<>();
+    /** 魔药物品检索字典 (途径 -> (序列 -> 物品))，用于动态查找对应途径和序列的魔药 */
     public static final Map<String, Map<Integer, Supplier<Item>>> POTION_MAP = new HashMap<>();
 
     // ==================== 聚合非凡特性 ====================
@@ -41,7 +43,9 @@ public class ModItems {
     public static final DeferredItem<Item> MIRACLE_INVOKER_CHARACTERISTIC = registerCharacteristic("miracle_invoker_characteristic", "fool", 2, 5000);
     public static final DeferredItem<Item> ATTENDANT_OF_MYSTERIES_CHARACTERISTIC = registerCharacteristic("attendant_of_mysteries_characteristic", "fool", 1, 10000);
     // ==================== 占卜家途径主材料 ====================
-    public static final DeferredItem<Item> LAVA_OCTOPUS_BLOOD = registerMainMaterial("lava_octopus_blood", "fool", 9); // 占卜家途径主材料
+    /** 拉瓦章鱼血液 - 占卜家途径序列 9 魔药主材 */
+    public static final DeferredItem<Item> LAVA_OCTOPUS_BLOOD = registerMainMaterial("lava_octopus_blood", "fool", 9);
+    /** 星水晶 - 占卜家途径序列 9 魔药主材 */
     public static final DeferredItem<Item> STAR_CRYSTAL = registerMainMaterial("star_crystal", "fool", 9);
 
     // ==================== 纯水（炼药基底溶剂） ====================
@@ -58,10 +62,22 @@ public class ModItems {
     public static final DeferredItem<Item> DRAGON_BLOOD_POWDER = registerAuxiliaryMaterial("dragon_blood_powder");
 
 
+    /**
+     * 注册纯水产品 - 炼药锅的基础溶剂
+     *
+     * @param name 物品注册名
+     * @return 注册后的 DeferredItem 引用
+     */
     private static DeferredItem<Item> registerPureWater(String name) {
         return ITEMS.register("pure_water/" + name, () -> new PureWaterItem(PureWaterItem.createDefaultProperties()));
     }
 
+    /**
+     * 注册魔药辅助材料物品
+     *
+     * @param name 物品注册名
+     * @return 注册后的 DeferredItem 引用
+     */
     private static DeferredItem<Item> registerAuxiliaryMaterial(String name) {
         return ITEMS.register("auxiliary_material/" + name, () -> new Item(new Item.Properties()));
     }
@@ -114,6 +130,11 @@ public class ModItems {
         return seqMap != null && seqMap.containsKey(sequence) ? seqMap.get(sequence).get() : null;
     }
 
+    /**
+     * 将物品注册表绑定到模组事件总线
+     *
+     * @param eventBus 模组事件总线
+     */
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
     }

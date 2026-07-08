@@ -18,6 +18,13 @@ import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 @EventBusSubscriber(modid = LordofMysteries.MODID, value = Dist.CLIENT)
 public class ModHUDOverlay {
 
+    /**
+     * HUD 覆盖层渲染回调
+     * 在原版 TAB_LIST 层渲染后叠加神秘学状态面板
+     * 包括身份看板、理智度、灵性值、魔药消化度等核心状态显示
+     *
+     * @param event GUI 层渲染事件
+     */
     @SubscribeEvent
     public static void onRenderOverlay(RenderGuiLayerEvent.Post event) {
         // 仅在原版 TAB_LIST 层渲染后叠加，确保不会因虚空图层触发重复重绘

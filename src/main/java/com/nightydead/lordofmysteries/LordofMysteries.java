@@ -115,10 +115,6 @@ public class LordofMysteries {
      * @param event 创造模式标签页内容构建事件
      */
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
-//        if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS) {
-//            event.accept(EXAMPLE_BLOCK_ITEM);
-//        }
-
     }
 
     /**

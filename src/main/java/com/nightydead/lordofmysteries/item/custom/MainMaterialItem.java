@@ -24,6 +24,12 @@ public class MainMaterialItem extends Item {
         super(createDefaultProperties());
     }
 
+    /**
+     * 创建魔药主材的默认属性
+     * 不可堆叠、抗火、稀有品质
+     *
+     * @return 配置好的物品属性
+     */
     public static Properties createDefaultProperties() {
         return new Item.Properties()
                 .stacksTo(1)
@@ -31,11 +37,16 @@ public class MainMaterialItem extends Item {
                 .rarity(Rarity.RARE);
     }
 
+    /** 主材始终显示附魔光芒效果 */
     @Override
     public boolean isFoil(ItemStack stack) {
         return true; // 让主材在物品栏里同样散发超凡的附魔光芒
     }
 
+    /**
+     * 添加物品悬停提示文本
+     * 显示主材所属途径和序列信息
+     */
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
         String pathway = stack.get(ModDataComponents.PATHWAY.get());

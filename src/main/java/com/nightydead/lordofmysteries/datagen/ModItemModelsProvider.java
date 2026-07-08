@@ -6,11 +6,27 @@ import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
+/**
+ * 物品模型数据提供者
+ * 负责为模组中所有物品生成物品模型 JSON 文件
+ * 使用 generated 模型（2D扁平图标）作为默认物品模型类型
+ */
 public class ModItemModelsProvider extends ItemModelProvider {
+
+    /**
+     * 构造物品模型提供者
+     *
+     * @param output             数据包输出目录
+     * @param existingFileHelper 已有文件检查器，用于验证纹理资源是否存在
+     */
     public ModItemModelsProvider(PackOutput output, ExistingFileHelper existingFileHelper) {
         super(output, LordofMysteries.MODID, existingFileHelper);
     }
 
+    /**
+     * 注册所有物品的模型
+     * 注释掉的物品表示纹理文件尚未准备就绪，待添加纹理后取消注释即可
+     */
     @Override
     protected void registerModels() {
         // TODO: 为以下物品添加纹理后取消注释以生成模型

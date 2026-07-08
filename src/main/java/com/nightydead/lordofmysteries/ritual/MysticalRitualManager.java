@@ -22,6 +22,7 @@ public class MysticalRitualManager {
 
     /**
      * 检查玩家是否满足晋升目标序列的仪式条件
+     * 序列 5 及以上无需仪式，序列 4 及以下必须满足特定仪式
      *
      * @param player    待晋升的玩家
      * @param data      玩家的非凡数据

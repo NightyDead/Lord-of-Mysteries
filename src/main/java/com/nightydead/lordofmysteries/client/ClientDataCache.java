@@ -27,32 +27,46 @@ public class ClientDataCache {
 
     // ==================== 理智 (Sanity) ====================
 
+    /** 设置当前理智值 */
     public static void setSanity(int value) { sanity = value; }
+    /** 获取当前理智值 */
     public static int getSanity() { return sanity; }
 
     // ==================== 灵性 (Spirituality) ====================
 
+    /** 设置当前灵性值 */
     public static void setSpirituality(int value) { spirituality = value; }
+    /** 获取当前灵性值 */
     public static int getSpirituality() { return spirituality; }
 
+    /** 设置灵性上限值 */
     public static void setMaxSpirituality(int value) { maxSpirituality = value; }
+    /** 获取灵性上限值 */
     public static int getMaxSpirituality() { return maxSpirituality; }
 
     // ==================== 消化度 (Digestion) ====================
 
+    /** 设置魔药消化进度 */
     public static void setDigestion(float value) { digestion = value; }
+    /** 获取魔药消化进度 */
     public static float getDigestion() { return digestion; }
 
     // ==================== 灵视状态 (Spirit Vision) ====================
 
+    /** 设置灵视界面开关状态 */
     public static void setSpiritVisionActive(boolean active) { spiritVisionActive = active; }
+    /** 获取灵视界面是否激活 */
     public static boolean isSpiritVisionActive() { return spiritVisionActive; }
 
     // ==================== 途径与序列 (Pathway & Sequence) ====================
 
+    /** 设置当前途径 ID */
     public static void setPathway(String value) { pathway = value; }
+    /** 获取当前途径 ID */
     public static String getPathway() { return pathway; }
 
+    /** 设置当前序列号 */
     public static void setSequence(int value) { sequence = value; }
+    /** 获取当前序列号 */
     public static int getSequence() { return sequence; }
 }

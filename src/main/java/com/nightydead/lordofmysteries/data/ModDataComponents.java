@@ -18,6 +18,7 @@ import java.util.function.Supplier;
  */
 public class ModDataComponents {
 
+    /** 数据组件类型延迟注册表，使用模组 ID 作为命名空间 */
     public static final DeferredRegister<DataComponentType<?>> DATA_COMPONENT_TYPES =
             DeferredRegister.create(Registries.DATA_COMPONENT_TYPE, LordofMysteries.MODID);
 
@@ -53,6 +54,11 @@ public class ModDataComponents {
                     .build()
     );
 
+    /**
+     * 将数据组件注册表绑定到模组事件总线
+     *
+     * @param eventBus 模组事件总线
+     */
     public static void register(IEventBus eventBus) {
         DATA_COMPONENT_TYPES.register(eventBus);
     }

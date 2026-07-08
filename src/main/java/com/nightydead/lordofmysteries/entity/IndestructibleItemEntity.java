@@ -21,25 +21,50 @@ import org.jetbrains.annotations.NotNull;
  */
 public class IndestructibleItemEntity extends ItemEntity {
 
+    /** 是否正在进行维度转移的标志位，防止重复触发 */
     private boolean isTransferringDimension = false;
+    /** 运行时悬浮状态标志 */
     private boolean isHoveringRuntime = false;
+    /** 悬浮状态是否已从 NBT 初始化 */
     private boolean isHoveringInitialized = false;
 
+    /**
+     * 构造不可破坏物品实体（通过 EntityType 创建）
+     *
+     * @param type  实体类型
+     * @param level 所在世界
+     */
     public IndestructibleItemEntity(EntityType<? extends ItemEntity> type, Level level) {
         super(type, level);
         initIndestructible();
     }
 
+    /**
+     * 构造不可破坏物品实体（通过坐标创建）
+     *
+     * @param level 所在世界
+     * @param x     X 坐标
+     * @param y     Y 坐标
+     * @param z     Z 坐标
+     * @param stack 携带的物品堆栈
+     */
     public IndestructibleItemEntity(Level level, double x, double y, double z, ItemStack stack) {
         super(level, x, y, z, stack);
         initIndestructible();
     }
 
+    /** 初始化不可破坏属性：设置无敌状态和无限生命周期 */
     private void initIndestructible() {
         this.setInvulnerable(true);
         this.setUnlimitedLifetime();
     }
 
+    /**
+     * 获取实体的绝对悬浮状态
+     * 首次调用时从物品 NBT 中读取悬浮标志并缓存
+     *
+     * @return 是否处于悬浮状态
+     */
     public boolean isAbsoluteHovering() {
         if (this.isHoveringInitialized) return this.isHoveringRuntime;
 
@@ -55,6 +80,12 @@ public class IndestructibleItemEntity extends ItemEntity {
         return false;
     }
 
+    /**
+     * 设置实体的悬浮状态
+     * 同时更新运行时标志、重力状态和物品 NBT 数据
+     *
+     * @param hovering 是否启用悬浮
+     */
     public void setAbsoluteHovering(boolean hovering) {
         this.isHoveringRuntime = hovering;
         this.isHoveringInitialized = true;
@@ -122,6 +153,7 @@ public class IndestructibleItemEntity extends ItemEntity {
         this.zo = this.getZ();
     }
 
+    /** 检测实体是否位于主世界出生点附近（用于判断是否应悬浮） */
     private boolean isAtOverworldSpawn() {
         if (this.level().dimension() != Level.OVERWORLD) return false;
         BlockPos spawnPos = this.level().getSharedSpawnPos();

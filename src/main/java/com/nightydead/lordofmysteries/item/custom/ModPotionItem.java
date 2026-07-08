@@ -30,6 +30,12 @@ public class ModPotionItem extends Item {
         this(createDefaultProperties());
     }
 
+    /**
+     * 创建魔药的默认属性
+     * 不可堆叠、史诗品质、使用后残留玻璃瓶
+     *
+     * @return 配置好的物品属性
+     */
     public static Properties createDefaultProperties() {
         return new Item.Properties()
                 .stacksTo(1)
@@ -79,18 +85,29 @@ public class ModPotionItem extends Item {
         }
     }
 
+    /**
+     * 魔药使用动作 - 开始饮用动画
+     *
+     * @return 消耗动作结果
+     */
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         player.startUsingItem(hand);
         return InteractionResultHolder.consume(player.getItemInHand(hand));
     }
 
+    /** 魔药使用动画类型为“饮用” */
     @Override
     public UseAnim getUseAnimation(ItemStack stack) { return UseAnim.DRINK; }
 
+    /** 魔药饮用时长为 32 tick（1.6秒） */
     @Override
     public int getUseDuration(ItemStack stack, LivingEntity entity) { return 32; }
 
+    /**
+     * 魔药饮用完成回调
+     * 消耗魔药并返还空玻璃瓶
+     */
     @Override
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
         ItemStack resultStack = super.finishUsingItem(stack, level, entity);
@@ -108,9 +125,14 @@ public class ModPotionItem extends Item {
         return resultStack;
     }
 
+    /** 魔药始终显示附魔光芒效果 */
     @Override
     public boolean isFoil(ItemStack stack) { return true; }
 
+    /**
+     * 添加物品悬停提示文本
+     * 显示魔药所属途径和序列信息
+     */
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
         String pathway = stack.get(ModDataComponents.PATHWAY.get());

@@ -14,6 +14,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
  */
 public class ModEntities {
 
+    /** 实体类型延迟注册表，使用模组 ID 作为命名空间 */
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES =
             DeferredRegister.create(Registries.ENTITY_TYPE, LordofMysteries.MODID);
 
@@ -29,6 +30,11 @@ public class ModEntities {
                     .build("indestructible_item")
             );
 
+    /**
+     * 将实体类型注册表绑定到模组事件总线
+     *
+     * @param eventBus 模组事件总线
+     */
     public static void register(IEventBus eventBus) {
         ENTITY_TYPES.register(eventBus);
     }

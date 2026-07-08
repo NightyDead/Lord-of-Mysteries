@@ -27,6 +27,12 @@ import java.util.List;
 @EventBusSubscriber(modid = LordofMysteries.MODID)
 public class ModMysticalMechanics {
 
+    /**
+     * 玩家使用物品完成事件 - 处理非凡特性/魔药的吸收逻辑
+     * 区分聚合特性物品和单体特性/魔药物品两种吸收场景
+     *
+     * @param event 物品使用完成事件
+     */
     @SubscribeEvent
     public static void onAbsorbCharacteristic(LivingEntityUseItemEvent.Finish event) {
         if (!(event.getEntity() instanceof Player player) || player.level().isClientSide()) return;
@@ -68,6 +74,17 @@ public class ModMysticalMechanics {
         executeAbsorptionLogic(player, data, itemPathway, itemSequence, maxSp, isPotion);
     }
 
+    /**
+     * 执行吸收逻辑的核心方法
+     * 根据玩家当前状态判断是凡人首次吸收还是非凡者继续吸收
+     *
+     * @param player  吸收玩家
+     * @param data    玩家非凡数据
+     * @param pathway 吸收的途径 ID
+     * @param seq     吸收的序列号
+     * @param maxSp   灵性上限值
+     * @param isPotion 是否为魔药（而非原始特性）
+     */
     private static void executeAbsorptionLogic(Player player, PlayerData data, String pathway, int seq, int maxSp, boolean isPotion) {
         int ticksBefore = data.getSdcTicks();
 
@@ -97,6 +114,10 @@ public class ModMysticalMechanics {
         }
     }
 
+    /**
+     * 处理凡人首次吸收的逻辑
+     * 检查仪式条件、计算成功概率、写入超凡状态
+     */
     private static void handleNormalHumanAbsorption(Player player, PlayerData data, String pathway, int seq, int maxSp, boolean isPotion) {
         if (!MysticalRitualManager.checkAndConsumeRitual(player, data, pathway, seq)) {
             String pathKey = "pathway." + LordofMysteries.MODID + "." + pathway.toLowerCase();
@@ -123,6 +144,10 @@ public class ModMysticalMechanics {
         }
     }
 
+    /**
+     * 处理非凡者继续吸收的逻辑
+     * 区分三种场景：跨途径吸收、同途径晋升、同序列堆叠
+     */
     private static void handleBeyonderAbsorption(Player player, PlayerData data, String pathway, int seq, int maxSp, boolean isPotion) {
         // 场景 1：跨途径吸收
         if (!data.getCurrentPathway().equals(pathway)) {
@@ -172,6 +197,10 @@ public class ModMysticalMechanics {
         }
     }
 
+    /**
+     * 处理污染与失控逻辑
+     * 赋予负面效果、启动失控倒计时
+     */
     private static void handleContaminationAndMadness(Player player, PlayerData data, String pathway, int sequence) {
         player.sendSystemMessage(Component.translatable("message.lordofmysteries.contamination.loss_of_control"));
         player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 300, 0));
@@ -180,10 +209,12 @@ public class ModMysticalMechanics {
         data.setSdcTicks(300); // 15 秒失控倒计时
     }
 
+    /** 根据序列号计算默认灵性上限：序列越低（等级越高）灵性上限越高 */
     private static int calculateDefaultMaxSp(int seq) {
         return (10 - seq) * 50;
     }
 
+    /** 根据序列号计算理智惩罚值：序列越低惩罚越重 */
     private static int calculateSanityPenalty(int seq) {
         return switch (seq) {
             case 9, 8, 7 -> 40;
@@ -193,6 +224,7 @@ public class ModMysticalMechanics {
         };
     }
 
+    /** 根据序列号计算魔药吸收成功率：序列越低成功率越低 */
     private static double calculatePotionSuccessChance(int seq) {
         return switch (seq) {
             case 9 -> 1.0;
@@ -204,6 +236,7 @@ public class ModMysticalMechanics {
         };
     }
 
+    /** 根据序列号计算原始特性吸收成功率：极低，远低于魔药 */
     private static double calculateRawCharacteristicChance(int seq) {
         return switch (seq) {
             case 9 -> 0.20;
@@ -214,6 +247,13 @@ public class ModMysticalMechanics {
         };
     }
 
+    /**
+     * 同步所有神秘学数据到客户端
+     * 发送理智、灵性、消化度、途径/序列四个数据包
+     *
+     * @param player 目标玩家
+     * @param data   玩家非凡数据
+     */
     public static void syncAllData(ServerPlayer player, PlayerData data) {
         PacketDistributor.sendToPlayer(player, new SyncSanityPacket(data.getSanity()));
         PacketDistributor.sendToPlayer(player, new SyncSpiritualityPacket(data.getSpirituality(), data.getMaxSpiritual()));
