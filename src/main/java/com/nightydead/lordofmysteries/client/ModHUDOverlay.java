@@ -38,9 +38,23 @@ public class ModHUDOverlay {
         GuiGraphics graphics = event.getGuiGraphics();
         Font font = mc.font;
 
+        // 获取当前游戏屏幕的实际动态宽高
+        int width = graphics.guiWidth();
+        int height = graphics.guiHeight();
+
+        // ==================== 👁️ 灵视全屏幽蓝滤镜特效 ====================
+        // 从客户端本地数据缓存中提取灵视激活状态
+        if (ClientDataCache.isSpiritVisionActive()) {
+            // 使用 fill 绘制一个覆盖全屏幕的半透明灵界幽蓝色（2F 前两位为十六进制透明度，后六位为幽蓝色）
+            graphics.fill(0, 0, width, height, 0x2F003366);
+
+            // 可选：在屏幕中央或顶部淡淡渲染一句占卜家的密传，增强代入感（这里选择左上角）
+            graphics.drawString(font, Component.literal("👁 灵视状态已激活 (Spirit Vision)"), 10, 10, 0x55FFFFFF, true);
+        }
+
         // 设定神秘学面板的左上角绝对基准坐标
         int startX = 10;
-        int currentY = graphics.guiHeight() - 85;
+        int currentY = height - 85; // 改用局部变量 height，自适应屏幕
 
         // 提取当前的非凡身份缓存数据
         String pathway = ClientDataCache.getPathway();
@@ -50,16 +64,16 @@ public class ModHUDOverlay {
         Component identityText;
         int identityColor;
 
-        boolean isMortal = pathway == null || pathway.equalsIgnoreCase("none") || sequence >= 10;
+        boolean isMortal = pathway == null || pathway.equalsIgnoreCase("none") || sequence >= 10; //
 
         if (isMortal) {
-            identityText = Component.translatable("hud.lordofmysteries.identity.mortal");
+            identityText = Component.translatable("hud.lordofmysteries.identity.mortal"); //
             identityColor = 0xFFAAAAAA; // 凡人为朴素灰色
         } else {
             // 通过统一的语言包 key 动态获取途径名称，完全解耦硬编码
-            String translationKey = "pathway." + LordofMysteries.MODID + "." + pathway.toLowerCase();
-            Component pathwayName = Component.translatable(translationKey);
-            identityText = Component.translatable("hud.lordofmysteries.identity.format", pathwayName, sequence);
+            String translationKey = "pathway." + LordofMysteries.MODID + "." + pathway.toLowerCase(); //
+            Component pathwayName = Component.translatable(translationKey); //
+            identityText = Component.translatable("hud.lordofmysteries.identity.format", pathwayName, sequence); //
 
             // 根据序列层级赋予尊贵的颜色变化
             if (sequence <= 4) {
@@ -72,49 +86,54 @@ public class ModHUDOverlay {
             }
         }
 
-        graphics.drawString(font, identityText, startX, currentY, identityColor, true);
+        // 如果开启了灵视，在左下角身份牌上方再加一行亮青色小字
+        if (ClientDataCache.isSpiritVisionActive() && !isMortal) {
+            graphics.drawString(font, Component.literal("§b⚡ 灵视运行中"), startX, currentY - 12, 0xFF55FFFF, true);
+        }
+
+        graphics.drawString(font, identityText, startX, currentY, identityColor, true); //
         currentY += 15; // 步进安全下移
 
         // ==================== 🧠 1. 理智度 (Sanity) ====================
-        int sanity = ClientDataCache.getSanity();
-        int sanityColor = sanity <= 30 ? 0xFFAA0000 : (sanity <= 70 ? 0xFFFFAA00 : 0xFFFFFFFF);
+        int sanity = ClientDataCache.getSanity(); //
+        int sanityColor = sanity <= 30 ? 0xFFAA0000 : (sanity <= 70 ? 0xFFFFAA00 : 0xFFFFFFFF); //
 
-        graphics.drawString(font, Component.translatable("hud.lordofmysteries.sanity.text", sanity), startX, currentY, sanityColor, true);
+        graphics.drawString(font, Component.translatable("hud.lordofmysteries.sanity.text", sanity), startX, currentY, sanityColor, true); //
 
         // 绘制理智血条
-        graphics.fill(startX, currentY + 10, startX + 100, currentY + 14, 0x55555555);
-        int sanityBarWidth = Math.max(0, Math.min(100, sanity));
-        graphics.fill(startX, currentY + 10, startX + sanityBarWidth, currentY + 14, 0xFFFF5555);
-        currentY += 18;
+        graphics.fill(startX, currentY + 10, startX + 100, currentY + 14, 0x55555555); //
+        int sanityBarWidth = Math.max(0, Math.min(100, sanity)); //
+        graphics.fill(startX, currentY + 10, startX + sanityBarWidth, currentY + 14, 0xFFFF5555); //
+        currentY += 18; //
 
         // ==================== 🔮 2. 灵性值 与 魔药消化度 ====================
-        int spirituality = ClientDataCache.getSpirituality();
-        int maxSpirituality = ClientDataCache.getMaxSpirituality();
+        int spirituality = ClientDataCache.getSpirituality(); //
+        int maxSpirituality = ClientDataCache.getMaxSpirituality(); //
 
         // 🔮 只有当拥有最大灵性上限时（即成为了非凡者），才渲染接下来的超凡专属属性
         if (maxSpirituality > 0 && !isMortal) {
-            graphics.drawString(font, Component.translatable("hud.lordofmysteries.spirituality.text", spirituality, maxSpirituality), startX, currentY, 0xFFCC55FF, true);
+            graphics.drawString(font, Component.translatable("hud.lordofmysteries.spirituality.text", spirituality, maxSpirituality), startX, currentY, 0xFFCC55FF, true); //
 
             // 绘制灵性条
-            graphics.fill(startX, currentY + 10, startX + 100, currentY + 14, 0x55555555);
-            float spPercent = (float) spirituality / maxSpirituality;
-            int spBarWidth = (int) (Math.max(0.0F, Math.min(1.0F, spPercent)) * 100);
-            graphics.fill(startX, currentY + 10, startX + spBarWidth, currentY + 14, 0xFF5555FF);
-            currentY += 18;
+            graphics.fill(startX, currentY + 10, startX + 100, currentY + 14, 0x55555555); //
+            float spPercent = (float) spirituality / maxSpirituality; //
+            int spBarWidth = (int) (Math.clamp(spPercent, 0.0F, 1.0F) * 100); //
+            graphics.fill(startX, currentY + 10, startX + spBarWidth, currentY + 14, 0xFF5555FF); //
+            currentY += 18; //
 
             // ==================== 🌟 3. 魔药消化度 (仅非凡者可见) ====================
-            float digestion = ClientDataCache.getDigestion();
+            float digestion = ClientDataCache.getDigestion(); //
             // 刚喝完魔药时 digestion 为 0.0F，转换成整数即为 0
-            int digestionValue = (int) (digestion * 100);
-            int digColor = digestion >= 1.0F ? 0xFFFFFF55 : 0xFF55FFFF;
+            int digestionValue = (int) (digestion * 100); //
+            int digColor = digestion >= 1.0F ? 0xFFFFFF55 : 0xFF55FFFF; //
 
             // 完美重构：改写为 "魔药消化度: X / 100" 的硬核数值形式显示
-            graphics.drawString(font, Component.translatable("hud.lordofmysteries.digestion.text", digestionValue), startX, currentY, digColor, true);
+            graphics.drawString(font, Component.translatable("hud.lordofmysteries.digestion.text", digestionValue), startX, currentY, digColor, true); //
 
             // 绘制消化条
-            graphics.fill(startX, currentY + 10, startX + 100, currentY + 14, 0x55555555);
-            int digBarWidth = (int) (Math.max(0.0F, Math.min(1.0F, digestion)) * 100);
-            graphics.fill(startX, currentY + 10, startX + digBarWidth, currentY + 14, digColor);
+            graphics.fill(startX, currentY + 10, startX + 100, currentY + 14, 0x55555555); //
+            int digBarWidth = (int) (Math.clamp(digestion, 0.0F, 1.0F) * 100); //
+            graphics.fill(startX, currentY + 10, startX + digBarWidth, currentY + 14, digColor); //
         }
     }
 }

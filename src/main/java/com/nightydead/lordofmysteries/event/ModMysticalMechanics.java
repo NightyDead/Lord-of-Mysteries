@@ -6,6 +6,9 @@ import com.nightydead.lordofmysteries.data.ModDataComponents;
 import com.nightydead.lordofmysteries.data.PlayerData;
 import com.nightydead.lordofmysteries.item.custom.ModPotionItem;
 import com.nightydead.lordofmysteries.network.*;
+import com.nightydead.lordofmysteries.pathway.PathwayRegistry;
+import com.nightydead.lordofmysteries.pathway.abstracts.AbstractPathway;
+import com.nightydead.lordofmysteries.pathway.abstracts.ISequence;
 import com.nightydead.lordofmysteries.ritual.MysticalRitualManager;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -50,7 +53,7 @@ public class ModMysticalMechanics {
                         String[] split = featureStr.split(":");
                         String pathway = split[0];
                         int seq = Integer.parseInt(split[1]);
-                        executeAbsorptionLogic(player, data, pathway, seq, calculateDefaultMaxSp(seq), false);
+                        executeAbsorptionLogic(player, data, pathway, seq, false);
                     } catch (Exception e) {
                         System.out.println("解析聚合特性失败: " + featureStr);
                     }
@@ -66,34 +69,30 @@ public class ModMysticalMechanics {
         Integer itemSequence = stack.get(ModDataComponents.SEQUENCE.get());
         if (itemPathway == null || itemSequence == null) return;
 
-        // 提取动态灵性上限逻辑
-        int maxSp = stack.has(ModDataComponents.MAX_SPIRITUALITY.get()) ?
-        stack.get(ModDataComponents.MAX_SPIRITUALITY.get()) : calculateDefaultMaxSp(itemSequence);
         boolean isPotion = stack.getItem() instanceof ModPotionItem;
 
-        executeAbsorptionLogic(player, data, itemPathway, itemSequence, maxSp, isPotion);
+        executeAbsorptionLogic(player, data, itemPathway, itemSequence, isPotion);
     }
 
     /**
      * 执行吸收逻辑的核心方法
      * 根据玩家当前状态判断是凡人首次吸收还是非凡者继续吸收
      *
-     * @param player  吸收玩家
-     * @param data    玩家非凡数据
-     * @param pathway 吸收的途径 ID
-     * @param seq     吸收的序列号
-     * @param maxSp   灵性上限值
+     * @param player   吸收玩家
+     * @param data     玩家非凡数据
+     * @param pathway  吸收的途径 ID
+     * @param seq      吸收的序列号
      * @param isPotion 是否为魔药（而非原始特性）
      */
-    private static void executeAbsorptionLogic(Player player, PlayerData data, String pathway, int seq, int maxSp, boolean isPotion) {
+    private static void executeAbsorptionLogic(Player player, PlayerData data, String pathway, int seq, boolean isPotion) {
         int ticksBefore = data.getSdcTicks();
 
         // 判断是否为凡人首次走上超凡道路
         boolean isNormalHuman = "none".equals(data.getCurrentPathway()) || data.getCurrentSequence() >= 10;
         if (isNormalHuman) {
-            handleNormalHumanAbsorption(player, data, pathway, seq, maxSp, isPotion);
+            handleNormalHumanAbsorption(player, data, pathway, seq, isPotion);
         } else {
-            handleBeyonderAbsorption(player, data, pathway, seq, maxSp, isPotion);
+            handleBeyonderAbsorption(player, data, pathway, seq, isPotion);
         }
 
         // 扣除理智值
@@ -118,7 +117,7 @@ public class ModMysticalMechanics {
      * 处理凡人首次吸收的逻辑
      * 检查仪式条件、计算成功概率、写入超凡状态
      */
-    private static void handleNormalHumanAbsorption(Player player, PlayerData data, String pathway, int seq, int maxSp, boolean isPotion) {
+    private static void handleNormalHumanAbsorption(Player player, PlayerData data, String pathway, int seq, boolean isPotion) {
         if (!MysticalRitualManager.checkAndConsumeRitual(player, data, pathway, seq)) {
             String pathKey = "pathway." + LordofMysteries.MODID + "." + pathway.toLowerCase();
             player.sendSystemMessage(Component.translatable("message.lordofmysteries.rejection.mortal", Component.translatable(pathKey)));
@@ -132,13 +131,14 @@ public class ModMysticalMechanics {
             String pathKey = "pathway." + LordofMysteries.MODID + "." + pathway.toLowerCase();
             player.sendSystemMessage(Component.translatable("message.lordofmysteries.potion.consumed", Component.translatable(pathKey), seq));
 
-            // 写入超凡状态，顺便把灵性充满
+            // 写入超凡状态
             data.setCurrentPathway(pathway);
             data.setCurrentSequence(seq);
             data.addAbsorbedRecord(pathway, seq);
-            data.setMaxSpirituality(maxSp);
-            data.setSpirituality(maxSp);
             data.setDigestion(0.0F);
+            // 先触发序列专属回调（设置灵性上限等），再将灵性充满至新上限
+            invokeOnAbsorbed(player, pathway, seq);
+            data.setSpirituality(data.getMaxSpiritual());
         } else {
             handleContaminationAndMadness(player, data, pathway, seq);
         }
@@ -148,7 +148,7 @@ public class ModMysticalMechanics {
      * 处理非凡者继续吸收的逻辑
      * 区分三种场景：跨途径吸收、同途径晋升、同序列堆叠
      */
-    private static void handleBeyonderAbsorption(Player player, PlayerData data, String pathway, int seq, int maxSp, boolean isPotion) {
+    private static void handleBeyonderAbsorption(Player player, PlayerData data, String pathway, int seq, boolean isPotion) {
         // 场景 1：跨途径吸收
         if (!data.getCurrentPathway().equals(pathway)) {
             if (isPotion && player.level().random.nextDouble() < 0.005) {
@@ -156,6 +156,10 @@ public class ModMysticalMechanics {
                 data.setCurrentPathway(pathway);
                 data.setCurrentSequence(seq);
                 data.addAbsorbedRecord(pathway, seq);
+                data.setDigestion(0.0F);
+                // 跨途径奇迹：先触发新序列回调，再将灵性充满
+                invokeOnAbsorbed(player, pathway, seq);
+                data.setSpirituality(data.getMaxSpiritual());
             } else {
                 handleContaminationAndMadness(player, data, pathway, seq);
             }
@@ -176,9 +180,10 @@ public class ModMysticalMechanics {
             if (player.level().random.nextDouble() < finalChance) {
                 data.setCurrentSequence(seq);
                 data.addAbsorbedRecord(pathway, seq);
-                data.setMaxSpirituality(maxSp);
-                data.setSpirituality(maxSp);
                 data.setDigestion(0.0F);
+                // 先触发序列专属回调（设置灵性上限等），再将灵性充满至新上限
+                invokeOnAbsorbed(player, pathway, seq);
+                data.setSpirituality(data.getMaxSpiritual());
                 player.sendSystemMessage(Component.translatable("message.lordofmysteries.upgrade.success", seq));
             } else {
                 handleContaminationAndMadness(player, data, pathway, seq);
@@ -209,10 +214,42 @@ public class ModMysticalMechanics {
         data.setSdcTicks(300); // 15 秒失控倒计时
     }
 
-    /** 根据序列号计算默认灵性上限：序列越低（等级越高）灵性上限越高 */
-    private static int calculateDefaultMaxSp(int seq) {
-        return (10 - seq) * 50;
+    /**
+     * 调用序列的 onAbsorbed 回调
+     * 用于触发序列专属的晋升逻辑（如设置灵性上限、赋予被动能力等）
+     *
+     * @param player  吸收成功的玩家
+     * @param pathway 途径 ID
+     * @param seq     序列号
+     */
+    private static void invokeOnAbsorbed(Player player, String pathway, int seq) {
+        AbstractPathway pathwayObj = PathwayRegistry.get(pathway);
+        if (pathwayObj != null) {
+            ISequence sequenceObj = pathwayObj.getSequence(seq);
+            if (sequenceObj != null) {
+                sequenceObj.onAbsorbed(player);
+            }
+        }
     }
+
+    /**
+     * 调用序列的 onRemoved 回调
+     * 用于触发序列专属的移除逻辑（如回退灵性上限、剥离被动能力等）
+     *
+     * @param player  失去序列的玩家
+     * @param pathway 途径 ID
+     * @param seq     序列号
+     */
+    public static void invokeOnRemoved(Player player, String pathway, int seq) {
+        AbstractPathway pathwayObj = PathwayRegistry.get(pathway);
+        if (pathwayObj != null) {
+            ISequence sequenceObj = pathwayObj.getSequence(seq);
+            if (sequenceObj != null) {
+                sequenceObj.onRemoved(player);
+            }
+        }
+    }
+
 
     /** 根据序列号计算理智惩罚值：序列越低惩罚越重 */
     private static int calculateSanityPenalty(int seq) {
@@ -249,7 +286,7 @@ public class ModMysticalMechanics {
 
     /**
      * 同步所有神秘学数据到客户端
-     * 发送理智、灵性、消化度、途径/序列四个数据包
+     * 发送理智、灵性、消化度、途径/序列、灵视状态五个数据包
      *
      * @param player 目标玩家
      * @param data   玩家非凡数据
@@ -259,5 +296,7 @@ public class ModMysticalMechanics {
         PacketDistributor.sendToPlayer(player, new SyncSpiritualityPacket(data.getSpirituality(), data.getMaxSpiritual()));
         PacketDistributor.sendToPlayer(player, new SyncDigestionPacket(data.getDigestion()));
         PacketDistributor.sendToPlayer(player, new SyncPathwayPacket(data.getCurrentPathway(), data.getCurrentSequence()));
+        // 👁️ 同步灵视状态，确保客户端登录/定期兑底时灵视 HUD 和实体发光正确渲染
+        PacketDistributor.sendToPlayer(player, new SyncVisionPacket(data.isVisionActive()));
     }
 }

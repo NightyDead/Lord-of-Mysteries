@@ -1,5 +1,6 @@
 package com.nightydead.lordofmysteries;
 
+import com.nightydead.lordofmysteries.client.VisionGlowHandler;
 import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;

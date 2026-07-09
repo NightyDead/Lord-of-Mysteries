@@ -50,6 +50,9 @@
   "pathway.lordofmysteries.door": "The Door",
   "pathway.lordofmysteries.morgany": "Mother Tree of Desire",
 
+  "key.categories.lordofmysteries": "Lord of Mysteries - Powers",
+  "key.lordofmysteries.toggle_vision": "Toggle Spirit Vision",
+
   "tooltip.lordofmysteries.characteristic.info": "Pathway: %s (Seq %d)",
   "tooltip.lordofmysteries.characteristic.law": "The Law of Beyonder Characteristics Conservation: Indestructible.",
 

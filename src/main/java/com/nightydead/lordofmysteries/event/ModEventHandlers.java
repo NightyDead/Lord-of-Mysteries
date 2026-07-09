@@ -22,6 +22,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.network.PacketDistributor;
+import com.nightydead.lordofmysteries.network.SyncVisionPacket;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDropsEvent;
@@ -29,6 +31,12 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 /**
  * 模组事件处理器类
@@ -37,6 +45,19 @@ import java.util.ArrayList;
  */
 @EventBusSubscriber(modid = LordofMysteries.MODID)
 public class ModEventHandlers {
+
+    /** 灵视感知半径（方块单位），与客户端 VisionGlowHandler 保持一致 */
+    private static final double VISION_RANGE = 32.0D;
+    /** 服务端发光扫描频率：每 10 tick 扫描一次 */
+    private static final int VISION_SCAN_INTERVAL = 10;
+    /** 灵视灵性消耗频率：每 20 tick（1秒）消耗 1 点灵性 */
+    private static final int VISION_SPIRITUALITY_DRAIN_INTERVAL = 20;
+
+    /**
+     * 服务端灵视发光追踪：记录每个玩家通过灵视标记为发光的实体 ID 集合
+     * 用于在灵视关闭时精确还原发光状态，避免误清其他来源的发光效果
+     */
+    private static final Map<UUID, Set<Integer>> serverVisionGlowingEntities = new HashMap<>();
 
     /**
      * 玩家登录事件 - 在玩家加入世界时同步所有神秘学数据到客户端
@@ -95,7 +116,8 @@ public class ModEventHandlers {
             data.setSanity(data.getSanity() + 1);
         }
 
-        if (player.tickCount % 40 == 0) {
+        // 灵视激活时暂停自然灵性恢复，避免与消耗抵消导致无代价使用
+        if (player.tickCount % 40 == 0 && !data.isVisionActive()) {
             int maxSp = data.getMaxSpiritual();
             if (maxSp > 0 && data.getSpirituality() < maxSp) {
                 data.addSpirituality(Math.max(1, (int) (maxSp * 0.05f)));
@@ -105,6 +127,110 @@ public class ModEventHandlers {
         // 4. 定期兜底数据传输（合并优化减少发包）
         if (player.tickCount % 20 == 0 && player instanceof ServerPlayer serverPlayer) {
             ModMysticalMechanics.syncAllData(serverPlayer, data);
+        }
+
+        // 5. 🔮 灵视发光处理（服务端权威模式）
+        // 在服务端设置 setGlowingTag，通过实体数据同步到客户端渲染，避免单人模式下客户端设置被覆盖
+        handleVisionGlowing(player, data);
+    }
+
+    /**
+     * 服务端灵视发光处理
+     * 当玩家灵视激活时，扫描周围活体生物并在服务端设置发光标记
+     * 关闭灵视时，精确清除所有由灵视标记的发光实体
+     *
+     * @param player 当前 Tick 的玩家
+     * @param data   玩家非凡数据
+     */
+    private static void handleVisionGlowing(Player player, com.nightydead.lordofmysteries.data.PlayerData data) {
+        if (player.level().isClientSide()) return;
+
+        UUID playerId = player.getUUID();
+        boolean visionActive = data.isVisionActive();
+
+        if (!visionActive) {
+            // 灵视关闭时：清除该玩家标记的所有发光实体
+            Set<Integer> tracked = serverVisionGlowingEntities.remove(playerId);
+            if (tracked != null && !tracked.isEmpty()) {
+                for (int entityId : tracked) {
+                    var entity = player.level().getEntity(entityId);
+                    if (entity instanceof net.minecraft.world.entity.LivingEntity livingEntity) {
+                        livingEntity.setGlowingTag(false);
+                    }
+                }
+                tracked.clear();
+            }
+            return;
+        }
+
+        // ==================== 🔮 灵视灵性消耗机制 ====================
+        // 灵视持续消耗灵性：每 20 tick（1秒）消耗 1 点灵性
+        if (player.tickCount % VISION_SPIRITUALITY_DRAIN_INTERVAL == 0 && !player.isCreative()) {
+            int currentSp = data.getSpirituality();
+            if (currentSp > 0) {
+                data.addSpirituality(-1); // 消耗 1 点灵性
+            }
+
+            // 灵性耗尽：自动关闭灵视 + 施加头晕眼花 debuff
+            if (data.getSpirituality() <= 0) {
+                data.setVisionActive(false);
+                player.setData(ModAttachments.PLAYER_DATA.get(), data);
+
+                // 同步灵视关闭状态到客户端
+                if (player instanceof ServerPlayer serverPlayer) {
+                    PacketDistributor.sendToPlayer(serverPlayer, new SyncVisionPacket(false));
+                }
+
+                // 施加反胃 + 失明效果（头晕眼花），持续 10 秒（200 tick）
+                player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 200, 0));
+                player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 200, 0));
+
+                player.sendSystemMessage(Component.literal("§c灵性枯竭！灵视被迫关闭，你感到一阵头晕目眩..."));
+                return; // 灵视已关闭，跳过后续发光逻辑
+            }
+        }
+
+        // 灵性为 0 但灵视仍激活（极端情况兜底）：强制关闭 + debuff
+        if (data.getSpirituality() <= 0 && !player.isCreative()) {
+            data.setVisionActive(false);
+            player.setData(ModAttachments.PLAYER_DATA.get(), data);
+            if (player instanceof ServerPlayer serverPlayer) {
+                PacketDistributor.sendToPlayer(serverPlayer, new SyncVisionPacket(false));
+            }
+            player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 200, 0));
+            player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 200, 0));
+            player.sendSystemMessage(Component.literal("§c灵性枯竭！灵视被迫关闭，你感到一阵头晕目眩..."));
+            return;
+        }
+
+        // ==================== 🔮 灵视发光扫描 ====================
+        // 灵视激活时：每 VISION_SCAN_INTERVAL tick 扫描一次
+        if (player.tickCount % VISION_SCAN_INTERVAL != 0) return;
+
+        Set<Integer> tracked = serverVisionGlowingEntities.computeIfAbsent(playerId, k -> new HashSet<>());
+
+        // 清理已失效的实体记录
+        Iterator<Integer> iterator = tracked.iterator();
+        while (iterator.hasNext()) {
+            int entityId = iterator.next();
+            var entity = player.level().getEntity(entityId);
+            if (entity == null || !entity.isAlive()) {
+                iterator.remove();
+            }
+        }
+
+        // 扫描并标记周围活体生物为发光状态
+        var nearbyEntities = player.level().getEntitiesOfClass(
+                net.minecraft.world.entity.LivingEntity.class,
+                player.getBoundingBox().inflate(VISION_RANGE),
+                entity -> entity != player && entity.isAlive()
+        );
+
+        for (net.minecraft.world.entity.LivingEntity entity : nearbyEntities) {
+            if (!entity.isCurrentlyGlowing()) {
+                entity.setGlowingTag(true); // 服务端设置，通过实体数据同步到客户端
+                tracked.add(entity.getId());
+            }
         }
     }
 
@@ -142,6 +268,8 @@ public class ModEventHandlers {
             aggregatedStack.set(ModDataComponents.AGGREGATED_FEATURES.get(), new ArrayList<>(history));
 
             event.getDrops().add(new ItemEntity(player.level(), player.getX(), player.getY() + 0.5, player.getZ(), aggregatedStack));
+            // 特性析出前触发序列移除回调（回退灵性上限、剥离被动能力等）
+            ModMysticalMechanics.invokeOnRemoved(player, data.getCurrentPathway(), data.getCurrentSequence());
             data.reset(); // 特性析出后彻底归凡
             player.sendSystemMessage(Component.translatable("message.lordofmysteries.characteristic.dropped"));
         }

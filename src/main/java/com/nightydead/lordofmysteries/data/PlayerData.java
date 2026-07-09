@@ -21,7 +21,8 @@ public class PlayerData {
                     Codec.STRING.fieldOf("currentPathway").forGetter(PlayerData::getCurrentPathway),
                     Codec.INT.fieldOf("currentSequence").forGetter(PlayerData::getCurrentSequence),
                     Codec.INT.fieldOf("sdcTicks").forGetter(PlayerData::getSdcTicks),
-                    Codec.STRING.listOf().fieldOf("absorbedCharacteristics").forGetter(PlayerData::getAbsorbedCharacteristics)
+                    Codec.STRING.listOf().fieldOf("absorbedCharacteristics").forGetter(PlayerData::getAbsorbedCharacteristics),
+                    Codec.BOOL.fieldOf("visionActive").forGetter(PlayerData::isVisionActive) // 👁️ 1. 注册 CODEC 编解码字段
             ).apply(instance, PlayerData::new)
     );
 
@@ -43,6 +44,8 @@ public class PlayerData {
     private int sdcTicks;
     /** 已吸收的非凡特性历史记录列表（格式 "pathway:sequence"） */
     private List<String> absorbedCharacteristics;
+    /** 👁️ 当前是否开启了灵视 */
+    private boolean visionActive;
 
     /** 初始凡人状态构造 */
     public PlayerData() {
@@ -60,11 +63,13 @@ public class PlayerData {
         this.currentSequence = 10;
         this.sdcTicks = -1;
         this.absorbedCharacteristics = new ArrayList<>();
+        this.visionActive = false; // 👁️ 2. 重置时默认关闭灵视
     }
 
     /** 全参数构造函数（Codec 反序列化与深拷贝底层驱动） */
     public PlayerData(int sanity, int maxSanity, float digestion, int spirituality, int maxSpirituality,
-                      String currentPathway, int currentSequence, int sdcTicks, List<String> absorbedCharacteristics) {
+                      String currentPathway, int currentSequence, int sdcTicks, List<String> absorbedCharacteristics,
+                      boolean visionActive) { // 👁️ 3. 构造函数追加灵视参数
         this.maxSanity = maxSanity;
         this.maxSpirituality = maxSpirituality;
         this.sanity = clamp(sanity, 0, maxSanity);
@@ -74,6 +79,7 @@ public class PlayerData {
         this.currentSequence = currentSequence;
         this.sdcTicks = sdcTicks;
         this.absorbedCharacteristics = new ArrayList<>(absorbedCharacteristics);
+        this.visionActive = visionActive; // 👁️ 4. 赋值字段
     }
 
     // ==================== 神秘学辅助工具方法 ====================
@@ -91,7 +97,7 @@ public class PlayerData {
     /** 深拷贝当前玩家数据实例 */
     public PlayerData copy() {
         return new PlayerData(this.sanity, this.maxSanity, this.digestion, this.spirituality, this.maxSpirituality,
-                this.currentPathway, this.currentSequence, this.sdcTicks, this.absorbedCharacteristics);
+                this.currentPathway, this.currentSequence, this.sdcTicks, this.absorbedCharacteristics, this.visionActive); // 👁️ 5. 拷贝时保留灵视状态
     }
 
     /** 解析已吸收的非凡特性历史记录为结构化对象列表 */
@@ -154,9 +160,9 @@ public class PlayerData {
     /** 设置当前序列号 */
     public void setCurrentSequence(int sequence) { this.currentSequence = sequence; }
 
-    /** 获取失控倒计时 Tick 数 */
+    /** 获取失控倒计时 Tick数 */
     public int getSdcTicks() { return this.sdcTicks; }
-    /** 设置失控倒计时 Tick 数 */
+    /** 设置失控倒计时 Tick数 */
     public void setSdcTicks(int ticks) { this.sdcTicks = ticks; }
 
     /** 获取已吸收的非凡特性历史记录列表 */
@@ -165,4 +171,9 @@ public class PlayerData {
     public void setAbsorbedCharacteristics(List<String> list) {
         this.absorbedCharacteristics = list != null ? new ArrayList<>(list) : new ArrayList<>();
     }
+
+    /** 👁️ 获取当前是否激活了灵视 */
+    public boolean isVisionActive() { return this.visionActive; }
+    /** 👁️ 设置当前是否激活了灵视 */
+    public void setVisionActive(boolean active) { this.visionActive = active; }
 }

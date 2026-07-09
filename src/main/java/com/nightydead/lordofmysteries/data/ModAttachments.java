@@ -19,8 +19,8 @@ public class ModAttachments {
             DeferredRegister.create(NeoForgeRegistries.Keys.ATTACHMENT_TYPES, LordofMysteries.MODID);
 
     /**
-     * 玩家非凡数据附加组件[cite: 17]
-     * 自动挂载 PlayerData，依赖其内部的序列化 CODEC 闭环读写存储[cite: 17]
+     * 玩家非凡数据附加组件
+     * 自动挂载 PlayerData，依赖其内部的序列化 CODEC 闭环读写存储
      */
     public static final Supplier<AttachmentType<PlayerData>> PLAYER_DATA = ATTACHMENT_TYPES.register(
             "player_data", () -> AttachmentType.builder(PlayerData::new)
@@ -31,7 +31,7 @@ public class ModAttachments {
     // ✨ 未来留空：可在下方无缝增加如外神污染源、特定超凡生物（诸如失控者）的独立附件注册
 
     /**
-     * 将 Attachment 注册表绑定到模组事件总线[cite: 17]
+     * 将 Attachment 注册表绑定到模组事件总线
      */
     public static void register(IEventBus eventBus) {
         ATTACHMENT_TYPES.register(eventBus);

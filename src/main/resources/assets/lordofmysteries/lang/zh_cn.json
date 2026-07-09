@@ -49,6 +49,9 @@
   "pathway.lordofmysteries.door": "门",
   "pathway.lordofmysteries.morgany": "欲望母树",
 
+  "key.categories.lordofmysteries": "诡秘之主 - 超凡能力",
+  "key.lordofmysteries.toggle_vision": "开启/关闭 灵视",
+
   "tooltip.lordofmysteries.characteristic.info": "非凡途径: %s（序列 %d）",
   "tooltip.lordofmysteries.characteristic.law": "非凡特性不灭定律：不会减少，不会消灭。",
 
