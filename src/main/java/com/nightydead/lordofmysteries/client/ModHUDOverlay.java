@@ -102,7 +102,7 @@ public class ModHUDOverlay {
 
         // 绘制理智血条
         graphics.fill(startX, currentY + 10, startX + 100, currentY + 14, 0x55555555); //
-        int sanityBarWidth = Math.max(0, Math.min(100, sanity)); //
+        int sanityBarWidth = Math.clamp(sanity, 0, 100); //
         graphics.fill(startX, currentY + 10, startX + sanityBarWidth, currentY + 14, 0xFFFF5555); //
         currentY += 18; //
 

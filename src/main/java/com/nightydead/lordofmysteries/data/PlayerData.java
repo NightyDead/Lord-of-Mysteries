@@ -72,9 +72,9 @@ public class PlayerData {
                       boolean visionActive) { // 👁️ 3. 构造函数追加灵视参数
         this.maxSanity = maxSanity;
         this.maxSpirituality = maxSpirituality;
-        this.sanity = clamp(sanity, 0, maxSanity);
+        this.sanity = Math.clamp(sanity, 0, maxSanity);
         this.digestion = Math.max(0.0F, Math.min(digestion, 1.0F));
-        this.spirituality = clamp(spirituality, 0, maxSpirituality);
+        this.spirituality = Math.clamp(spirituality, 0, maxSpirituality);
         this.currentPathway = currentPathway;
         this.currentSequence = currentSequence;
         this.sdcTicks = sdcTicks;
@@ -108,11 +108,6 @@ public class PlayerData {
         }).toList();
     }
 
-    /** 数值裁剪工具方法，确保值在指定范围内 */
-    private int clamp(int val, int min, int max) {
-        return Math.max(min, Math.min(val, max));
-    }
-
     /** 非凡特性记录 - 存储途径 ID 和序列号的不可变记录类 */
     public record CharacteristicRecord(String pathway, int sequence) {}
 
@@ -121,7 +116,7 @@ public class PlayerData {
     /** 获取当前理智值 */
     public int getSanity() { return this.sanity; }
     /** 设置当前理智值，自动裁剪到合法范围 */
-    public void setSanity(int sanity) { this.sanity = clamp(sanity, 0, this.maxSanity); }
+    public void setSanity(int sanity) { this.sanity = Math.clamp(sanity, 0, this.maxSanity); }
     /** 获取理智上限值 */
     public int getMaxSanity() { return this.maxSanity; }
     /** 设置理智上限值 */
@@ -140,7 +135,7 @@ public class PlayerData {
     /** 获取当前灵性值 */
     public int getSpirituality() { return this.spirituality; }
     /** 设置当前灵性值，自动裁剪到合法范围 */
-    public void setSpirituality(int spirituality) { this.spirituality = clamp(spirituality, 0, this.maxSpirituality); }
+    public void setSpirituality(int spirituality) { this.spirituality = Math.clamp(spirituality, 0, this.maxSpirituality); }
 
     /** 获取灵性上限值 */
     public int getMaxSpiritual() { return this.maxSpirituality; }
