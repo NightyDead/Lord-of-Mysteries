@@ -73,7 +73,7 @@ public class PlayerData {
         this.maxSanity = maxSanity;
         this.maxSpirituality = maxSpirituality;
         this.sanity = Math.clamp(sanity, 0, maxSanity);
-        this.digestion = Math.max(0.0F, Math.min(digestion, 1.0F));
+        this.digestion = Math.clamp(digestion, 0.0F, 1.0F);
         this.spirituality = Math.clamp(spirituality, 0, maxSpirituality);
         this.currentPathway = currentPathway;
         this.currentSequence = currentSequence;
@@ -125,7 +125,7 @@ public class PlayerData {
     /** 获取魔药消化进度 */
     public float getDigestion() { return this.digestion; }
     /** 设置魔药消化进度，自动裁剪到 0.0F~1.0F 范围 */
-    public void setDigestion(float digestion) { this.digestion = Math.max(0.0F, Math.min(digestion, 1.0F)); }
+    public void setDigestion(float digestion) { this.digestion = Math.clamp(digestion, 0.0F, 1.0F); }
 
     /** 增加理智值（可为负数） */
     public void addSanity(int amount) { setSanity(this.sanity + amount); }
