@@ -8,6 +8,9 @@ import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
+import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.common.conditions.IConditionBuilder;
 
 import java.util.concurrent.CompletableFuture;
@@ -31,7 +34,7 @@ public class ModRecipesProvider extends RecipeProvider implements IConditionBuil
 
     /**
      * 注册所有合成配方
-     * 当前包含金薄荷方块分解为金薄荷叶的无形状配方
+     * 当前包含草药分解为对应材料的无形状配方和纯水烧制配方
      *
      * @param recipeOutput 配方输出接口，用于保存生成的配方
      */
@@ -42,6 +45,32 @@ public class ModRecipesProvider extends RecipeProvider implements IConditionBuil
                 .requires(ModBlocks.GOLD_MINT_HERB.get())
                 .unlockedBy("has_gold_mint_herb", has(ModBlocks.GOLD_MINT_HERB.get()))
                 .save(recipeOutput, "lordofmysteries:gold_mint_leaf_from_herb");
+
+        // 龙血草方块 → 3个龙血草粉末（无形状配方）
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.DRAGON_BLOOD_POWDER.get(), 3)
+                .requires(ModBlocks.DRAGON_BLOOD_HERB.get())
+                .unlockedBy("has_dragon_blood_herb", has(ModBlocks.DRAGON_BLOOD_HERB.get()))
+                .save(recipeOutput, "lordofmysteries:dragon_blood_powder_from_herb");
+
+        // 水瓶 → 纯水（熔炉烧制，200 tick）
+        SimpleCookingRecipeBuilder.smelting(
+                        Ingredient.of(Items.POTION),
+                        RecipeCategory.MISC,
+                        ModItems.PURE_WATER.get(),
+                        0.1f,
+                        200)
+                .unlockedBy("has_water_bottle", has(Items.POTION))
+                .save(recipeOutput, "lordofmysteries:pure_water_from_smelting");
+
+        // 水瓶 → 纯水（烟熏炉烧制，100 tick）
+        SimpleCookingRecipeBuilder.smoking(
+                        Ingredient.of(Items.POTION),
+                        RecipeCategory.MISC,
+                        ModItems.PURE_WATER.get(),
+                        0.1f,
+                        100)
+                .unlockedBy("has_water_bottle", has(Items.POTION))
+                .save(recipeOutput, "lordofmysteries:pure_water_from_smoking");
 
         super.buildRecipes(recipeOutput);
     }

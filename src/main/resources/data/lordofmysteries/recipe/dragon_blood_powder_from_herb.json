@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "lordofmysteries:dragon_blood_herb"
+    }
+  ],
+  "result": {
+    "count": 3,
+    "id": "lordofmysteries:auxiliary_material/dragon_blood_powder"
+  }
+}

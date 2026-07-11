@@ -47,10 +47,10 @@ public class ModZhCnLangProvider extends LanguageProvider {
         add(ModItems.SEER_POTION.get(), "占卜家魔药");
 
         // 魔药辅助材料
-        add(ModItems.NIGHT_PERFUME_JUICE.get(), "夜香果汁");
+        add(ModItems.NIGHT_PERFUME_JUICE.get(), "夜香草汁液");
         add(ModItems.GOLD_MINT_LEAF.get(), "金薄荷叶");
-        add(ModItems.POISON_HEMLOCK_JUICE.get(), "毒芹果汁");
-        add(ModItems.DRAGON_BLOOD_POWDER.get(), "龙血粉");
+        add(ModItems.POISON_HEMLOCK_JUICE.get(), "毒堇汁");
+        add(ModItems.DRAGON_BLOOD_POWDER.get(), "龙血草粉末");
 
         // 方块
         add(ModBlocks.EXAMPLE_BLOCK.get(), " 示例方块");
