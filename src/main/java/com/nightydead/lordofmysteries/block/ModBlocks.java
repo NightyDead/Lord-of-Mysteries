@@ -38,7 +38,7 @@ public class ModBlocks {
     /** 夜香草 - 吃掉或神秘学互动时可赋予幸运效果，持续5秒/100刻 */
     public static final DeferredBlock<Block> NIGHT_PERFUME_HERB =
             registerBlock("night_perfume_herb",
-                    () -> new FlowerBlock(MobEffects.LUCK, 5.0F, BlockBehaviour.Properties.of().noCollission().instabreak().sound(SoundType.GRASS).pushReaction(PushReaction.DESTROY)));
+                    () -> new FlowerBlock(MobEffects.NIGHT_VISION, 5.0F, BlockBehaviour.Properties.of().noCollission().instabreak().sound(SoundType.GRASS).pushReaction(PushReaction.DESTROY)));
 
     /** 金薄荷 - 魔药辅助材料来源植物 */
     public static final DeferredBlock<Block> GOLD_MINT_HERB =
@@ -53,7 +53,7 @@ public class ModBlocks {
     /** 龙血草 - 魔药辅助材料来源植物 */
     public static final DeferredBlock<Block> DRAGON_BLOOD_HERB =
             registerBlock("dragon_blood_herb",
-                    () -> new FlowerBlock(MobEffects.LUCK, 5.0F, BlockBehaviour.Properties.of().noCollission().instabreak().sound(SoundType.GRASS).pushReaction(net.minecraft.world.level.material.PushReaction.DESTROY)));
+                    () -> new FlowerBlock(MobEffects.FIRE_RESISTANCE, 5.0F, BlockBehaviour.Properties.of().noCollission().instabreak().sound(SoundType.GRASS).pushReaction(net.minecraft.world.level.material.PushReaction.DESTROY)));
 
     /**
      * 注册方块对应的方块物品（使方块可以被拾取和放置在物品栏中）
