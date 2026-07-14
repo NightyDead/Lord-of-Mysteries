@@ -1,5 +1,6 @@
 package com.nightydead.lordofmysteries;
 
+import com.nightydead.lordofmysteries.block.ModBlockEntities;
 import com.nightydead.lordofmysteries.block.ModBlocks;
 import com.nightydead.lordofmysteries.data.ModAttachments;
 import com.nightydead.lordofmysteries.data.ModDataComponents;
@@ -8,23 +9,13 @@ import com.nightydead.lordofmysteries.item.ModCreativeModeTabs;
 import com.nightydead.lordofmysteries.item.ModItems;
 import com.nightydead.lordofmysteries.loot.ModLootModifiers;
 import com.nightydead.lordofmysteries.network.ModMessages;
+import com.nightydead.lordofmysteries.recipe.ModRecipes;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
 
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.CreativeModeTabs;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.MapColor;
-import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
@@ -34,10 +25,6 @@ import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
-import net.neoforged.neoforge.registries.DeferredBlock;
-import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.DeferredItem;
-import net.neoforged.neoforge.registries.DeferredRegister;
 
 /**
  * 诡秘之主（Lord of Mysteries）模组主类
@@ -69,6 +56,8 @@ public class LordofMysteries {
         ModCreativeModeTabs.register(modEventBus);
         // 注册模组方块
         ModBlocks.register(modEventBus);
+        // 注册模组方块实体类型
+        ModBlockEntities.register(modEventBus);
         // 注册模组数据附加组件（Attachment，用于绑定玩家数据）
         ModAttachments.register(modEventBus);
         // 注册模组数据组件（DataComponent，用于物品 NBT 数据存储）
@@ -78,6 +67,8 @@ public class LordofMysteries {
         // 注册模组网络数据包（理智、灵性、消化度、途径同步）
         ModMessages.register(modEventBus);
         ModLootModifiers.register(modEventBus);
+        // 注册模组配方类型（魔药酿造配方）
+        ModRecipes.register(modEventBus);
 
         // 将本类注册到 NeoForge 全局事件总线，以便响应服务端事件（如 onServerStarting）
         // 注意：仅当本类中包含 @SubscribeEvent 注解的方法时才需要此行

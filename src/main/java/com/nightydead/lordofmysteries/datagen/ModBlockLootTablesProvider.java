@@ -40,6 +40,9 @@ public class ModBlockLootTablesProvider extends BlockLootSubProvider {
         dropSelf(ModBlocks.GOLD_MINT_HERB.get());
         dropSelf(ModBlocks.POISON_HEMLOCK_HERB.get());
         dropSelf(ModBlocks.DRAGON_BLOOD_HERB.get());
+
+        // 炼药锅掉落自身（内部物品由 BlockEntity.onRemove 处理）
+        dropSelf(ModBlocks.ALCHEMY_CAULDRON.get());
     }
 
     /**

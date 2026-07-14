@@ -1,25 +1,34 @@
 package com.nightydead.lordofmysteries.event;
 
 import com.nightydead.lordofmysteries.LordofMysteries;
+import com.nightydead.lordofmysteries.block.AlchemyCauldronBlock;
+import com.nightydead.lordofmysteries.block.AlchemyCauldronBlockEntity;
 import com.nightydead.lordofmysteries.data.ModAttachments;
 import com.nightydead.lordofmysteries.data.ModDataComponents;
+import com.nightydead.lordofmysteries.data.PlayerData;
 import com.nightydead.lordofmysteries.entity.IndestructibleItemEntity;
 import com.nightydead.lordofmysteries.entity.IndestructiblePotionEntity;
 import com.nightydead.lordofmysteries.item.ModItems;
 import com.nightydead.lordofmysteries.item.custom.CharacteristicItem;
 import com.nightydead.lordofmysteries.item.custom.MainMaterialItem;
 import com.nightydead.lordofmysteries.item.custom.ModPotionItem;
+import com.nightydead.lordofmysteries.item.custom.RitualDaggerItem;
 import com.nightydead.lordofmysteries.pathway.PathwayRegistry;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -28,6 +37,7 @@ import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDropsEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 import java.util.ArrayList;
@@ -101,11 +111,11 @@ public class ModEventHandlers {
             if (ticksLeft > 0) {
                 data.setSdcTicks(ticksLeft - 1);
                 if (ticksLeft % 60 == 0) {
-                    player.sendSystemMessage(Component.translatable("message.lordofmysteries.madness.whisper"));
+                    player.displayClientMessage(Component.translatable("message.lordofmysteries.madness.whisper"), true);
                 }
                 if (data.getSdcTicks() <= 0) {
                     data.setSdcTicks(-2); // 触发生成倒计时锁
-                    player.sendSystemMessage(Component.translatable("message.lordofmysteries.madness.failed"));
+                    player.displayClientMessage(Component.translatable("message.lordofmysteries.madness.failed"), true);
                     player.hurt(player.damageSources().outOfBorder(), Float.MAX_VALUE);
                 }
             }
@@ -142,7 +152,7 @@ public class ModEventHandlers {
      * @param player 当前 Tick 的玩家
      * @param data   玩家非凡数据
      */
-    private static void handleVisionGlowing(Player player, com.nightydead.lordofmysteries.data.PlayerData data) {
+    private static void handleVisionGlowing(Player player, PlayerData data) {
         if (player.level().isClientSide()) return;
 
         UUID playerId = player.getUUID();
@@ -185,7 +195,7 @@ public class ModEventHandlers {
                 player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 200, 0));
                 player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 200, 0));
 
-                player.sendSystemMessage(Component.literal("§c灵性枯竭！灵视被迫关闭，你感到一阵头晕目眩..."));
+                player.displayClientMessage(Component.literal("§c灵性枯竭！灵视被迫关闭，你感到一阵头晕目眩..."), true);
                 return; // 灵视已关闭，跳过后续发光逻辑
             }
         }
@@ -199,7 +209,7 @@ public class ModEventHandlers {
             }
             player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 200, 0));
             player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 200, 0));
-            player.sendSystemMessage(Component.literal("§c灵性枯竭！灵视被迫关闭，你感到一阵头晕目眩..."));
+            player.displayClientMessage(Component.literal("§c灵性枯竭！灵视被迫关闭，你感到一阵头晕目眩..."), true);
             return;
         }
 
@@ -221,12 +231,12 @@ public class ModEventHandlers {
 
         // 扫描并标记周围活体生物为发光状态
         var nearbyEntities = player.level().getEntitiesOfClass(
-                net.minecraft.world.entity.LivingEntity.class,
+                LivingEntity.class,
                 player.getBoundingBox().inflate(VISION_RANGE),
                 entity -> entity != player && entity.isAlive()
         );
 
-        for (net.minecraft.world.entity.LivingEntity entity : nearbyEntities) {
+        for (LivingEntity entity : nearbyEntities) {
             if (!entity.isCurrentlyGlowing()) {
                 entity.setGlowingTag(true); // 服务端设置，通过实体数据同步到客户端
                 tracked.add(entity.getId());
@@ -271,7 +281,7 @@ public class ModEventHandlers {
             // 特性析出前触发序列移除回调（回退灵性上限、剥离被动能力等）
             ModMysticalMechanics.invokeOnRemoved(player, data.getCurrentPathway(), data.getCurrentSequence());
             data.reset(); // 特性析出后彻底归凡
-            player.sendSystemMessage(Component.translatable("message.lordofmysteries.characteristic.dropped"));
+            player.displayClientMessage(Component.translatable("message.lordofmysteries.characteristic.dropped"), true);
         }
     }
 
@@ -351,6 +361,43 @@ public class ModEventHandlers {
                 event.getLevel().addFreshEntity(customEntity);
             }
         }
+    }
+
+    /**
+     * 玩家右键方块事件 - 处理仪式匕首与炼药锅的交互
+     * 手持仪式匕首 shift+右键炼药锅时，普通人也能注入灵性触发酿造
+     * 永远阻止匕首被当作材料放入炼药锅
+     */
+    @SubscribeEvent
+    public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
+        // 只在服务端处理实际逻辑
+        if (event.getLevel().isClientSide()) return;
+
+        ItemStack stack = event.getItemStack();
+        if (!(stack.getItem() instanceof RitualDaggerItem)) return;
+
+        // 只拦截炼药锅交互
+        BlockPos pos = event.getPos();
+        BlockState state = event.getLevel().getBlockState(pos);
+        if (!(state.getBlock() instanceof AlchemyCauldronBlock)) return;
+
+        BlockEntity be = event.getLevel().getBlockEntity(pos);
+        if (!(be instanceof AlchemyCauldronBlockEntity cauldron)) return;
+
+        Player player = event.getEntity();
+
+        // shift+右键 + 锅内有物品且未酿造 → 触发酿造
+        if (player.isShiftKeyDown() && !cauldron.isEmpty() && !cauldron.isBrewed()) {
+            cauldron.triggerBrew(player);
+            int newState = cauldron.getBrewState();
+            event.getLevel().setBlock(pos, state.setValue(AlchemyCauldronBlock.BREW_STATE, newState),
+                    Block.UPDATE_ALL);
+            player.displayClientMessage(Component.translatable(
+                    "message.lordofmysteries.ritual_dagger.cauldron_brew"), true);
+        }
+
+        // 始终取消事件，防止匕首被当作材料误吞
+        event.setCanceled(true);
     }
 
     /**

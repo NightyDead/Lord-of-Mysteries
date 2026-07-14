@@ -50,7 +50,7 @@ public record C2SToggleVisionPacket() implements CustomPacketPayload {
             if (context.player() instanceof ServerPlayer player) {
                 player.getExistingData(ModAttachments.PLAYER_DATA.get()).ifPresent(data -> {
                     if (data.getCurrentSequence() >= 10) {
-                        player.sendSystemMessage(Component.literal("§c凡俗之躯无法触碰灵界，你未能开启灵视。"));
+                        player.displayClientMessage(Component.literal("§c凡俗之躯无法触碰灵界，你未能开启灵视。"), true);
                         return;
                     }
 
@@ -59,7 +59,7 @@ public record C2SToggleVisionPacket() implements CustomPacketPayload {
 
                     // 🔮 开启灵视时检查灵性：灵性为 0 无法开启
                     if (newStatus && data.getSpirituality() <= 0 && !player.isCreative()) {
-                        player.sendSystemMessage(Component.literal("§c灵性枯竭，无法开启灵视。"));
+                        player.displayClientMessage(Component.literal("§c灵性枯竭，无法开启灵视。"), true);
                         return;
                     }
 
@@ -70,9 +70,9 @@ public record C2SToggleVisionPacket() implements CustomPacketPayload {
                     PacketDistributor.sendToPlayer(player, new SyncVisionPacket(newStatus));
 
                     if (newStatus) {
-                        player.sendSystemMessage(Component.literal("§5【神秘学启示】§7 灵光在你眼底蔓延，你开启了灵视..."));
+                        player.displayClientMessage(Component.literal("§5【神秘学启示】§7 灵光在你眼底蔓延，你开启了灵视..."), true);
                     } else {
-                        player.sendSystemMessage(Component.literal("§7 灵光隐去，你退出了灵视。"));
+                        player.displayClientMessage(Component.literal("§7 灵光隐去，你退出了灵视。"), true);
                     }
 
                 });

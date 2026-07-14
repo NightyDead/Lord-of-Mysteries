@@ -45,6 +45,7 @@ public class ModZhCnLangProvider extends LanguageProvider {
         add(ModItems.STAR_CRYSTAL.get(), "星水晶");
         add(ModItems.PURE_WATER.get(), "纯水");
         add(ModItems.SEER_POTION.get(), "占卜家魔药");
+        add(ModItems.RITUAL_DAGGER.get(), "仪式匕首");
 
         // 魔药辅助材料
         add(ModItems.NIGHT_PERFUME_JUICE.get(), "夜香草汁液");
@@ -59,6 +60,28 @@ public class ModZhCnLangProvider extends LanguageProvider {
         add(ModBlocks.GOLD_MINT_HERB.get(), "金薄荷");
         add(ModBlocks.POISON_HEMLOCK_HERB.get(), "毒堇");
         add(ModBlocks.DRAGON_BLOOD_HERB.get(), "龙血草");
+        // 炼药锅
+        add(ModBlocks.ALCHEMY_CAULDRON.get(), "炼药锅");
+
+        // 炼药锅交互消息
+        add("message.lordofmysteries.cauldron.item_added", "§a[炼药锅] §f材料已放入。");
+        add("message.lordofmysteries.cauldron.item_removed", "§e[炼药锅] §f材料已取出。");
+        add("message.lordofmysteries.cauldron.brew.success", "§6[炼药锅] §a炼制成功！魔药正在成形...");
+        add("message.lordofmysteries.cauldron.brew.failed", "§c[炼药锅] §4炼制失败！材料已被污染扭曲...");
+        add("message.lordofmysteries.cauldron.brew.penalty", "§4[炼药锅] §c失败的炼制涌出混乱的能量，抽取了你的生命与理智！");
+        add("message.lordofmysteries.cauldron.potion_taken", "§a[炼药锅] §f你从锅中取出了魔药。");
+        add("message.lordofmysteries.cauldron.characteristic_taken", "§e[炼药锅] §f你取出了聚合的非凡特性。");
+        add("message.lordofmysteries.cauldron.use_bottle", "§e[炼药锅] §f请使用玻璃瓶来收集魔药。");
+        add("message.lordofmysteries.cauldron.need_beyonder", "§c[炼药锅] §4只有非凡者才能注入灵性触发炼制。（Shift + 空手右键）");
+        add("message.lordofmysteries.cauldron.need_spirituality", "§c[炼药锅] §4灵性不足！你至少需要 5 点灵性。");
+        add("message.lordofmysteries.cauldron.brewed_block", "§e[炼药锅] §f炼药锅已完成炼制，请先取出结果。");
+
+        // 仪式匕首消息
+        add("message.lordofmysteries.ritual_dagger.cauldron_brew", "§5[仪式匕首] §f你通过匕首将灵性注入到炼药锅中...");
+
+        // 失败酿造 Tooltip
+        add("tooltip.lordofmysteries.characteristic.failed_brew_title", "--- 炼制失败：魔药主材 ---");
+        add("tooltip.lordofmysteries.characteristic.failed_brew_material", "主材来源: %s（序列 %d）");
 
         // 创造模式标签页
         add("itemGroup.characteristic_tab", "非凡特性");

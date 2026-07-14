@@ -1,0 +1,11 @@
+{
+  "parent": "minecraft:block/template_cauldron_full",
+  "textures": {
+    "content": "lordofmysteries:block/alchemy_cauldron/cauldron_liquid_failed",
+    "inside": "lordofmysteries:block/alchemy_cauldron/cauldron_inside",
+    "side": "lordofmysteries:block/alchemy_cauldron/cauldron_side",
+    "top": "lordofmysteries:block/alchemy_cauldron/cauldron_top",
+    "bottom": "lordofmysteries:block/alchemy_cauldron/cauldron_bottom",
+    "particle": "lordofmysteries:block/alchemy_cauldron/cauldron_side"
+  }
+}

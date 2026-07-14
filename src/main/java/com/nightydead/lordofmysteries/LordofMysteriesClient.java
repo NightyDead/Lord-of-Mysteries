@@ -1,5 +1,7 @@
 package com.nightydead.lordofmysteries;
 
+import com.nightydead.lordofmysteries.block.ModBlockEntities;
+import com.nightydead.lordofmysteries.client.AlchemyCauldronRenderer;
 import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -7,6 +9,7 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 
@@ -42,5 +45,16 @@ public class LordofMysteriesClient {
     static void onClientSetup(FMLClientSetupEvent event) {
         LordofMysteries.LOGGER.info("HELLO FROM CLIENT SETUP");
         LordofMysteries.LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
+    }
+
+    /**
+     * 注册方块实体渲染器
+     * 为炼药锅注册自定义渲染器，实现锅内物品悬浮旋转效果
+     *
+     * @param event 渲染器注册事件
+     */
+    @SubscribeEvent
+    static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        event.registerBlockEntityRenderer(ModBlockEntities.ALCHEMY_CAULDRON.get(), AlchemyCauldronRenderer::new);
     }
 }

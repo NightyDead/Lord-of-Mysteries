@@ -64,7 +64,7 @@ public class MysticalRitualManager {
             case "fool", "seer" -> { // 占卜家途径序列 4「诡法师」
                 // 仪式要求：在至少 15 个活体生物的"注视"下完成晋升
                 String pathKey = "pathway." + LordofMysteries.MODID + "." + pathway.toLowerCase();
-                player.sendSystemMessage(Component.translatable("message.lordofmysteries.ritual.checking", Component.translatable(pathKey), 4));
+                player.displayClientMessage(Component.translatable("message.lordofmysteries.ritual.checking", Component.translatable(pathKey), 4), true);
 
                 // 扫描玩家周围半径 16 格、高度 8 格范围内的所有活体生物
                 AABB scanArea = player.getBoundingBox().inflate(16.0D, 8.0D, 16.0D);
@@ -75,7 +75,7 @@ public class MysticalRitualManager {
                 boolean isRitualReady = spectators.size() >= 15;
 
                 if (!isRitualReady) {
-                    player.sendSystemMessage(Component.translatable("message.lordofmysteries.ritual.failed.bizarro_sorcerer", spectators.size()));
+                    player.displayClientMessage(Component.translatable("message.lordofmysteries.ritual.failed.bizarro_sorcerer", spectators.size()), true);
                     return false;
                 }
                 return true;

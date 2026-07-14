@@ -47,7 +47,7 @@ public class ModMysticalMechanics {
         if (stack.has(ModDataComponents.AGGREGATED_FEATURES.get())) {
             List<String> features = stack.get(ModDataComponents.AGGREGATED_FEATURES.get());
             if (features != null && !features.isEmpty()) {
-                player.sendSystemMessage(Component.translatable("message.lordofmysteries.absorption.start"));
+                player.displayClientMessage(Component.translatable("message.lordofmysteries.absorption.start"), true);
                 for (String featureStr : features) {
                     try {
                         String[] split = featureStr.split(":");
@@ -105,9 +105,9 @@ public class ModMysticalMechanics {
         // 理智崩溃判定
         if (data.getSanity() <= 0) {
             if (ticksBefore == -1 && data.getSdcTicks() != -1) {
-                player.sendSystemMessage(Component.translatable("message.lordofmysteries.sanity.collapse.irreversible"));
+                player.displayClientMessage(Component.translatable("message.lordofmysteries.sanity.collapse.irreversible"), true);
             } else if (ticksBefore == -1) {
-                player.sendSystemMessage(Component.translatable("message.lordofmysteries.sanity.collapse.immediate"));
+                player.displayClientMessage(Component.translatable("message.lordofmysteries.sanity.collapse.immediate"), true);
                 handleContaminationAndMadness(player, data, pathway, seq);
             }
         }
@@ -120,7 +120,7 @@ public class ModMysticalMechanics {
     private static void handleNormalHumanAbsorption(Player player, PlayerData data, String pathway, int seq, boolean isPotion) {
         if (!MysticalRitualManager.checkAndConsumeRitual(player, data, pathway, seq)) {
             String pathKey = "pathway." + LordofMysteries.MODID + "." + pathway.toLowerCase();
-            player.sendSystemMessage(Component.translatable("message.lordofmysteries.rejection.mortal", Component.translatable(pathKey)));
+            player.displayClientMessage(Component.translatable("message.lordofmysteries.rejection.mortal", Component.translatable(pathKey)), true);
             handleContaminationAndMadness(player, data, pathway, seq);
             return;
         }
@@ -129,7 +129,7 @@ public class ModMysticalMechanics {
 
         if (player.level().random.nextDouble() < chance) {
             String pathKey = "pathway." + LordofMysteries.MODID + "." + pathway.toLowerCase();
-            player.sendSystemMessage(Component.translatable("message.lordofmysteries.potion.consumed", Component.translatable(pathKey), seq));
+            player.displayClientMessage(Component.translatable("message.lordofmysteries.potion.consumed", Component.translatable(pathKey), seq), true);
 
             // 写入超凡状态
             data.setCurrentPathway(pathway);
@@ -152,7 +152,7 @@ public class ModMysticalMechanics {
         // 场景 1：跨途径吸收
         if (!data.getCurrentPathway().equals(pathway)) {
             if (isPotion && player.level().random.nextDouble() < 0.005) {
-                player.sendSystemMessage(Component.translatable("message.lordofmysteries.cross_pathway.miracle"));
+                player.displayClientMessage(Component.translatable("message.lordofmysteries.cross_pathway.miracle"), true);
                 data.setCurrentPathway(pathway);
                 data.setCurrentSequence(seq);
                 data.addAbsorbedRecord(pathway, seq);
@@ -169,7 +169,7 @@ public class ModMysticalMechanics {
         // 场景 2：同途径晋升下一序列
         if (data.getCurrentSequence() - 1 == seq) {
             if (!MysticalRitualManager.checkAndConsumeRitual(player, data, pathway, seq)) {
-                player.sendSystemMessage(Component.translatable("message.lordofmysteries.rejection.beyonder", seq));
+                player.displayClientMessage(Component.translatable("message.lordofmysteries.rejection.beyonder", seq), true);
                 handleContaminationAndMadness(player, data, pathway, seq);
                 return;
             }
@@ -184,7 +184,7 @@ public class ModMysticalMechanics {
                 // 先触发序列专属回调（设置灵性上限等），再将灵性充满至新上限
                 invokeOnAbsorbed(player, pathway, seq);
                 data.setSpirituality(data.getMaxSpiritual());
-                player.sendSystemMessage(Component.translatable("message.lordofmysteries.upgrade.success", seq));
+                player.displayClientMessage(Component.translatable("message.lordofmysteries.upgrade.success", seq), true);
             } else {
                 handleContaminationAndMadness(player, data, pathway, seq);
             }
@@ -193,7 +193,7 @@ public class ModMysticalMechanics {
         else if (seq >= data.getCurrentSequence()) {
             if (data.getDigestion() >= 1.0F && player.level().random.nextDouble() < (isPotion ? 0.40 : 0.10)) {
                 data.addAbsorbedRecord(pathway, seq);
-                player.sendSystemMessage(Component.translatable("message.lordofmysteries.characteristic.stack", seq));
+                player.displayClientMessage(Component.translatable("message.lordofmysteries.characteristic.stack", seq), true);
             } else {
                 handleContaminationAndMadness(player, data, pathway, seq);
             }
@@ -207,7 +207,7 @@ public class ModMysticalMechanics {
      * 赋予负面效果、启动失控倒计时
      */
     private static void handleContaminationAndMadness(Player player, PlayerData data, String pathway, int sequence) {
-        player.sendSystemMessage(Component.translatable("message.lordofmysteries.contamination.loss_of_control"));
+        player.displayClientMessage(Component.translatable("message.lordofmysteries.contamination.loss_of_control"), true);
         player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 300, 0));
         player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 300, 0));
         data.addAbsorbedRecord(pathway, sequence);

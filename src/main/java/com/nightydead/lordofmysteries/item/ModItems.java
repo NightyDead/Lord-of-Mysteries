@@ -6,6 +6,7 @@ import com.nightydead.lordofmysteries.item.custom.CharacteristicItem;
 import com.nightydead.lordofmysteries.item.custom.MainMaterialItem;
 import com.nightydead.lordofmysteries.item.custom.ModPotionItem;
 import com.nightydead.lordofmysteries.item.custom.PureWaterItem;
+import com.nightydead.lordofmysteries.item.custom.RitualDaggerItem;
 import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
@@ -50,6 +51,10 @@ public class ModItems {
 
     // ==================== 纯水（炼药基底溶剂） ====================
     public static final DeferredItem<Item> PURE_WATER = registerPureWater("pure_water");
+
+    // ==================== 仪式匕首 ====================
+    public static final DeferredItem<Item> RITUAL_DAGGER =
+            ITEMS.register("ritual_dagger", RitualDaggerItem::new);
 
     // ==================== 占卜家途径魔药 ====================
     public static final DeferredItem<Item> SEER_POTION = registerPotion("seer_potion", "fool", 9, 50);

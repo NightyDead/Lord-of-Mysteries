@@ -61,9 +61,33 @@ public class CharacteristicItem extends Item {
     /**
      * 添加物品悬停提示文本
      * 显示特性所属途径、序列信息，以及聚合特性的历史记录列表
+     * 失败酿造产物显示"魔药主材"标签而非途径/序列
      */
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+        // 检查是否为炼药锅失败酿造产物
+        Boolean isFailedBrew = stack.get(ModDataComponents.FAILED_BREW_MARKER.get());
+        if (Boolean.TRUE.equals(isFailedBrew)) {
+            // 失败酿造：显示"魔药主材"标题
+            tooltipComponents.add(Component.translatable("tooltip.lordofmysteries.characteristic.failed_brew_title")
+                    .withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
+
+            // 显示主材物品名称（从 AGGREGATED_FEATURES 中读取）
+            List<String> materialNames = stack.get(ModDataComponents.AGGREGATED_FEATURES.get());
+            if (materialNames != null && !materialNames.isEmpty()) {
+                for (String name : materialNames) {
+                    tooltipComponents.add(Component.literal("• ").append(Component.literal(name))
+                            .withStyle(ChatFormatting.GRAY));
+                }
+            }
+
+            tooltipComponents.add(Component.translatable("tooltip.lordofmysteries.characteristic.law")
+                    .withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.ITALIC));
+            super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+            return;
+        }
+
+        // 正常非凡特性的 Tooltip 逻辑
         String pathway = stack.get(ModDataComponents.PATHWAY.get());
         Integer seq = stack.get(ModDataComponents.SEQUENCE.get());
 

@@ -13,7 +13,7 @@ import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 
 /**
  * 模组 HUD 覆盖层渲染器
- * 负责在游戏客户端界面的左下角优雅绘制非凡者的神秘学核心状态面板
+ * 负责在游戏客户端界面的左上角优雅绘制非凡者的神秘学核心状态面板
  */
 @EventBusSubscriber(modid = LordofMysteries.MODID, value = Dist.CLIENT)
 public class ModHUDOverlay {
@@ -35,6 +35,9 @@ public class ModHUDOverlay {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null || mc.options.hideGui) return;
 
+        // 当 F3 调试界面打开时隐藏模组 HUD，避免遮挡调试信息
+        if (mc.getDebugOverlay().showDebugScreen()) return;
+
         GuiGraphics graphics = event.getGuiGraphics();
         Font font = mc.font;
 
@@ -42,19 +45,20 @@ public class ModHUDOverlay {
         int width = graphics.guiWidth();
         int height = graphics.guiHeight();
 
+        // 设定神秘学面板的左上角绝对基准坐标（左上角）
+        int startX = 10;
+        int currentY = 10;
+
         // ==================== 👁️ 灵视全屏幽蓝滤镜特效 ====================
         // 从客户端本地数据缓存中提取灵视激活状态
         if (ClientDataCache.isSpiritVisionActive()) {
             // 使用 fill 绘制一个覆盖全屏幕的半透明灵界幽蓝色（2F 前两位为十六进制透明度，后六位为幽蓝色）
             graphics.fill(0, 0, width, height, 0x2F003366);
 
-            // 可选：在屏幕中央或顶部淡淡渲染一句占卜家的密传，增强代入感（这里选择左上角）
-            graphics.drawString(font, Component.literal("👁 灵视状态已激活 (Spirit Vision)"), 10, 10, 0x55FFFFFF, true);
+            // 在面板顶部显示灵视激活状态
+            graphics.drawString(font, Component.literal("👁 灵视状态已激活 (Spirit Vision)"), startX, currentY, 0x55FFFFFF, true);
+            currentY += 15;
         }
-
-        // 设定神秘学面板的左上角绝对基准坐标
-        int startX = 10;
-        int currentY = height - 85; // 改用局部变量 height，自适应屏幕
 
         // 提取当前的非凡身份缓存数据
         String pathway = ClientDataCache.getPathway();
@@ -86,9 +90,10 @@ public class ModHUDOverlay {
             }
         }
 
-        // 如果开启了灵视，在左下角身份牌上方再加一行亮青色小字
+        // 如果开启了灵视，在身份牌上方显示灵视运行标记
         if (ClientDataCache.isSpiritVisionActive() && !isMortal) {
-            graphics.drawString(font, Component.literal("§b⚡ 灵视运行中"), startX, currentY - 12, 0xFF55FFFF, true);
+            graphics.drawString(font, Component.literal("§b⚡ 灵视运行中"), startX, currentY, 0xFF55FFFF, true);
+            currentY += 12;
         }
 
         graphics.drawString(font, identityText, startX, currentY, identityColor, true); //

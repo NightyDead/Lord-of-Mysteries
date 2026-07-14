@@ -37,6 +37,28 @@
   "block.lordofmysteries.night_perfume_herb": "夜香草",
   "block.lordofmysteries.poison_hemlock_herb": "毒堇",
 
+  "block.lordofmysteries.alchemy_cauldron": "炼药锅",
+
+  "item.lordofmysteries.ritual_dagger": "仪式匕首",
+
+  "message.lordofmysteries.cauldron.item_added": "§a[炼药锅] §f材料已放入。",
+  "message.lordofmysteries.cauldron.item_removed": "§e[炼药锅] §f材料已取出。",
+  "message.lordofmysteries.cauldron.brew.success": "§6[炼药锅] §a炼制成功！魔药正在成形...",
+  "message.lordofmysteries.cauldron.brew.failed": "§c[炼药锅] §4炼制失败！材料已被污染扭曲...",
+  "message.lordofmysteries.cauldron.brew.failed_no_main": "§7[炼药锅] 炼制失败，但没有主材参与，材料已消散。",
+  "message.lordofmysteries.cauldron.brew.penalty": "§4[炼药锅] §c失败的炼制涌出混乱的能量，抽取了你的生命与理智！",
+  "message.lordofmysteries.cauldron.potion_taken": "§a[炼药锅] §f你从锅中取出了魔药。",
+  "message.lordofmysteries.cauldron.characteristic_taken": "§e[炼药锅] §f你取出了聚合的非凡特性。",
+  "message.lordofmysteries.cauldron.use_bottle": "§e[炼药锅] §f请使用玻璃瓶来收集魔药。",
+  "message.lordofmysteries.cauldron.need_beyonder": "§c[炼药锅] §4只有非凡者才能注入灵性触发炼制。（Shift + 空手右键）",
+  "message.lordofmysteries.cauldron.need_spirituality": "§c[炼药锅] §4灵性不足！你至少需要 5 点灵性。",
+  "message.lordofmysteries.cauldron.brewed_block": "§e[炼药锅] §f炼药锅已完成炼制，请先取出结果。",
+
+  "message.lordofmysteries.ritual_dagger.cauldron_brew": "§5[仪式匕首] §f你通过匕首将灵性注入到炼药锅中...",
+
+  "tooltip.lordofmysteries.characteristic.failed_brew_title": "--- 炼制失败：魔药主材 ---",
+  "tooltip.lordofmysteries.characteristic.failed_brew_material": "主材来源: %s（序列 %d）",
+
   "hud.lordofmysteries.identity.mortal": "凡人",
   "hud.lordofmysteries.identity.format": "%s 途径 (序列 %s)",
   "hud.lordofmysteries.sanity.text": "理智: %s / 100",

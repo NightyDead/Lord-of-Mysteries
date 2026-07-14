@@ -38,6 +38,28 @@
   "block.lordofmysteries.night_perfume_herb": "Night Perfume Herb",
   "block.lordofmysteries.poison_hemlock_herb": "Poison Hemlock Herb",
 
+  "block.lordofmysteries.alchemy_cauldron": "Alchemy Cauldron",
+
+  "item.lordofmysteries.ritual_dagger": "Ritual Dagger",
+
+  "message.lordofmysteries.cauldron.item_added": "§a[Alchemy Cauldron] §fMaterial added.",
+  "message.lordofmysteries.cauldron.item_removed": "§e[Alchemy Cauldron] §fMaterial removed.",
+  "message.lordofmysteries.cauldron.brew.success": "§6[Alchemy Cauldron] §aBrewing succeeded! A potion is forming...",
+  "message.lordofmysteries.cauldron.brew.failed": "§c[Alchemy Cauldron] §4Brewing failed! The materials have been corrupted...",
+  "message.lordofmysteries.cauldron.brew.failed_no_main": "§7[Alchemy Cauldron] Brewing failed, but no main materials were involved. The materials have dissipated.",
+  "message.lordofmysteries.cauldron.brew.penalty": "§4[Alchemy Cauldron] §cThe failed brew surges with chaotic energy, draining your vitality and sanity!",
+  "message.lordofmysteries.cauldron.potion_taken": "§a[Alchemy Cauldron] §fYou collected the potion from the cauldron.",
+  "message.lordofmysteries.cauldron.characteristic_taken": "§e[Alchemy Cauldron] §fYou retrieved the aggregated characteristic.",
+  "message.lordofmysteries.cauldron.use_bottle": "§e[Alchemy Cauldron] §fUse a glass bottle to collect the potion.",
+  "message.lordofmysteries.cauldron.need_beyonder": "§c[Alchemy Cauldron] §4Only a Beyonder can infuse spirituality to trigger brewing. (Shift + Right-click with empty hand)",
+  "message.lordofmysteries.cauldron.need_spirituality": "§c[Alchemy Cauldron] §4Not enough spirituality! You need at least 5 points.",
+  "message.lordofmysteries.cauldron.brewed_block": "§e[Alchemy Cauldron] §fThe cauldron has finished brewing. Collect the result first.",
+
+  "message.lordofmysteries.ritual_dagger.cauldron_brew": "§5[Ritual Dagger] §fYou channel spirituality through the dagger into the cauldron...",
+
+  "tooltip.lordofmysteries.characteristic.failed_brew_title": "--- Failed Brew: Magic Main Material ---",
+  "tooltip.lordofmysteries.characteristic.failed_brew_material": "Main Material: %s (Seq %d)",
+
   "hud.lordofmysteries.identity.mortal": "Mortal",
   "hud.lordofmysteries.identity.format": "%s Pathway (Sequence %s)",
   "hud.lordofmysteries.sanity.text": "Sanity: %s / 100",

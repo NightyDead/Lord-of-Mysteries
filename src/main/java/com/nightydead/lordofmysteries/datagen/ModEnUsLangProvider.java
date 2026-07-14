@@ -45,6 +45,7 @@ public class ModEnUsLangProvider extends LanguageProvider {
         add(ModItems.STAR_CRYSTAL.get(), "Star Crystal");
         add(ModItems.PURE_WATER.get(), "Pure Water");
         add(ModItems.SEER_POTION.get(), "Seer Potion");
+        add(ModItems.RITUAL_DAGGER.get(), "Ritual Dagger");
 
         // 魔药辅助材料
         add(ModItems.NIGHT_PERFUME_JUICE.get(), "Night Perfume Juice");
@@ -59,6 +60,28 @@ public class ModEnUsLangProvider extends LanguageProvider {
         add(ModBlocks.GOLD_MINT_HERB.get(), "Gold Mint Herb");
         add(ModBlocks.POISON_HEMLOCK_HERB.get(), "Poison Hemlock");
         add(ModBlocks.DRAGON_BLOOD_HERB.get(), "Dragon Blood Herb");
+        // 炼药锅
+        add(ModBlocks.ALCHEMY_CAULDRON.get(), "Alchemy Cauldron");
+
+        // 炼药锅交互消息
+        add("message.lordofmysteries.cauldron.item_added", "§a[Alchemy Cauldron] §fMaterial added.");
+        add("message.lordofmysteries.cauldron.item_removed", "§e[Alchemy Cauldron] §fMaterial removed.");
+        add("message.lordofmysteries.cauldron.brew.success", "§6[Alchemy Cauldron] §aBrewing succeeded! A potion is forming...");
+        add("message.lordofmysteries.cauldron.brew.failed", "§c[Alchemy Cauldron] §4Brewing failed! The materials have been corrupted...");
+        add("message.lordofmysteries.cauldron.brew.penalty", "§4[Alchemy Cauldron] §cThe failed brew surges with chaotic energy, draining your vitality and sanity!");
+        add("message.lordofmysteries.cauldron.potion_taken", "§a[Alchemy Cauldron] §fYou collected the potion from the cauldron.");
+        add("message.lordofmysteries.cauldron.characteristic_taken", "§e[Alchemy Cauldron] §fYou retrieved the aggregated characteristic.");
+        add("message.lordofmysteries.cauldron.use_bottle", "§e[Alchemy Cauldron] §fUse a glass bottle to collect the potion.");
+        add("message.lordofmysteries.cauldron.need_beyonder", "§c[Alchemy Cauldron] §4Only a Beyonder can infuse spirituality to trigger brewing. (Shift + Right-click with empty hand)");
+        add("message.lordofmysteries.cauldron.need_spirituality", "§c[Alchemy Cauldron] §4Not enough spirituality! You need at least 5 points.");
+        add("message.lordofmysteries.cauldron.brewed_block", "§e[Alchemy Cauldron] §fThe cauldron has finished brewing. Collect the result first.");
+
+        // 仪式匕首消息
+        add("message.lordofmysteries.ritual_dagger.cauldron_brew", "§5[Ritual Dagger] §fYou channel spirituality through the dagger into the cauldron...");
+
+        // 失败酿造 Tooltip
+        add("tooltip.lordofmysteries.characteristic.failed_brew_title", "--- Failed Brew: Magic Main Material ---");
+        add("tooltip.lordofmysteries.characteristic.failed_brew_material", "Main Material: %s (Seq %d)");
 
         // 创造模式标签页
         add("itemGroup.characteristic_tab", "Characteristic");

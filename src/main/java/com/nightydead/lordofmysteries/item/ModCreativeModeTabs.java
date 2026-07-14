@@ -72,6 +72,8 @@ public class ModCreativeModeTabs {
                     .title(Component.translatable("itemGroup.mod_block_tab"))
                     .displayItems((parameters, output) -> {
                         output.accept(ModBlocks.EXAMPLE_BLOCK);
+                        output.accept(ModBlocks.ALCHEMY_CAULDRON);
+                        output.accept(ModItems.RITUAL_DAGGER);
                     }).withTabsBefore(ResourceLocation.fromNamespaceAndPath(LordofMysteries.MODID, "potion_tab"))
                     .build());
 

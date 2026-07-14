@@ -1,0 +1,10 @@
+{
+  "parent": "minecraft:block/cauldron",
+  "textures": {
+    "inside": "lordofmysteries:block/alchemy_cauldron/cauldron_inside",
+    "side": "lordofmysteries:block/alchemy_cauldron/cauldron_side",
+    "top": "lordofmysteries:block/alchemy_cauldron/cauldron_top",
+    "bottom": "lordofmysteries:block/alchemy_cauldron/cauldron_bottom",
+    "particle": "lordofmysteries:block/alchemy_cauldron/cauldron_side"
+  }
+}

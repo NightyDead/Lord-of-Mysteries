@@ -1,12 +1,14 @@
 package com.nightydead.lordofmysteries.datagen;
 
 import com.nightydead.lordofmysteries.LordofMysteries;
+import com.nightydead.lordofmysteries.block.AlchemyCauldronBlock;
 import com.nightydead.lordofmysteries.block.ModBlocks;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
+import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 /**
@@ -40,6 +42,9 @@ public class ModBlockStatesProvider extends BlockStateProvider {
         makeFlower(ModBlocks.GOLD_MINT_HERB.get());
         makeFlower(ModBlocks.POISON_HEMLOCK_HERB.get());
         makeFlower(ModBlocks.DRAGON_BLOOD_HERB.get());
+
+        // 炼药锅：生成 4 种状态的方块模型（空/有物品/成功/失败）
+        registerCauldronStates();
     }
 
     /**
@@ -50,5 +55,34 @@ public class ModBlockStatesProvider extends BlockStateProvider {
      */
     private void makeFlower(Block block) {
         simpleBlock(block, models().cross(blockTexture(block).getPath(), blockTexture(block)).renderType("cutout"));
+    }
+
+    /**
+     * 注册炼药锅的 4 种方块状态模型
+     * 使用 brew_state 属性区分：0=空, 1=有物品, 2=成功, 3=失败
+     * 所有状态均继承原版炼药锅模型（minecraft:block/cauldron），仅替换内部液体纹理
+     */
+    private void registerCauldronStates() {
+        Block cauldron = ModBlocks.ALCHEMY_CAULDRON.get();
+
+        // 为 4 种状态分别创建模型，继承原版炼药锅外形，覆盖内部液体纹理
+        var emptyModel = models().withExistingParent("alchemy_cauldron_empty", mcLoc("block/cauldron"))
+                .texture("inner", modLoc("block/alchemy_cauldron/empty"));
+        var itemsModel = models().withExistingParent("alchemy_cauldron_contains_items", mcLoc("block/cauldron"))
+                .texture("inner", modLoc("block/alchemy_cauldron/contains_items"));
+        var successModel = models().withExistingParent("alchemy_cauldron_success", mcLoc("block/cauldron"))
+                .texture("inner", modLoc("block/alchemy_cauldron/success"));
+        var failedModel = models().withExistingParent("alchemy_cauldron_failed", mcLoc("block/cauldron"))
+                .texture("inner", modLoc("block/alchemy_cauldron/failed"));
+
+        // 使用 getVariantBuilder 构建多状态方块
+        getVariantBuilder(cauldron)
+                .partialState().with(AlchemyCauldronBlock.BREW_STATE, 0).setModels(new ConfiguredModel(emptyModel))
+                .partialState().with(AlchemyCauldronBlock.BREW_STATE, 1).setModels(new ConfiguredModel(itemsModel))
+                .partialState().with(AlchemyCauldronBlock.BREW_STATE, 2).setModels(new ConfiguredModel(successModel))
+                .partialState().with(AlchemyCauldronBlock.BREW_STATE, 3).setModels(new ConfiguredModel(failedModel));
+
+        // 炼药锅物品模型：指向空状态模型（继承原版炼药锅外形）
+        simpleBlockItem(cauldron, emptyModel);
     }
 }

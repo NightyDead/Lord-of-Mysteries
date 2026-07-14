@@ -54,6 +54,14 @@ public class ModDataComponents {
                     .build()
     );
 
+    /** 失败酿造标记组件 - 标记聚合非凡特性为炼药锅失败产物，使 Tooltip 显示"魔药主材"而非途径/序列 */
+    public static final Supplier<DataComponentType<Boolean>> FAILED_BREW_MARKER = DATA_COMPONENT_TYPES.register(
+            "failed_brew_marker", () -> DataComponentType.<Boolean>builder()
+                    .persistent(Codec.BOOL)
+                    .networkSynchronized(ByteBufCodecs.BOOL)
+                    .build()
+    );
+
     /**
      * 将数据组件注册表绑定到模组事件总线
      *

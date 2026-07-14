@@ -9,6 +9,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.FlowerBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredBlock;
@@ -54,6 +55,16 @@ public class ModBlocks {
     public static final DeferredBlock<Block> DRAGON_BLOOD_HERB =
             registerBlock("dragon_blood_herb",
                     () -> new FlowerBlock(MobEffects.FIRE_RESISTANCE, 5.0F, BlockBehaviour.Properties.of().noCollission().instabreak().sound(SoundType.GRASS).pushReaction(net.minecraft.world.level.material.PushReaction.DESTROY)));
+
+    /** 炼药锅 - 无UI交互的魔药炼制装置，支持右键放入/取出材料、灵性注入触发酿造 */
+    public static final DeferredBlock<AlchemyCauldronBlock> ALCHEMY_CAULDRON =
+            registerBlock("alchemy_cauldron",
+                    () -> new AlchemyCauldronBlock(BlockBehaviour.Properties.of()
+                            .strength(3.5F, 6.0F)
+                            .requiresCorrectToolForDrops()
+                            .sound(SoundType.METAL)
+                            .mapColor(MapColor.METAL)
+                            .noOcclusion()));
 
     /**
      * 注册方块对应的方块物品（使方块可以被拾取和放置在物品栏中）

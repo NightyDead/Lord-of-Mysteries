@@ -41,9 +41,10 @@ public class ModItemModelsProvider extends ItemModelProvider {
         // basicItem(ModItems.MIRACLE_INVOKER_CHARACTERISTIC.get()); // 缺少 textures/item/characteristic/miracle_invoker_characteristic.png
         // basicItem(ModItems.ATTENDANT_OF_MYSTERIES_CHARACTERISTIC.get()); // 缺少 textures/item/characteristic/attendant_of_mysteries_characteristic.png
         basicItem(ModItems.LAVA_OCTOPUS_BLOOD.get());
-        // basicItem(ModItems.STAR_CRYSTAL.get());                   // 缺少 textures/item/material/star_crystal.png
+        basicItem(ModItems.STAR_CRYSTAL.get());
         basicItem(ModItems.PURE_WATER.get());
         basicItem(ModItems.SEER_POTION.get());
+        basicItem(ModItems.RITUAL_DAGGER.get());
 
         // 为植物的 BlockItem 生成 2D 物品模型，指向 textures/block/ 目录下的贴图
         makeBlockItemModel("night_perfume_herb");

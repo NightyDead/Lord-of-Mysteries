@@ -7,8 +7,10 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.common.conditions.IConditionBuilder;
@@ -71,6 +73,17 @@ public class ModRecipesProvider extends RecipeProvider implements IConditionBuil
                         100)
                 .unlockedBy("has_water_bottle", has(Items.POTION))
                 .save(recipeOutput, "lordofmysteries:pure_water_from_smoking");
+
+        // 仪式匕首：铁锭 + 花卉 + 木棍（竖直一列）
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.RITUAL_DAGGER.get())
+                .pattern("I")
+                .pattern("F")
+                .pattern("S")
+                .define('I', Items.IRON_INGOT)
+                .define('F', ItemTags.FLOWERS)
+                .define('S', Items.STICK)
+                .unlockedBy("has_iron_ingot", has(Items.IRON_INGOT))
+                .save(recipeOutput, "lordofmysteries:ritual_dagger");
 
         super.buildRecipes(recipeOutput);
     }

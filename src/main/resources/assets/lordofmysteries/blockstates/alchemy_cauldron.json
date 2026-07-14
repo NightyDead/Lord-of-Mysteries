@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "brew_state=0": {
+      "model": "lordofmysteries:block/alchemy_cauldron"
+    },
+    "brew_state=1": {
+      "model": "lordofmysteries:block/alchemy_cauldron_contains_items"
+    },
+    "brew_state=2": {
+      "model": "lordofmysteries:block/alchemy_cauldron_success"
+    },
+    "brew_state=3": {
+      "model": "lordofmysteries:block/alchemy_cauldron_failed"
+    }
+  }
+}
