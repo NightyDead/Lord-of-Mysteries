@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "BBB",
+    "BCB",
+    "BBB"
+  ],
+  "key": {
+    "B": {
+      "item": "minecraft:blackstone"
+    },
+    "C": {
+      "item": "minecraft:cauldron"
+    }
+  },
+  "result": {
+    "count":1,
+    "id": "lordofmysteries:alchemy_cauldron"
+  }
+}

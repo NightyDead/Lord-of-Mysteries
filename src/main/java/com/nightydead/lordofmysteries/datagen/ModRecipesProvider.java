@@ -85,6 +85,16 @@ public class ModRecipesProvider extends RecipeProvider implements IConditionBuil
                 .unlockedBy("has_iron_ingot", has(Items.IRON_INGOT))
                 .save(recipeOutput, "lordofmysteries:ritual_dagger");
 
+        //炼药锅：原版炼药锅 +8个黑石围一圈
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.ALCHEMY_CAULDRON.get())
+                .pattern("BBB")
+                .pattern("BCB")
+                .pattern("BBB")
+                .define('B', Items.BLACKSTONE)
+                .define('C', Items.CAULDRON)
+                .unlockedBy("has_cauldron", has(Items.CAULDRON))
+                .save(recipeOutput, "lordofmysteries:alchemy_cauldron");
+
         super.buildRecipes(recipeOutput);
     }
 }
