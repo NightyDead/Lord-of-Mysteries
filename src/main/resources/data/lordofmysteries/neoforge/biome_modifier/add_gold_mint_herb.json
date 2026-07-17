@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": ["minecraft:meadow", "minecraft:flower_forest", "minecraft:sunflower_plains"],
+  "features": "lordofmysteries:gold_mint_herb_placed",
+  "step": "vegetal_decoration"
+}

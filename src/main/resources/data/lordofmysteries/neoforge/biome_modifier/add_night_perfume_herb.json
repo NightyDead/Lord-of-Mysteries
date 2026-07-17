@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": ["minecraft:dark_forest", "minecraft:swamp"],
+  "features": "lordofmysteries:night_perfume_herb_placed",
+  "step": "vegetal_decoration"
+}
