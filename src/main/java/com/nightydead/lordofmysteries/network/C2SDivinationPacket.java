@@ -8,6 +8,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
@@ -29,11 +30,11 @@ public record C2SDivinationPacket() implements CustomPacketPayload {
             new Type<>(ResourceLocation.fromNamespaceAndPath(LordofMysteries.MODID, "c2s_divination"));
 
     /** 占卜灵性消耗 */
-    private static final int SPIRITUALITY_COST = 5;
-    /** 占卜成功增加的消化进度（2%） */
-    private static final float DIGESTION_GAIN = 0.02F;
+    private static final int SPIRITUALITY_COST = 20;
+    /** 占卜成功增加的消化进度（1%） */
+    private static final float DIGESTION_GAIN = 0.01F;
     /** 占卜失败扣除的理智值 */
-    private static final int SANITY_LOSS = 2;
+    private static final int SANITY_LOSS = 5;
 
     /** 无字段数据包，使用 unit 编解码器 */
     public static final StreamCodec<FriendlyByteBuf, C2SDivinationPacket> STREAM_CODEC =
@@ -128,8 +129,13 @@ public record C2SDivinationPacket() implements CustomPacketPayload {
                 player.setData(ModAttachments.PLAYER_DATA.get(), data);
                 PacketDistributor.sendToPlayer(player, new SyncDigestionPacket(data.getDigestion()));
 
-                // 生成粒子指引轨迹
+                // 生成粒子指引轨迹（分5波生成，每5tick一波，持续约1秒）
                 DivinationHandler.spawnGuidanceTrail(player.serverLevel(), player, nearest);
+                int baseTick = player.getServer().getTickCount();
+                for (int wave = 1; wave <= 4; wave++) {
+                    player.getServer().tell(new TickTask(baseTick + wave * 5,
+                            () -> DivinationHandler.spawnGuidanceTrail(player.serverLevel(), player, nearest)));
+                }
 
                 int dist = (int) Math.sqrt(player.blockPosition().distSqr(nearest));
                 player.displayClientMessage(

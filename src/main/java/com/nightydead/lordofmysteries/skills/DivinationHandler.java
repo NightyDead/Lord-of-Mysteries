@@ -24,7 +24,7 @@ public class DivinationHandler {
     /** 占卜搜索半径（方块） */
     public static final int SEARCH_RADIUS = 32;
     /** 粒子轨迹间距（方块） */
-    private static final double TRAIL_SPACING = 0.6;
+    private static final double TRAIL_SPACING = 0.3;
     /** 粒子颜色 — 灵性金色 */
     private static final Vector3f PARTICLE_COLOR = new Vector3f(1.0f, 0.84f, 0.2f);
     /** 粒子大小 */
@@ -181,9 +181,9 @@ public class DivinationHandler {
                     1, 0.02, 0.02, 0.02, 0.01);
         }
 
-        // 目标矿石处额外生成一圈标记粒子
-        for (int i = 0; i < 8; i++) {
-            double angle = i * Math.PI * 2 / 8;
+        // 目标矿石处额外生成多圈标记粒子（双层环 + 顶部标记）
+        for (int i = 0; i < 12; i++) {
+            double angle = i * Math.PI * 2 / 12;
             double ox = Math.cos(angle) * 0.4;
             double oz = Math.sin(angle) * 0.4;
             level.sendParticles(particle,
@@ -191,6 +191,9 @@ public class DivinationHandler {
                     1, 0, 0, 0, 0.02);
             level.sendParticles(particle,
                     end.x + ox, end.y + 0.8, end.z + oz,
+                    1, 0, 0, 0, 0.02);
+            level.sendParticles(particle,
+                    end.x + ox, end.y + 1.3, end.z + oz,
                     1, 0, 0, 0, 0.02);
         }
     }
