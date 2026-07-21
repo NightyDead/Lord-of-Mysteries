@@ -15,6 +15,7 @@ import com.nightydead.lordofmysteries.item.custom.ModPotionItem;
 import com.nightydead.lordofmysteries.item.custom.RitualDaggerItem;
 import com.nightydead.lordofmysteries.pathway.PathwayRegistry;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -123,7 +124,27 @@ public class ModEventHandlers {
             }
         }
 
-        // 3. 自然恢复机制（200t恢复理智，40t恢复灵性）
+        // 3. 理智惩罚效果（生存模式专用）
+        if (!player.isCreative()) {
+            int sanity = data.getSanity();
+            if (sanity > 0) {
+                // 理智低于20：反胃
+                if (sanity < 20 && player.tickCount % 100 == 0) {
+                    player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 200, 0));
+                }
+                // 理智低于10：失明（同时仍受反胃影响）
+                if (sanity < 10 && player.tickCount % 100 == 0) {
+                    player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 200, 0));
+                }
+            } else if (data.getSdcTicks() == -1) {
+                // 理智归零：触发失控倒计时
+                data.setSdcTicks(300);
+                player.displayClientMessage(
+                        Component.translatable("message.lordofmysteries.sanity.collapse.immediate"), true);
+            }
+        }
+
+        // 4. 自然恢复机制（200t恢复理智，40t恢复灵性）
         if (player.tickCount % 200 == 0 && data.getSanity() < 100 && (data.getSdcTicks() == -1 || player.isCreative())) {
             data.setSanity(data.getSanity() + 1);
         }
@@ -136,12 +157,12 @@ public class ModEventHandlers {
             }
         }
 
-        // 4. 定期兜底数据传输（合并优化减少发包）
+        // 5. 定期兜底数据传输（合并优化减少发包）
         if (player.tickCount % 20 == 0 && player instanceof ServerPlayer serverPlayer) {
             ModMysticalMechanics.syncAllData(serverPlayer, data);
         }
 
-        // 5. 🔮 灵视发光处理（服务端权威模式）
+        // 6. 🔮 灵视发光处理（服务端权威模式）
         // 在服务端设置 setGlowingTag，通过实体数据同步到客户端渲染，避免单人模式下客户端设置被覆盖
         handleVisionGlowing(player, data);
     }
@@ -248,6 +269,8 @@ public class ModEventHandlers {
 
     /**
      * 玩家死亡事件 - 处理失控倒计时触发的疯狂怪物生成
+     * 失控死亡时，非凡特性优先绑定在失控僵尸身上（非和平模式）
+     * 和平模式下僵尸无法生成，特性直接掉落
      *
      * @param event 生物死亡事件
      */
@@ -256,7 +279,24 @@ public class ModEventHandlers {
         if (event.getEntity() instanceof Player player && !player.level().isClientSide()) {
             player.getExistingData(ModAttachments.PLAYER_DATA.get()).ifPresent(data -> {
                 if (data.getSdcTicks() == -2) {
-                    spawnMadnessMonster(player);
+                    var history = data.getAbsorbedCharacteristics();
+                    if (history != null && !history.isEmpty()) {
+                        Zombie zombie = spawnMadnessMonster(player);
+                        if (zombie != null) {
+                            // 非和平模式：特性存入僵尸，击杀后才掉落
+                            String joined = String.join(";", history);
+                            zombie.getPersistentData().putBoolean("lordofmysteries.madness", true);
+                            zombie.getPersistentData().putString("lordofmysteries.chars", joined);
+                            // 清除玩家特性记录，防止 onPlayerDrops 重复掉落
+                            data.getAbsorbedCharacteristics().clear();
+                            ModMysticalMechanics.invokeOnRemoved(player, data.getCurrentPathway(), data.getCurrentSequence());
+                            data.reset();
+                            player.displayClientMessage(Component.translatable("message.lordofmysteries.characteristic.dropped"), true);
+                        }
+                        // 和平模式（zombie == null）：不清理特性，留给 onPlayerDrops 直接掉落
+                    } else {
+                        spawnMadnessMonster(player);
+                    }
                     data.setSdcTicks(-1);
                 }
             });
@@ -265,6 +305,7 @@ public class ModEventHandlers {
 
     /**
      * 玩家掉落物事件 - 玩家死亡时析出已吸收的非凡特性为聚合特性物品
+     * 失控死亡时特性已转移至僵尸，此处跳过（history 已被清空）
      *
      * @param event 生物掉落物事件
      */
@@ -275,16 +316,16 @@ public class ModEventHandlers {
         var data = player.getData(ModAttachments.PLAYER_DATA.get());
         var history = data.getAbsorbedCharacteristics();
 
-        if (history != null && !history.isEmpty()) {
-            ItemStack aggregatedStack = new ItemStack(ModItems.AGGREGATED_CHARACTERISTIC.get());
-            aggregatedStack.set(ModDataComponents.AGGREGATED_FEATURES.get(), new ArrayList<>(history));
+        if (history == null || history.isEmpty()) return;
 
-            event.getDrops().add(new ItemEntity(player.level(), player.getX(), player.getY() + 0.5, player.getZ(), aggregatedStack));
-            // 特性析出前触发序列移除回调（回退灵性上限、剥离被动能力等）
-            ModMysticalMechanics.invokeOnRemoved(player, data.getCurrentPathway(), data.getCurrentSequence());
-            data.reset(); // 特性析出后彻底归凡
-            player.displayClientMessage(Component.translatable("message.lordofmysteries.characteristic.dropped"), true);
-        }
+        ItemStack aggregatedStack = new ItemStack(ModItems.AGGREGATED_CHARACTERISTIC.get());
+        aggregatedStack.set(ModDataComponents.AGGREGATED_FEATURES.get(), new ArrayList<>(history));
+
+        event.getDrops().add(new ItemEntity(player.level(), player.getX(), player.getY() + 0.5, player.getZ(), aggregatedStack));
+        // 特性析出前触发序列移除回调（回退灵性上限、剥离被动能力等）
+        ModMysticalMechanics.invokeOnRemoved(player, data.getCurrentPathway(), data.getCurrentSequence());
+        data.reset(); // 特性析出后彻底归凡
+        player.displayClientMessage(Component.translatable("message.lordofmysteries.characteristic.dropped"), true);
     }
 
     /**
@@ -403,21 +444,52 @@ public class ModEventHandlers {
     }
 
     /**
+     * 失控僵尸死亡掉落事件 - 僵尸被击杀时掉落其携带的聚合非凡特性
+     * 特性数据存储于僵尸的 persistentData 中，服务器重启后依然有效
+     *
+     * @param event 生物掉落物事件
+     */
+    @SubscribeEvent
+    public static void onMadnessZombieDrops(LivingDropsEvent event) {
+        if (event.getEntity().level().isClientSide()) return;
+        if (!(event.getEntity() instanceof Zombie zombie)) return;
+
+        CompoundTag persistentData = zombie.getPersistentData();
+        if (!persistentData.getBoolean("lordofmysteries.madness")) return;
+
+        String joined = persistentData.getString("lordofmysteries.chars");
+        if (joined.isEmpty()) return;
+
+        java.util.List<String> characteristics = new ArrayList<>();
+        for (String s : joined.split(";")) {
+            if (!s.isEmpty()) characteristics.add(s);
+        }
+        if (characteristics.isEmpty()) return;
+
+        ItemStack stack = new ItemStack(ModItems.AGGREGATED_CHARACTERISTIC.get());
+        stack.set(ModDataComponents.AGGREGATED_FEATURES.get(), characteristics);
+        event.getDrops().add(new ItemEntity(zombie.level(), zombie.getX(), zombie.getY() + 0.5, zombie.getZ(), stack));
+    }
+
+    /**
      * 生成疯狂怪物 - 玩家失控倒计时归零后在玩家位置生成强化僵尸
-     * 怪物拥有力量提升和速度提升的永久效果，并显示玩家名称
+     * 怪物拥有力量提升和速度提升的永久效果，设置不消失，并显示玩家名称
      *
      * @param player 失控的玩家
+     * @return 生成的僵尸实体，失败时返回 null
      */
-    private static void spawnMadnessMonster(Player player) {
+    private static Zombie spawnMadnessMonster(Player player) {
         Level level = player.level();
         Zombie zombie = EntityType.ZOMBIE.create(level);
         if (zombie != null) {
             zombie.moveTo(player.getX(), player.getY(), player.getZ(), player.getYRot(), player.getXRot());
-            zombie.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 99999, 1));
-            zombie.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 99999, 0));
+            zombie.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST,99999,1));
+            zombie.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED,99999,0));
             zombie.setCustomName(Component.translatable("entity.lordofmysteries.madness_zombie", player.getGameProfile().getName()));
             zombie.setCustomNameVisible(true);
+            zombie.setPersistenceRequired();
             level.addFreshEntity(zombie);
         }
+        return zombie;
     }
 }
