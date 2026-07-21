@@ -32,8 +32,15 @@ public class ModMessages {
             SyncVisionPacket.register(registrar);
             // ⚡ 注册灵视切换包（客户端 -> 服务器）
             C2SToggleVisionPacket.register(registrar);
-            // 🔮 注册占卜请求包（客户端 -> 服务器）
+            // 🔮 注册占卜请求包（客户端 → 服务器）
             C2SDivinationPacket.register(registrar);
+            // 🌿 注册群系占卜请求包（客户端 → 服务器）
+            C2SBiomeDivinationPacket.register(registrar);
+            // 🏛️ 注册结构占卜请求包（客户端 → 服务器）
+            C2SStructureDivinationPacket.register(registrar);
+            // 🏛️ 注册结构列表请求/响应包
+            C2SRequestStructuresPacket.register(registrar);
+            S2CStructureListPacket.register(registrar);
         });
     }
 }

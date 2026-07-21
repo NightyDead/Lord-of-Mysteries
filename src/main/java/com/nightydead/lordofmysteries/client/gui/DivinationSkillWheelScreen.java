@@ -5,10 +5,14 @@ import com.mojang.blaze3d.vertex.*;
 import com.nightydead.lordofmysteries.network.C2SDivinationPacket;
 import com.nightydead.lordofmysteries.skills.ModSkills;
 import com.nightydead.lordofmysteries.skills.ModSkills.SkillEntry;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.lwjgl.glfw.GLFW;
 
@@ -168,15 +172,184 @@ public class DivinationSkillWheelScreen extends Screen {
 
     private void executeAndClose() {
         if (selectedSector >= 0 && selectedSector < skills.size()) {
-            execute(skills.get(selectedSector));
+            SkillEntry skill = skills.get(selectedSector);
+            if (skill.id().equals(ModSkills.ID_DIVINATION)) {
+                // 群系占卜：setScreen 会自动清理轮盘，无需走 onClose
+                if (isHoldingCompassAndPlant()) {
+                    Minecraft.getInstance().setScreen(new BiomeDivinationScreen());
+                    return;
+                }
+                // 结构占卜：指南针 + 岩石类方块
+                if (isHoldingCompassAndStone()) {
+                    Minecraft.getInstance().setScreen(new StructureDivinationScreen());
+                    return;
+                }
+                // 矿物占卜：发送网络包后正常关闭轮盘
+                PacketDistributor.sendToServer(new C2SDivinationPacket());
+            }
         }
         onClose();
     }
 
-    private void execute(SkillEntry skill) {
-        if (skill.id().equals(ModSkills.ID_DIVINATION)) {
-            PacketDistributor.sendToServer(new C2SDivinationPacket());
-        }
+    /**
+     * 检查玩家是否一手持指南针、另一手持植物类物品
+     */
+    private static boolean isHoldingCompassAndPlant() {
+        var player = Minecraft.getInstance().player;
+        if (player == null) return false;
+
+        ItemStack main = player.getMainHandItem();
+        ItemStack off = player.getOffhandItem();
+
+        boolean mainCompass = main.is(Items.COMPASS);
+        boolean offCompass = off.is(Items.COMPASS);
+        boolean mainPlant = isPlantItem(main);
+        boolean offPlant = isPlantItem(off);
+
+        return (mainCompass && offPlant) || (offCompass && mainPlant);
+    }
+
+    /**
+     * 判断物品是否为植物类（花、树叶、树苗、种子、草等）
+     */
+    private static boolean isPlantItem(ItemStack stack) {
+        if (stack.isEmpty()) return false;
+        // 标签匹配：花、树叶、树苗
+        if (stack.is(ItemTags.FLOWERS)) return true;
+        if (stack.is(ItemTags.LEAVES)) return true;
+        if (stack.is(ItemTags.SAPLINGS)) return true;
+        // 常见植物物品
+        return stack.is(Items.SHORT_GRASS) || stack.is(Items.TALL_GRASS)
+                || stack.is(Items.FERN) || stack.is(Items.LARGE_FERN)
+                || stack.is(Items.VINE) || stack.is(Items.WHEAT_SEEDS)
+                || stack.is(Items.MELON_SEEDS) || stack.is(Items.PUMPKIN_SEEDS)
+                || stack.is(Items.BEETROOT_SEEDS) || stack.is(Items.SUGAR_CANE)
+                || stack.is(Items.BAMBOO) || stack.is(Items.CACTUS)
+                || stack.is(Items.SEA_PICKLE) || stack.is(Items.LILY_PAD)
+                || stack.is(Items.DEAD_BUSH) || stack.is(Items.WEEPING_VINES)
+                || stack.is(Items.TWISTING_VINES) || stack.is(Items.CRIMSON_FUNGUS)
+                || stack.is(Items.WARPED_FUNGUS) || stack.is(Items.BROWN_MUSHROOM)
+                || stack.is(Items.RED_MUSHROOM) || stack.is(Items.NETHER_SPROUTS)
+                || stack.is(Items.NETHER_WART) || stack.is(Items.CHORUS_FLOWER)
+                || stack.is(Items.COCOA_BEANS) || stack.is(Items.KELP)
+                || stack.is(Items.SEAGRASS)
+                || stack.is(Items.GLOW_LICHEN) || stack.is(Items.MOSS_BLOCK)
+                || stack.is(Items.MOSS_CARPET) || stack.is(Items.HANGING_ROOTS)
+                || stack.is(Items.SPORE_BLOSSOM) || stack.is(Items.AZALEA)
+                || stack.is(Items.FLOWERING_AZALEA) || stack.is(Items.BIG_DRIPLEAF)
+                || stack.is(Items.SMALL_DRIPLEAF) || stack.is(Items.GLOW_BERRIES)
+                || stack.is(Items.SWEET_BERRIES) || stack.is(Items.PITCHER_PLANT)
+                || stack.is(Items.TORCHFLOWER);
+    }
+
+    /**
+     * 检查玩家是否一手持指南针、另一手持岩石类方块
+     */
+    private static boolean isHoldingCompassAndStone() {
+        var player = Minecraft.getInstance().player;
+        if (player == null) return false;
+
+        ItemStack main = player.getMainHandItem();
+        ItemStack off = player.getOffhandItem();
+
+        boolean mainCompass = main.is(Items.COMPASS);
+        boolean offCompass = off.is(Items.COMPASS);
+        boolean mainStone = isStoneItem(main);
+        boolean offStone = isStoneItem(off);
+
+        return (mainCompass && offStone) || (offCompass && mainStone);
+    }
+
+    /**
+     * 判断物品是否为岩石类（圆石、花岗岩、石砖、黑石、下界岩等）
+     */
+    private static boolean isStoneItem(ItemStack stack) {
+        if (stack.isEmpty()) return false;
+        // 标签匹配
+        if (stack.is(ItemTags.STONE_CRAFTING_MATERIALS)) return true;
+        if (stack.is(ItemTags.STONE_BRICKS)) return true;
+        // 圆石、石头及其变种
+        if (stack.is(Items.COBBLESTONE) || stack.is(Items.STONE)
+                || stack.is(Items.COBBLESTONE_SLAB) || stack.is(Items.STONE_SLAB)
+                || stack.is(Items.COBBLESTONE_STAIRS) || stack.is(Items.STONE_STAIRS)
+                || stack.is(Items.COBBLESTONE_WALL) || stack.is(Items.MOSSY_COBBLESTONE)
+                || stack.is(Items.MOSSY_COBBLESTONE_SLAB) || stack.is(Items.MOSSY_COBBLESTONE_STAIRS)
+                || stack.is(Items.MOSSY_COBBLESTONE_WALL)
+                || stack.is(Items.SMOOTH_STONE) || stack.is(Items.SMOOTH_STONE_SLAB)) return true;
+        // 花岗岩、闪长岩、安山岩
+        if (stack.is(Items.GRANITE) || stack.is(Items.DIORITE) || stack.is(Items.ANDESITE)
+                || stack.is(Items.GRANITE_SLAB) || stack.is(Items.DIORITE_SLAB) || stack.is(Items.ANDESITE_SLAB)
+                || stack.is(Items.GRANITE_STAIRS) || stack.is(Items.DIORITE_STAIRS) || stack.is(Items.ANDESITE_STAIRS)
+                || stack.is(Items.GRANITE_WALL) || stack.is(Items.DIORITE_WALL) || stack.is(Items.ANDESITE_WALL)
+                || stack.is(Items.POLISHED_GRANITE) || stack.is(Items.POLISHED_DIORITE) || stack.is(Items.POLISHED_ANDESITE)
+                || stack.is(Items.POLISHED_GRANITE_SLAB) || stack.is(Items.POLISHED_DIORITE_SLAB) || stack.is(Items.POLISHED_ANDESITE_SLAB)
+                || stack.is(Items.POLISHED_GRANITE_STAIRS) || stack.is(Items.POLISHED_DIORITE_STAIRS) || stack.is(Items.POLISHED_ANDESITE_STAIRS)) return true;
+        // 黑石及变种
+        if (stack.is(Items.BLACKSTONE) || stack.is(Items.BLACKSTONE_SLAB)
+                || stack.is(Items.BLACKSTONE_STAIRS) || stack.is(Items.BLACKSTONE_WALL)
+                || stack.is(Items.POLISHED_BLACKSTONE) || stack.is(Items.POLISHED_BLACKSTONE_SLAB)
+                || stack.is(Items.POLISHED_BLACKSTONE_STAIRS) || stack.is(Items.POLISHED_BLACKSTONE_WALL)
+                || stack.is(Items.POLISHED_BLACKSTONE_BRICKS) || stack.is(Items.POLISHED_BLACKSTONE_BRICK_SLAB)
+                || stack.is(Items.POLISHED_BLACKSTONE_BRICK_STAIRS) || stack.is(Items.POLISHED_BLACKSTONE_BRICK_WALL)
+                || stack.is(Items.CHISELED_POLISHED_BLACKSTONE) || stack.is(Items.CRACKED_POLISHED_BLACKSTONE_BRICKS)
+                || stack.is(Items.GILDED_BLACKSTONE)) return true;
+        // 下界岩、下界砖
+        if (stack.is(Items.NETHERRACK) || stack.is(Items.NETHER_BRICKS)
+                || stack.is(Items.NETHER_BRICK_SLAB) || stack.is(Items.NETHER_BRICK_STAIRS)
+                || stack.is(Items.NETHER_BRICK_WALL) || stack.is(Items.NETHER_BRICK_FENCE)
+                || stack.is(Items.RED_NETHER_BRICKS) || stack.is(Items.RED_NETHER_BRICK_SLAB)
+                || stack.is(Items.RED_NETHER_BRICK_STAIRS) || stack.is(Items.RED_NETHER_BRICK_WALL)
+                || stack.is(Items.CHISELED_NETHER_BRICKS) || stack.is(Items.CRACKED_NETHER_BRICKS)
+                || stack.is(Items.CRIMSON_NYLIUM) || stack.is(Items.WARPED_NYLIUM)) return true;
+        // 砂岩
+        if (stack.is(Items.SANDSTONE) || stack.is(Items.SANDSTONE_SLAB)
+                || stack.is(Items.SANDSTONE_STAIRS) || stack.is(Items.SANDSTONE_WALL)
+                || stack.is(Items.SMOOTH_SANDSTONE) || stack.is(Items.SMOOTH_SANDSTONE_SLAB)
+                || stack.is(Items.SMOOTH_SANDSTONE_STAIRS) || stack.is(Items.CHISELED_SANDSTONE)
+                || stack.is(Items.CUT_SANDSTONE)
+                || stack.is(Items.RED_SANDSTONE) || stack.is(Items.RED_SANDSTONE_SLAB)
+                || stack.is(Items.RED_SANDSTONE_STAIRS) || stack.is(Items.RED_SANDSTONE_WALL)
+                || stack.is(Items.SMOOTH_RED_SANDSTONE) || stack.is(Items.SMOOTH_RED_SANDSTONE_SLAB)
+                || stack.is(Items.SMOOTH_RED_SANDSTONE_STAIRS) || stack.is(Items.CHISELED_RED_SANDSTONE)) return true;
+        // 深板岩
+        if (stack.is(Items.DEEPSLATE) || stack.is(Items.COBBLED_DEEPSLATE)
+                || stack.is(Items.COBBLED_DEEPSLATE_SLAB) || stack.is(Items.COBBLED_DEEPSLATE_STAIRS)
+                || stack.is(Items.COBBLED_DEEPSLATE_WALL) || stack.is(Items.POLISHED_DEEPSLATE)
+                || stack.is(Items.POLISHED_DEEPSLATE_SLAB) || stack.is(Items.POLISHED_DEEPSLATE_STAIRS)
+                || stack.is(Items.POLISHED_DEEPSLATE_WALL) || stack.is(Items.DEEPSLATE_BRICKS)
+                || stack.is(Items.DEEPSLATE_BRICK_SLAB) || stack.is(Items.DEEPSLATE_BRICK_STAIRS)
+                || stack.is(Items.DEEPSLATE_BRICK_WALL) || stack.is(Items.DEEPSLATE_TILES)
+                || stack.is(Items.DEEPSLATE_TILE_SLAB) || stack.is(Items.DEEPSLATE_TILE_STAIRS)
+                || stack.is(Items.DEEPSLATE_TILE_WALL) || stack.is(Items.CHISELED_DEEPSLATE)
+                || stack.is(Items.CRACKED_DEEPSLATE_BRICKS) || stack.is(Items.CRACKED_DEEPSLATE_TILES)
+                || stack.is(Items.REINFORCED_DEEPSLATE)) return true;
+        // 凝灰岩
+        if (stack.is(Items.TUFF) || stack.is(Items.TUFF_SLAB)
+                || stack.is(Items.TUFF_STAIRS) || stack.is(Items.TUFF_WALL)
+                || stack.is(Items.POLISHED_TUFF) || stack.is(Items.POLISHED_TUFF_SLAB)
+                || stack.is(Items.POLISHED_TUFF_STAIRS) || stack.is(Items.POLISHED_TUFF_WALL)
+                || stack.is(Items.TUFF_BRICKS) || stack.is(Items.TUFF_BRICK_SLAB)
+                || stack.is(Items.TUFF_BRICK_STAIRS) || stack.is(Items.TUFF_BRICK_WALL)
+                || stack.is(Items.CHISELED_TUFF) || stack.is(Items.CHISELED_TUFF_BRICKS)) return true;
+        // 滴水石
+        if (stack.is(Items.DRIPSTONE_BLOCK) || stack.is(Items.POINTED_DRIPSTONE)) return true;
+        // 方解石、玄武岩
+        if (stack.is(Items.CALCITE) || stack.is(Items.BASALT)
+                || stack.is(Items.SMOOTH_BASALT) || stack.is(Items.POLISHED_BASALT)) return true;
+        // 末地石
+        if (stack.is(Items.END_STONE) || stack.is(Items.END_STONE_BRICKS)
+                || stack.is(Items.END_STONE_BRICK_SLAB) || stack.is(Items.END_STONE_BRICK_STAIRS)
+                || stack.is(Items.END_STONE_BRICK_WALL)) return true;
+        // 紫珀
+        if (stack.is(Items.PURPUR_BLOCK) || stack.is(Items.PURPUR_SLAB)
+                || stack.is(Items.PURPUR_STAIRS) || stack.is(Items.PURPUR_PILLAR)) return true;
+        // 海晶石
+        if (stack.is(Items.PRISMARINE) || stack.is(Items.PRISMARINE_SLAB)
+                || stack.is(Items.PRISMARINE_STAIRS) || stack.is(Items.PRISMARINE_WALL)
+                || stack.is(Items.PRISMARINE_BRICKS) || stack.is(Items.PRISMARINE_BRICK_SLAB)
+                || stack.is(Items.PRISMARINE_BRICK_STAIRS) || stack.is(Items.DARK_PRISMARINE)
+                || stack.is(Items.DARK_PRISMARINE_SLAB) || stack.is(Items.DARK_PRISMARINE_STAIRS)) return true;
+        return false;
     }
 
     // ==================== 几何绘制工具 ====================

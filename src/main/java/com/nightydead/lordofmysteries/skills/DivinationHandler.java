@@ -165,7 +165,17 @@ public class DivinationHandler {
      * @param target 目标矿石坐标
      */
     public static void spawnGuidanceTrail(ServerLevel level, Player player, BlockPos target) {
-        Vec3 start = player.getEyePosition();
+        spawnGuidanceTrail(level, player.getEyePosition(), target);
+    }
+
+    /**
+     * 生成粒子轨迹 — 使用固定起点，用于延时波次避免玩家移动导致轨迹偏移
+     *
+     * @param level  服务端世界
+     * @param start  固定的轨迹起点
+     * @param target 目标坐标
+     */
+    public static void spawnGuidanceTrail(ServerLevel level, Vec3 start, BlockPos target) {
         Vec3 end = Vec3.atCenterOf(target);
         Vec3 dir = end.subtract(start);
         double totalDist = dir.length();
