@@ -104,7 +104,7 @@ public record C2SDivinationPacket() implements CustomPacketPayload {
                     player.setData(ModAttachments.PLAYER_DATA.get(), data);
                     PacketDistributor.sendToPlayer(player, new SyncSanityPacket(data.getSanity()));
                     player.displayClientMessage(
-                            Component.literal("§c手持矿物类物品才能进行占卜（矿石、粗矿、锭、粒、块均可）。"), true);
+                            Component.literal("§c占卜失败"), true);
                     return;
                 }
 
