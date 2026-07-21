@@ -2,7 +2,9 @@ package com.nightydead.lordofmysteries.client;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.nightydead.lordofmysteries.LordofMysteries;
+import com.nightydead.lordofmysteries.client.gui.DivinationSkillWheelScreen;
 import com.nightydead.lordofmysteries.network.C2SToggleVisionPacket;
+import com.nightydead.lordofmysteries.skills.ModSkills;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;
@@ -23,13 +25,24 @@ public class ModKeyMappings {
     /** 统一定义按键分类在控制菜单中的本地化语言键 (Lang Key) */
     private static final String KEY_CATEGORY = "key.categories." + LordofMysteries.MODID;
 
-    /** 👁️ 定义“开启/关闭灵视”按键，默认绑定为键盘 V 键 */
+    /** 👁️ 定义"开启/关闭灵视"按键，默认绑定为键盘 V 键 */
     public static final KeyMapping TOGGLE_VISION_KEY = new KeyMapping(
-            "key." + LordofMysteries.MODID + ".toggle_vision", // 按键本身的本地化键
+            "key." + LordofMysteries.MODID + ".toggle_vision",
             InputConstants.Type.KEYSYM,
-            GLFW.GLFW_KEY_V,                                   // 默认按键为 V
-            KEY_CATEGORY                                      // 所属分类
+            GLFW.GLFW_KEY_V,
+            KEY_CATEGORY
     );
+    
+    /** 🔮 定义"技能轮盘"按键，默认绑定为键盘 C 键（按下即打开轮盘，松开释放技能） */
+    public static final KeyMapping DIVINATION_WHEEL_KEY = new KeyMapping(
+            "key." + LordofMysteries.MODID + ".skill_wheel",
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_C,
+            KEY_CATEGORY
+    );
+    
+    /** C 键上一帧是否按下，用于检测按下瞬间（上升沿） */
+    private static boolean cWasDown = false;
 
     /**
      * 🚀 自动注册到 Mod 总线
@@ -38,6 +51,7 @@ public class ModKeyMappings {
     @SubscribeEvent
     public static void onRegisterKeyMappings(RegisterKeyMappingsEvent event) {
         event.register(TOGGLE_VISION_KEY);
+        event.register(DIVINATION_WHEEL_KEY);
     }
 
     /**
@@ -47,12 +61,24 @@ public class ModKeyMappings {
      */
     @SubscribeEvent
     public static void onClientTick(ClientTickEvent.Post event) {
-        // 确保只在游戏世界内且玩家未打开任何 UI 界面（如背包、聊天栏）时才响应快捷键
-        if (Minecraft.getInstance().level != null && Minecraft.getInstance().screen == null) {
+        Minecraft mc = Minecraft.getInstance();
 
-            // ⚡ 检查“灵视按键”是否在当前 Tick 被按下
+        boolean cDown = DIVINATION_WHEEL_KEY.isDown();
+
+        // ──────── 🔮 技能轮盘：C 键按下即开 ────────
+        // 上升沿检测：上一帧未按下，当前帧按下，且无其他 UI 遮挡
+        if (cDown && !cWasDown && mc.level != null && mc.screen == null) {
+            var skills = ModSkills.getAvailableSkills(
+                    ClientDataCache.getPathway(),
+                    ClientDataCache.getSequence()
+            );
+            mc.setScreen(new DivinationSkillWheelScreen(skills));
+        }
+        cWasDown = cDown;
+
+        // ──────── 👁️ 灵视：V 键即时切换（仅在无 UI 遮挡时） ────────
+        if (mc.level != null && mc.screen == null) {
             while (TOGGLE_VISION_KEY.consumeClick()) {
-                // 🚀 向服务器提交“我想开关灵视”的请求
                 PacketDistributor.sendToServer(new C2SToggleVisionPacket());
             }
         }

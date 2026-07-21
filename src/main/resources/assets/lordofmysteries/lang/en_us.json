@@ -74,6 +74,11 @@
 
   "key.categories.lordofmysteries": "Lord of Mysteries - Powers",
   "key.lordofmysteries.toggle_vision": "Toggle Spirit Vision",
+  "key.lordofmysteries.skill_wheel": "Skill Wheel",
+
+  "skill.lordofmysteries.spirit_vision": "Spirit Vision",
+  "skill.lordofmysteries.divination": "Divination",
+  "skill.lordofmysteries.wheel.mortal_hint": "Mortal",
 
   "tooltip.lordofmysteries.characteristic.info": "Pathway: %s (Seq %d)",
   "tooltip.lordofmysteries.characteristic.law": "The Law of Beyonder Characteristics Conservation: Indestructible.",

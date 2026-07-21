@@ -60,8 +60,10 @@ public class ModEventHandlers {
     private static final double VISION_RANGE = 32.0D;
     /** 服务端发光扫描频率：每 10 tick 扫描一次 */
     private static final int VISION_SCAN_INTERVAL = 10;
-    /** 灵视灵性消耗频率：每 20 tick（1秒）消耗 1 点灵性 */
-    private static final int VISION_SPIRITUALITY_DRAIN_INTERVAL = 20;
+    /** 灵视灵性消耗频率：每 8 tick（0.4秒）消耗 2 点灵性（约 5点/秒，100点 ~20秒耗尽） */
+    private static final int VISION_SPIRITUALITY_DRAIN_INTERVAL = 8;
+    /** 灵视每次消耗的灵性点数 */
+    private static final int VISION_SPIRITUALITY_DRAIN_AMOUNT = 2;
 
     /**
      * 服务端灵视发光追踪：记录每个玩家通过灵视标记为发光的实体 ID 集合
@@ -174,11 +176,11 @@ public class ModEventHandlers {
         }
 
         // ==================== 🔮 灵视灵性消耗机制 ====================
-        // 灵视持续消耗灵性：每 20 tick（1秒）消耗 1 点灵性
+        // 灵视持续消耗灵性：每 8 tick（0.4秒）消耗 2 点灵性，约 20 秒耗尽
         if (player.tickCount % VISION_SPIRITUALITY_DRAIN_INTERVAL == 0 && !player.isCreative()) {
             int currentSp = data.getSpirituality();
             if (currentSp > 0) {
-                data.addSpirituality(-1); // 消耗 1 点灵性
+                data.addSpirituality(-VISION_SPIRITUALITY_DRAIN_AMOUNT);
             }
 
             // 灵性耗尽：自动关闭灵视 + 施加头晕眼花 debuff
