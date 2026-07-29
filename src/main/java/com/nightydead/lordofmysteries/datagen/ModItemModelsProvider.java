@@ -3,8 +3,12 @@ package com.nightydead.lordofmysteries.datagen;
 import com.nightydead.lordofmysteries.LordofMysteries;
 import com.nightydead.lordofmysteries.item.ModItems;
 import net.minecraft.data.PackOutput;
+import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
+
+import java.util.Map;
+import java.util.function.Supplier;
 
 /**
  * 物品模型数据提供者
@@ -29,21 +33,22 @@ public class ModItemModelsProvider extends ItemModelProvider {
      */
     @Override
     protected void registerModels() {
-        // TODO: 为以下物品添加纹理后取消注释以生成模型
-        // basicItem(ModItems.AGGREGATED_CHARACTERISTIC.get());      // 缺少 textures/item/characteristic/aggregated_characteristic.png
-        basicItem(ModItems.SEER_CHARACTERISTIC.get());
-        // basicItem(ModItems.CLOWN_CHARACTERISTIC.get());           // 缺少 textures/item/characteristic/clown_characteristic.png
-        // basicItem(ModItems.MAGICIAN_CHARACTERISTIC.get());        // 缺少 textures/item/characteristic/magician_characteristic.png
-        // basicItem(ModItems.FACELESS_CHARACTERISTIC.get());        // 缺少 textures/item/characteristic/faceless_characteristic.png
-        // basicItem(ModItems.MARIONETTIST_CHARACTERISTIC.get());    // 缺少 textures/item/characteristic/marionettist_characteristic.png
-        // basicItem(ModItems.BIZARRO_SORCERER_CHARACTERISTIC.get()); // 缺少 textures/item/characteristic/bizarro_sorcerer_characteristic.png
-        // basicItem(ModItems.SCHOLAR_OF_YORE_CHARACTERISTIC.get()); // 缺少 textures/item/characteristic/scholar_of_yore_characteristic.png
-        // basicItem(ModItems.MIRACLE_INVOKER_CHARACTERISTIC.get()); // 缺少 textures/item/characteristic/miracle_invoker_characteristic.png
-        // basicItem(ModItems.ATTENDANT_OF_MYSTERIES_CHARACTERISTIC.get()); // 缺少 textures/item/characteristic/attendant_of_mysteries_characteristic.png
+        // 批量生成全途径非凡特性物品模型
+        for (Map.Entry<String, Map<Integer, Supplier<Item>>> pwEntry : ModItems.CHARACTERISTIC_MAP.entrySet()) {
+            for (Map.Entry<Integer, Supplier<Item>> seqEntry : pwEntry.getValue().entrySet()) {
+                basicItem(seqEntry.getValue().get());
+            }
+        }
+        // 批量生成全途径魔药物品模型
+        for (Map.Entry<String, Map<Integer, Supplier<Item>>> pwEntry : ModItems.POTION_MAP.entrySet()) {
+            for (Map.Entry<Integer, Supplier<Item>> seqEntry : pwEntry.getValue().entrySet()) {
+                basicItem(seqEntry.getValue().get());
+            }
+        }
+
         basicItem(ModItems.LAVA_OCTOPUS_BLOOD.get());
         basicItem(ModItems.STAR_CRYSTAL.get());
         basicItem(ModItems.PURE_WATER.get());
-        basicItem(ModItems.SEER_POTION.get());
         basicItem(ModItems.RITUAL_DAGGER.get());
 
         // 为植物的 BlockItem 生成 2D 物品模型，指向 textures/block/ 目录下的贴图

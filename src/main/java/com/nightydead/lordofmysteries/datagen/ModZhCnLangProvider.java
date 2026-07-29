@@ -3,8 +3,13 @@ package com.nightydead.lordofmysteries.datagen;
 import com.nightydead.lordofmysteries.LordofMysteries;
 import com.nightydead.lordofmysteries.block.ModBlocks;
 import com.nightydead.lordofmysteries.item.ModItems;
+import com.nightydead.lordofmysteries.item.ModItems.PathwayDef;
 import net.minecraft.data.PackOutput;
+import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.common.data.LanguageProvider;
+
+import java.util.Map;
+import java.util.function.Supplier;
 
 /**
  * 中文语言文件数据提供者
@@ -28,23 +33,35 @@ public class ModZhCnLangProvider extends LanguageProvider {
      */
     @Override
     protected void addTranslations() {
-        // 非凡特性物品
+        // 聚合非凡特性
         add(ModItems.AGGREGATED_CHARACTERISTIC.get(), "聚合的非凡特性");
-        add(ModItems.SEER_CHARACTERISTIC.get(), "占卜家非凡特性");
-        add(ModItems.CLOWN_CHARACTERISTIC.get(), "小丑非凡特性");
-        add(ModItems.MAGICIAN_CHARACTERISTIC.get(), "魔术师非凡特性");
-        add(ModItems.FACELESS_CHARACTERISTIC.get(), "无面人非凡特性");
-        add(ModItems.MARIONETTIST_CHARACTERISTIC.get(), "秘偶大师非凡特性");
-        add(ModItems.BIZARRO_SORCERER_CHARACTERISTIC.get(), "诡法师非凡特性");
-        add(ModItems.SCHOLAR_OF_YORE_CHARACTERISTIC.get(), "古代学者非凡特性");
-        add(ModItems.MIRACLE_INVOKER_CHARACTERISTIC.get(), "奇迹师非凡特性");
-        add(ModItems.ATTENDANT_OF_MYSTERIES_CHARACTERISTIC.get(), " 诡秘侍者非凡特性");
+
+        // 批量生成全途径中文翻译
+        for (Map.Entry<String, PathwayDef> pwEntry : ModItems.getPathwayData().entrySet()) {
+            PathwayDef def = pwEntry.getValue();
+            String[] zhNames = def.zhNames();
+            int[] spirituality = PathwayDef.SPIRITUALITY;
+            for (int seq = 9; seq >= 0; seq--) {
+                int idx = 9 - seq;
+                String eng = def.engNames()[idx];
+                String zh = zhNames[idx];
+                // 非凡特性: "占卜家非凡特性"
+                Item characteristic = ModItems.getPureCharacteristic(def.pathwayId(), seq);
+                if (characteristic != null) {
+                    add(characteristic, zh + "非凡特性");
+                }
+                // 魔药: "占卜家魔药"
+                Item potion = ModItems.getPurePotion(def.pathwayId(), seq);
+                if (potion != null) {
+                    add(potion, zh + "魔药");
+                }
+            }
+        }
 
         // 魔药主材与特殊物品
         add(ModItems.LAVA_OCTOPUS_BLOOD.get(), "拉瓦章鱼血液");
         add(ModItems.STAR_CRYSTAL.get(), "星水晶");
         add(ModItems.PURE_WATER.get(), "纯水");
-        add(ModItems.SEER_POTION.get(), "占卜家魔药");
         add(ModItems.RITUAL_DAGGER.get(), "仪式匕首");
 
         // 魔药辅助材料

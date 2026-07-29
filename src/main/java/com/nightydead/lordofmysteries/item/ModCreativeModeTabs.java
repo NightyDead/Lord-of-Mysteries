@@ -30,10 +30,10 @@ public class ModCreativeModeTabs {
     /** 非凡特性标签页 - 包含所有序列的非凡特性和聚合特性 */
     public static final Supplier<CreativeModeTab> CHARACTERISTIC_TAB =
             CREATIVE_MODE_TABS.register("characteristic_tab", () -> CreativeModeTab.builder()
-                    .icon(() -> new ItemStack(ModItems.SEER_CHARACTERISTIC.get()))
+                    .icon(() -> new ItemStack(ModItems.getPureCharacteristic("fool", 9)))
                     .title(Component.translatable("itemGroup.characteristic_tab"))
                     .displayItems((parameters, output) -> {
-                        // 1. 注入聚合非凡特性（保持你原有的三条预置记录即可）
+                        // 1. 注入聚合非凡特性
                         ItemStack aggregated = new ItemStack(ModItems.AGGREGATED_CHARACTERISTIC.get());
                         List<String> defaultHistory = new ArrayList<>();
                         defaultHistory.add("fool:9");
@@ -42,26 +42,26 @@ public class ModCreativeModeTabs {
                         aggregated.set(ModDataComponents.AGGREGATED_FEATURES.get(), defaultHistory);
                         output.accept(aggregated);
 
-                        // 2. 🚀 极致简化：直接把注册表里的单例塞进创造栏，它们出厂便自带组件！
-                        output.accept(ModItems.SEER_CHARACTERISTIC.get());
-                        output.accept(ModItems.CLOWN_CHARACTERISTIC.get());
-                        output.accept(ModItems.MAGICIAN_CHARACTERISTIC.get());
-                        output.accept(ModItems.FACELESS_CHARACTERISTIC.get());
-                        output.accept(ModItems.MARIONETTIST_CHARACTERISTIC.get());
-                        output.accept(ModItems.BIZARRO_SORCERER_CHARACTERISTIC.get());
-                        output.accept(ModItems.SCHOLAR_OF_YORE_CHARACTERISTIC.get());
-                        output.accept(ModItems.MIRACLE_INVOKER_CHARACTERISTIC.get());
-                        output.accept(ModItems.ATTENDANT_OF_MYSTERIES_CHARACTERISTIC.get());
+                        // 2. 批量添加全途径非凡特性
+                        for (var pwEntry : ModItems.CHARACTERISTIC_MAP.entrySet()) {
+                            for (var seqEntry : pwEntry.getValue().entrySet()) {
+                                output.accept(seqEntry.getValue().get());
+                            }
+                        }
                     }).build());
 
     /** 魔药标签页 - 包含所有途径的魔药 */
     public static final Supplier<CreativeModeTab> POTION_TAB =
             CREATIVE_MODE_TABS.register("potion_tab", () -> CreativeModeTab.builder()
-                    .icon(() -> new ItemStack(ModItems.SEER_POTION.get()))
+                    .icon(() -> new ItemStack(ModItems.getPurePotion("fool", 9)))
                     .title(Component.translatable("itemGroup.potion_tab"))
                     .displayItems((parameters, output) -> {
-                        // 🚀 直接接受带组件的注册单例
-                        output.accept(ModItems.SEER_POTION.get());
+                        // 批量添加全途径魔药
+                        for (var pwEntry : ModItems.POTION_MAP.entrySet()) {
+                            for (var seqEntry : pwEntry.getValue().entrySet()) {
+                                output.accept(seqEntry.getValue().get());
+                            }
+                        }
                     })
                     .withTabsBefore(ResourceLocation.fromNamespaceAndPath(LordofMysteries.MODID, "characteristic_tab"))
                     .build());

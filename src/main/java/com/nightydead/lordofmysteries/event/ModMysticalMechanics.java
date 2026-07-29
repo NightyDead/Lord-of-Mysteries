@@ -285,7 +285,7 @@ public class ModMysticalMechanics {
      * @param pathway 途径 ID
      * @param seq     序列号
      */
-    private static void invokeOnAbsorbed(Player player, String pathway, int seq) {
+    public static void invokeOnAbsorbed(Player player, String pathway, int seq) {
         AbstractPathway pathwayObj = PathwayRegistry.get(pathway);
         if (pathwayObj != null) {
             ISequence sequenceObj = pathwayObj.getSequence(seq);
@@ -371,7 +371,7 @@ public class ModMysticalMechanics {
      * @param pathway 途径 ID
      * @param seq     序列号
      */
-    private static void autoLearnRecipe(Player player, String pathway, int seq) {
+    public static void autoLearnRecipe(Player player, String pathway, int seq) {
         LearnedRecipesData learned = player.getData(ModAttachments.LEARNED_RECIPES.get());
         if (!learned.hasLearned(pathway, seq)) {
             learned.learn(pathway, seq);

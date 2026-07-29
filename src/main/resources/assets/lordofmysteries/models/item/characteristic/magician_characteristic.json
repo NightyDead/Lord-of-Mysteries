@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "lordofmysteries:item/characteristic/magician_characteristic"
+    "layer0": "lordofmysteries:item/characteristic/aggregated_characteristic"
   }
 }

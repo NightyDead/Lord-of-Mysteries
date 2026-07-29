@@ -3,8 +3,12 @@ package com.nightydead.lordofmysteries.datagen;
 import com.nightydead.lordofmysteries.LordofMysteries;
 import com.nightydead.lordofmysteries.block.ModBlocks;
 import com.nightydead.lordofmysteries.item.ModItems;
+import com.nightydead.lordofmysteries.item.ModItems.PathwayDef;
 import net.minecraft.data.PackOutput;
+import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.common.data.LanguageProvider;
+
+import java.util.Map;
 
 /**
  * 英文语言文件数据提供者
@@ -28,23 +32,34 @@ public class ModEnUsLangProvider extends LanguageProvider {
      */
     @Override
     protected void addTranslations() {
-        // 非凡特性物品
+        // 聚合非凡特性
         add(ModItems.AGGREGATED_CHARACTERISTIC.get(), "Aggregated Characteristic");
-        add(ModItems.SEER_CHARACTERISTIC.get(), "Seer Characteristic");
-        add(ModItems.CLOWN_CHARACTERISTIC.get(), "Clown Characteristic");
-        add(ModItems.MAGICIAN_CHARACTERISTIC.get(), "Magician Characteristic");
-        add(ModItems.FACELESS_CHARACTERISTIC.get(), "Faceless Characteristic");
-        add(ModItems.MARIONETTIST_CHARACTERISTIC.get(), "Marionettist Characteristic");
-        add(ModItems.BIZARRO_SORCERER_CHARACTERISTIC.get(), "Bizarro Sorcerer Characteristic");
-        add(ModItems.SCHOLAR_OF_YORE_CHARACTERISTIC.get(), "Scholar of Yore Characteristic");
-        add(ModItems.MIRACLE_INVOKER_CHARACTERISTIC.get(), "Miracle Invoker Characteristic");
-        add(ModItems.ATTENDANT_OF_MYSTERIES_CHARACTERISTIC.get(), "Attendant of Mysteries Characteristic");
+
+        // 批量生成全途径英文翻译
+        for (Map.Entry<String, PathwayDef> pwEntry : ModItems.getPathwayData().entrySet()) {
+            PathwayDef def = pwEntry.getValue();
+            String[] engNames = def.engNames();
+            for (int seq = 9; seq >= 0; seq--) {
+                int idx = 9 - seq;
+                String eng = engNames[idx];
+                String displayName = toDisplayName(eng);
+                // 非凡特性: "Seer Characteristic"
+                Item characteristic = ModItems.getPureCharacteristic(def.pathwayId(), seq);
+                if (characteristic != null) {
+                    add(characteristic, displayName + " Characteristic");
+                }
+                // 魔药: "Seer Potion"
+                Item potion = ModItems.getPurePotion(def.pathwayId(), seq);
+                if (potion != null) {
+                    add(potion, displayName + " Potion");
+                }
+            }
+        }
 
         // 魔药主材与特殊物品
         add(ModItems.LAVA_OCTOPUS_BLOOD.get(), "Lava Octopus Blood");
         add(ModItems.STAR_CRYSTAL.get(), "Star Crystal");
         add(ModItems.PURE_WATER.get(), "Pure Water");
-        add(ModItems.SEER_POTION.get(), "Seer Potion");
         add(ModItems.RITUAL_DAGGER.get(), "Ritual Dagger");
 
         // 魔药辅助材料
@@ -89,5 +104,21 @@ public class ModEnUsLangProvider extends LanguageProvider {
         add("itemGroup.mod_block_tab", "Block");
         add("itemGroup.potion_material_tab", "Potion Material");
         add("itemGroup.potion_auxiliary_material_tab", "Potion Auxiliary Material");
+    }
+
+    /**
+     * 将 snake_case 英文名转换为首字母大写的显示名称
+     * 如 "bizarro_sorcerer" → "Bizarro Sorcerer"
+     */
+    private static String toDisplayName(String snakeCase) {
+        StringBuilder sb = new StringBuilder();
+        for (String word : snakeCase.split("_")) {
+            if (!word.isEmpty()) {
+                if (sb.length() > 0) sb.append(' ');
+                sb.append(Character.toUpperCase(word.charAt(0)));
+                if (word.length() > 1) sb.append(word.substring(1));
+            }
+        }
+        return sb.toString();
     }
 }
