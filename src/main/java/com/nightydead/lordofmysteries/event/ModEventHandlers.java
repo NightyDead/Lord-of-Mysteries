@@ -3,6 +3,7 @@ package com.nightydead.lordofmysteries.event;
 import com.nightydead.lordofmysteries.LordofMysteries;
 import com.nightydead.lordofmysteries.block.AlchemyCauldronBlock;
 import com.nightydead.lordofmysteries.block.AlchemyCauldronBlockEntity;
+import com.nightydead.lordofmysteries.data.LearnedRecipesData;
 import com.nightydead.lordofmysteries.data.ModAttachments;
 import com.nightydead.lordofmysteries.data.ModDataComponents;
 import com.nightydead.lordofmysteries.data.PlayerData;
@@ -34,6 +35,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.network.PacketDistributor;
 import com.nightydead.lordofmysteries.network.SyncVisionPacket;
+import com.nightydead.lordofmysteries.network.SyncLearnedRecipesPacket;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDropsEvent;
@@ -81,6 +83,9 @@ public class ModEventHandlers {
     public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
         if (!event.getEntity().level().isClientSide && event.getEntity() instanceof ServerPlayer serverPlayer) {
             ModMysticalMechanics.syncAllData(serverPlayer, serverPlayer.getData(ModAttachments.PLAYER_DATA.get()));
+            // 同步已学配方到客户端
+            LearnedRecipesData learned = serverPlayer.getData(ModAttachments.LEARNED_RECIPES.get());
+            PacketDistributor.sendToPlayer(serverPlayer, new SyncLearnedRecipesPacket(learned.getAll()));
         }
     }
 
@@ -353,8 +358,14 @@ public class ModEventHandlers {
             newData.setSdcTicks(oldData.getSdcTicks());
         }
 
+        // 复制已学配方（死亡不掉知识，符合原著设定）
+        var oldLearned = event.getOriginal().getData(ModAttachments.LEARNED_RECIPES.get());
+        var newLearned = event.getEntity().getData(ModAttachments.LEARNED_RECIPES.get());
+        newLearned.setAll(oldLearned.getAll());
+
         if (event.getEntity() instanceof ServerPlayer serverPlayer) {
             ModMysticalMechanics.syncAllData(serverPlayer, newData);
+            PacketDistributor.sendToPlayer(serverPlayer, new SyncLearnedRecipesPacket(newLearned.getAll()));
         }
     }
 

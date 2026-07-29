@@ -3,6 +3,7 @@ package com.nightydead.lordofmysteries.item;
 import com.nightydead.lordofmysteries.LordofMysteries;
 import com.nightydead.lordofmysteries.block.ModBlocks;
 import com.nightydead.lordofmysteries.data.ModDataComponents;
+import com.nightydead.lordofmysteries.data.PotionRecipeData;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -114,6 +115,36 @@ public class ModCreativeModeTabs {
                         output.accept(ModBlocks.POISON_HEMLOCK_HERB.get());
                         output.accept(ModBlocks.DRAGON_BLOOD_HERB.get());
                     }).withTabsBefore(ResourceLocation.fromNamespaceAndPath(LordofMysteries.MODID, "potion_auxiliary_materials"))
+                    .build());
+
+    /** 全部 22 条途径的 ID 列表（与 22途径.md 一一对应） */
+    private static final String[] ALL_PATHWAY_IDS = {
+            "fool", "error", "door", "visionary", "hanged_man",
+            "tyrant", "sun", "white_tower", "hermit", "paragon",
+            "darkness", "death", "twilight_giant", "red_priest", "demoness",
+            "abyss", "chained", "moon", "mother", "justiciar",
+            "black_emperor", "wheel_of_fortune"
+    };
+
+    /** 魔药配方标签页 - 包含全部 22 条途径 × 10 个序列 = 220 张配方纸 */
+    public static final Supplier<CreativeModeTab> RECIPE_TAB =
+            CREATIVE_MODE_TABS.register("recipe_tab", () -> CreativeModeTab.builder()
+                    .icon(() -> {
+                        ItemStack icon = new ItemStack(ModItems.POTION_RECIPE.get());
+                        icon.set(ModDataComponents.RECIPE_DATA.get(), PotionRecipeData.simple("fool", 9));
+                        return icon;
+                    })
+                    .title(Component.translatable("itemGroup.recipe_tab"))
+                    .displayItems((parameters, output) -> {
+                        for (String pathwayId : ALL_PATHWAY_IDS) {
+                            for (int seq = 9; seq >= 0; seq--) {
+                                ItemStack stack = new ItemStack(ModItems.POTION_RECIPE.get());
+                                stack.set(ModDataComponents.RECIPE_DATA.get(),
+                                        PotionRecipeData.simple(pathwayId, seq));
+                                output.accept(stack);
+                            }
+                        }
+                    }).withTabsBefore(ResourceLocation.fromNamespaceAndPath(LordofMysteries.MODID, "natural_item_tab"))
                     .build());
 
     /**

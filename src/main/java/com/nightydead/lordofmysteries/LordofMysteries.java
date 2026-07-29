@@ -10,6 +10,7 @@ import com.nightydead.lordofmysteries.item.ModItems;
 import com.nightydead.lordofmysteries.loot.ModLootModifiers;
 import com.nightydead.lordofmysteries.network.ModMessages;
 import com.nightydead.lordofmysteries.recipe.ModRecipes;
+import com.nightydead.lordofmysteries.data.PotionRecipeRegistry;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -89,6 +90,9 @@ public class LordofMysteries {
      */
     private void commonSetup(FMLCommonSetupEvent event) {
         LOGGER.info("HELLO FROM COMMON SETUP");
+
+        // 加载内置魔药配方
+        PotionRecipeRegistry.loadBuiltin();
 
         if (Config.LOG_DIRT_BLOCK.getAsBoolean()) {
             LOGGER.info("DIRT BLOCK >> {}", BuiltInRegistries.BLOCK.getKey(Blocks.DIRT));

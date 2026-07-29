@@ -5,6 +5,7 @@ import com.nightydead.lordofmysteries.data.ModDataComponents;
 import com.nightydead.lordofmysteries.item.custom.CharacteristicItem;
 import com.nightydead.lordofmysteries.item.custom.MainMaterialItem;
 import com.nightydead.lordofmysteries.item.custom.ModPotionItem;
+import com.nightydead.lordofmysteries.item.custom.PotionRecipeItem;
 import com.nightydead.lordofmysteries.item.custom.PureWaterItem;
 import com.nightydead.lordofmysteries.item.custom.RitualDaggerItem;
 import net.minecraft.world.item.Item;
@@ -33,6 +34,10 @@ public class ModItems {
     // ==================== 聚合非凡特性 ====================
     public static final DeferredItem<Item> AGGREGATED_CHARACTERISTIC =
             ITEMS.register("characteristic/aggregated_characteristic", () -> new CharacteristicItem());
+
+    // ==================== 魔药配方纸 ====================
+    public static final DeferredItem<Item> POTION_RECIPE =
+            ITEMS.register("potion_recipe", () -> new PotionRecipeItem());
     // ==================== 占卜家途径非凡特性（序列 9 ~ 序列 1） ====================
     public static final DeferredItem<Item> SEER_CHARACTERISTIC = registerCharacteristic("seer_characteristic", "fool", 9, 50);
     public static final DeferredItem<Item> CLOWN_CHARACTERISTIC = registerCharacteristic("clown_characteristic", "fool", 8, 100);

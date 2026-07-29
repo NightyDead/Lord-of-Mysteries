@@ -1,5 +1,9 @@
 package com.nightydead.lordofmysteries.client;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * 客户端非凡数据缓存中心
  * 存储从服务端通过网络包同步过来的神秘学属性数据
@@ -24,6 +28,9 @@ public class ClientDataCache {
 
     /** 灵视界面开关（预留功能，未来可绑定快捷键切换） */
     private static boolean spiritVisionActive = false;
+
+    /** 已学魔药配方集合，格式 "pathway:sequence" */
+    private static Set<String> learnedRecipes = new HashSet<>();
 
     // ==================== 理智 (Sanity) ====================
 
@@ -69,4 +76,15 @@ public class ClientDataCache {
     public static void setSequence(int value) { sequence = value; }
     /** 获取当前序列号 */
     public static int getSequence() { return sequence; }
+
+    // ==================== 已学配方 (Learned Recipes) ====================
+
+    /** 设置已学配方集合 */
+    public static void setLearnedRecipes(Set<String> recipes) { learnedRecipes = new HashSet<>(recipes); }
+    /** 获取已学配方集合的不可变视图 */
+    public static Set<String> getLearnedRecipes() { return Collections.unmodifiableSet(learnedRecipes); }
+    /** 检查是否已学习某个配方 */
+    public static boolean hasLearnedRecipe(String pathway, int sequence) {
+        return learnedRecipes.contains(pathway + ":" + sequence);
+    }
 }

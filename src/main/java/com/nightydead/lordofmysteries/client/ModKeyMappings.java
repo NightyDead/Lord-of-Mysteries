@@ -3,6 +3,7 @@ package com.nightydead.lordofmysteries.client;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.nightydead.lordofmysteries.LordofMysteries;
 import com.nightydead.lordofmysteries.client.gui.DivinationSkillWheelScreen;
+import com.nightydead.lordofmysteries.client.gui.KnowledgeScreen;
 import com.nightydead.lordofmysteries.network.C2SToggleVisionPacket;
 import com.nightydead.lordofmysteries.skills.ModSkills;
 import net.minecraft.client.KeyMapping;
@@ -40,6 +41,14 @@ public class ModKeyMappings {
             GLFW.GLFW_KEY_C,
             KEY_CATEGORY
     );
+
+    /** 📜 定义"知识面板"按键，默认绑定为键盘 K 键 */
+    public static final KeyMapping KNOWLEDGE_PANEL_KEY = new KeyMapping(
+            "key." + LordofMysteries.MODID + ".knowledge_panel",
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_K,
+            KEY_CATEGORY
+    );
     
     /** C 键上一帧是否按下，用于检测按下瞬间（上升沿） */
     private static boolean cWasDown = false;
@@ -52,6 +61,7 @@ public class ModKeyMappings {
     public static void onRegisterKeyMappings(RegisterKeyMappingsEvent event) {
         event.register(TOGGLE_VISION_KEY);
         event.register(DIVINATION_WHEEL_KEY);
+        event.register(KNOWLEDGE_PANEL_KEY);
     }
 
     /**
@@ -80,6 +90,13 @@ public class ModKeyMappings {
         if (mc.level != null && mc.screen == null) {
             while (TOGGLE_VISION_KEY.consumeClick()) {
                 PacketDistributor.sendToServer(new C2SToggleVisionPacket());
+            }
+        }
+
+        // ──────── 📜 知识面板：K 键按下即开 ────────
+        if (mc.level != null && mc.screen == null) {
+            while (KNOWLEDGE_PANEL_KEY.consumeClick()) {
+                mc.setScreen(new KnowledgeScreen());
             }
         }
     }

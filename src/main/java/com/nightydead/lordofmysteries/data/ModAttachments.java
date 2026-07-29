@@ -28,6 +28,16 @@ public class ModAttachments {
                     .build()
     );
 
+    /**
+     * 玩家已学魔药配方附加组件
+     * 持久化存储已学习的配方（pathway:sequence 集合），死亡不掉
+     */
+    public static final Supplier<AttachmentType<LearnedRecipesData>> LEARNED_RECIPES = ATTACHMENT_TYPES.register(
+            "learned_recipes", () -> AttachmentType.builder(LearnedRecipesData::new)
+                    .serialize(LearnedRecipesData.CODEC)
+                    .build()
+    );
+
     // ✨ 未来留空：可在下方无缝增加如外神污染源、特定超凡生物（诸如失控者）的独立附件注册
 
     /**

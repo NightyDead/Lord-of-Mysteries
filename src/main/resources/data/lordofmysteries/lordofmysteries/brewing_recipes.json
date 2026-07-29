@@ -1,0 +1,12 @@
+[
+  {
+    "input": "minecraft:potion",
+    "ingredient": "lordofmysteries:night_perfume_herb",
+    "output": "lordofmysteries:auxiliary_material/night_perfume_juice"
+  },
+  {
+    "input": "minecraft:potion",
+    "ingredient": "lordofmysteries:poison_hemlock_herb",
+    "output": "lordofmysteries:auxiliary_material/poison_hemlock_juice"
+  }
+]

@@ -41,6 +41,8 @@ public class ModMessages {
             // 🏛️ 注册结构列表请求/响应包
             C2SRequestStructuresPacket.register(registrar);
             S2CStructureListPacket.register(registrar);
+            // 📜 注册已学配方同步包（服务端 → 客户端）
+            SyncLearnedRecipesPacket.register(registrar);
         });
     }
 }

@@ -1,0 +1,16 @@
+{
+  "pathway": "fool",
+  "sequence": 9,
+  "main_materials": [
+    "lava_octopus_blood",
+    "star_crystal"
+  ],
+  "auxiliary_materials": [
+    "pure_water",
+    "night_perfume_juice",
+    "gold_mint_leaf",
+    "poison_hemlock_juice",
+    "dragon_blood_powder"
+  ],
+  "acquisition": "acquisition.lordofmysteries.potion_recipe.fool_9"
+}

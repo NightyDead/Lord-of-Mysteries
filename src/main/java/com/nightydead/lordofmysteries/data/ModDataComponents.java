@@ -62,6 +62,14 @@ public class ModDataComponents {
                     .build()
     );
 
+    /** 魔药配方数据组件 - 存储配方纸上的途径、序列及配方详情 */
+    public static final Supplier<DataComponentType<PotionRecipeData>> RECIPE_DATA = DATA_COMPONENT_TYPES.register(
+            "recipe_data", () -> DataComponentType.<PotionRecipeData>builder()
+                    .persistent(PotionRecipeData.CODEC)
+                    .networkSynchronized(PotionRecipeData.STREAM_CODEC)
+                    .build()
+    );
+
     /**
      * 将数据组件注册表绑定到模组事件总线
      *

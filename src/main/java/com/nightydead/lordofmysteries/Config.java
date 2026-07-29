@@ -18,8 +18,24 @@ import net.neoforged.neoforge.common.ModConfigSpec;
  * 配置项会在模组加载时自动注册，并可通过游戏内的配置界面或外部配置文件进行修改
  */
 public class Config {
+
+    /** 知识死亡惩罚模式 */
+    public enum DeathPenaltyMode {
+        /** 知识不丢 */
+        NONE,
+        /** 记忆模糊debuff */
+        MEMORY_FOG,
+        /** 丢失部分知识 */
+        PARTIAL_LOSS
+    }
+
     /** 配置构建器，用于逐步定义所有配置项，最终调用 build() 生成不可变的配置规范 */
     private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
+
+    /** 知识死亡惩罚模式配置 */
+    public static final ModConfigSpec.EnumValue<DeathPenaltyMode> DEATH_PENALTY = BUILDER
+            .comment("Death penalty for learned potion recipes: NONE (keep all), MEMORY_FOG (temp debuff), PARTIAL_LOSS (lose some)")
+            .defineEnum("deathPenalty", DeathPenaltyMode.NONE);
 
     /** 是否在游戏初始化时记录泥土方块信息的开关（调试用） */
     public static final ModConfigSpec.BooleanValue LOG_DIRT_BLOCK = BUILDER

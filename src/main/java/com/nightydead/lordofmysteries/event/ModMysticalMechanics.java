@@ -1,6 +1,7 @@
 package com.nightydead.lordofmysteries.event;
 
 import com.nightydead.lordofmysteries.LordofMysteries;
+import com.nightydead.lordofmysteries.data.LearnedRecipesData;
 import com.nightydead.lordofmysteries.data.ModAttachments;
 import com.nightydead.lordofmysteries.data.ModDataComponents;
 import com.nightydead.lordofmysteries.data.PlayerData;
@@ -139,6 +140,8 @@ public class ModMysticalMechanics {
             // 先触发序列专属回调（设置灵性上限等），再将灵性充满至新上限
             invokeOnAbsorbed(player, pathway, seq);
             data.setSpirituality(data.getMaxSpiritual());
+            // 自动学习该途径序列的魔药配方
+            autoLearnRecipe(player, pathway, seq);
         } else {
             handleContaminationAndMadness(player, data, pathway, seq);
         }
@@ -160,6 +163,8 @@ public class ModMysticalMechanics {
                 // 跨途径奇迹：先触发新序列回调，再将灵性充满
                 invokeOnAbsorbed(player, pathway, seq);
                 data.setSpirituality(data.getMaxSpiritual());
+                // 自动学习该途径序列的魔药配方
+                autoLearnRecipe(player, pathway, seq);
             } else {
                 handleContaminationAndMadness(player, data, pathway, seq);
             }
@@ -185,6 +190,8 @@ public class ModMysticalMechanics {
                 invokeOnAbsorbed(player, pathway, seq);
                 data.setSpirituality(data.getMaxSpiritual());
                 player.displayClientMessage(Component.translatable("message.lordofmysteries.upgrade.success", seq), true);
+                // 自动学习该途径序列的魔药配方
+                autoLearnRecipe(player, pathway, seq);
             } else {
                 handleContaminationAndMadness(player, data, pathway, seq);
             }
@@ -298,5 +305,24 @@ public class ModMysticalMechanics {
         PacketDistributor.sendToPlayer(player, new SyncPathwayPacket(data.getCurrentPathway(), data.getCurrentSequence()));
         // 👁️ 同步灵视状态，确保客户端登录/定期兑底时灵视 HUD 和实体发光正确渲染
         PacketDistributor.sendToPlayer(player, new SyncVisionPacket(data.isVisionActive()));
+    }
+
+    /**
+     * 自动学习魔药配方
+     * 玩家在成功吸收特性/魔药晋升后，自动习得对应途径序列的配方知识
+     *
+     * @param player  晋升成功的玩家
+     * @param pathway 途径 ID
+     * @param seq     序列号
+     */
+    private static void autoLearnRecipe(Player player, String pathway, int seq) {
+        LearnedRecipesData learned = player.getData(ModAttachments.LEARNED_RECIPES.get());
+        if (!learned.hasLearned(pathway, seq)) {
+            learned.learn(pathway, seq);
+            player.setData(ModAttachments.LEARNED_RECIPES.get(), learned);
+            if (player instanceof ServerPlayer serverPlayer) {
+                PacketDistributor.sendToPlayer(serverPlayer, new SyncLearnedRecipesPacket(learned.getAll()));
+            }
+        }
     }
 }
