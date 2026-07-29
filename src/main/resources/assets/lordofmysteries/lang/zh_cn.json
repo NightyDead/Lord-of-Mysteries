@@ -69,7 +69,7 @@
   "hud.lordofmysteries.identity.format": "%s 途径 (序列 %s)",
   "hud.lordofmysteries.sanity.text": "理智: %s / 100",
   "hud.lordofmysteries.spirituality.text": "灵性: %s / %s",
-  "hud.lordofmysteries.digestion.text": "魔药消化度: %s / 100",
+  "hud.lordofmysteries.digestion.text": "魔药消化度: %s / %s",
 
   "pathway.lordofmysteries.none": "凡人",
   "pathway.lordofmysteries.fool": "愚者",
@@ -406,6 +406,7 @@
   "message.lordofmysteries.absorption.start": "§d[特性容纳] §f你尝试强行吸收一团聚合的生鲜非凡特性...",
   "message.lordofmysteries.sanity.collapse.irreversible": "§4[理智崩溃] §c残存的理智未能阻挡疯狂，你的失控变得不可逆转...",
   "message.lordofmysteries.sanity.collapse.immediate": "§4[理智崩溃] §c魔药虽然成功容纳，但你的精神防线已彻底瓦解！你因理智归零而失控了！",
+  "message.lordofmysteries.sanity.insufficient": "§c[理智不足] §4你的精神状态已无法承受再一次神性冲击，理智将归零！",
   "message.lordofmysteries.rejection.mortal": "§c[神性排异] §4凡人之躯妄图窃取高位神职，且未举行对应的 %s 晋升仪式！",
   "message.lordofmysteries.cross_pathway.miracle": "§4[异界错乱] §e奇迹发生了！你竟然强行容纳了异途径的魔药...",
   "message.lordofmysteries.rejection.beyonder": "§c[神性失衡] §4你没有举行晋升序列 %d 所需的完整神秘学仪式！神性当场撕裂了你的躯壳！",

@@ -2,6 +2,7 @@ package com.nightydead.lordofmysteries.network;
 
 import com.nightydead.lordofmysteries.LordofMysteries;
 import com.nightydead.lordofmysteries.data.ModAttachments;
+import com.nightydead.lordofmysteries.data.PlayerData;
 import com.nightydead.lordofmysteries.skills.BiomeDivinationHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -34,8 +35,6 @@ public record C2SBiomeDivinationPacket(ResourceLocation biomeKey) implements Cus
     private static final int SEARCH_RADIUS = 6000;
     /** 搜索步长（方块），越大越快但精度越低 */
     private static final int SEARCH_STEP = 128;
-    /** 占卜成功增加的消化进度（1%） */
-    private static final float DIGESTION_GAIN = 0.01F;
     /** 占卜失败扣除的理智值 */
     private static final int SANITY_LOSS = 5;
 
@@ -74,22 +73,24 @@ public record C2SBiomeDivinationPacket(ResourceLocation biomeKey) implements Cus
                     return;
                 }
 
-                // 灵性检查
-                if (data.getSpirituality() < SPIRITUALITY_COST) {
+                // 灵性检查（含堆叠消耗倍率）
+                int effectiveCost = Math.round(SPIRITUALITY_COST * data.getStackCostMultiplier());
+                if (data.getSpirituality() < effectiveCost) {
                     player.displayClientMessage(
-                            Component.literal("§c灵性不足，无法施展占卜（需要 " + SPIRITUALITY_COST + " 点灵性）。"), true);
+                            Component.literal("§c灵性不足，无法施展占卜（需要 " + effectiveCost + " 点灵性）。"), true);
                     return;
                 }
 
                 // 扣除灵性
-                data.addSpirituality(-SPIRITUALITY_COST);
+                data.addSpirituality(-effectiveCost);
                 player.setData(ModAttachments.PLAYER_DATA.get(), data);
                 PacketDistributor.sendToPlayer(player,
                         new SyncSpiritualityPacket(data.getSpirituality(), data.getMaxSpiritual()));
 
-                // 搜索最近的目标群系位置
+                // 搜索最近的目标群系位置（搜索半径含堆叠能力倍率）
+                int effectiveRadius = Math.round(SEARCH_RADIUS * data.getStackPowerMultiplier());
                 BlockPos nearest = BiomeDivinationHandler.findNearestBiome(
-                        player, packet.biomeKey(), SEARCH_RADIUS, SEARCH_STEP);
+                        player, packet.biomeKey(), effectiveRadius, SEARCH_STEP);
 
                 if (nearest == null) {
                     // 失败：扣理智
@@ -97,15 +98,16 @@ public record C2SBiomeDivinationPacket(ResourceLocation biomeKey) implements Cus
                     player.setData(ModAttachments.PLAYER_DATA.get(), data);
                     PacketDistributor.sendToPlayer(player, new SyncSanityPacket(data.getSanity()));
                     player.displayClientMessage(
-                            Component.literal("§7灵摆毫无反应… " + SEARCH_RADIUS
+                            Component.literal("§7灵摆毫无反应… " + effectiveRadius
                                     + " 格内未发现目标群系。"), true);
                     return;
                 }
 
                 // ==================== 成功：增加消化度 ====================
-                data.addDigestion(DIGESTION_GAIN);
+                int gain = PlayerData.getDigestionGain(data.getCurrentSequence());
+                data.addDigestion(gain);
                 player.setData(ModAttachments.PLAYER_DATA.get(), data);
-                PacketDistributor.sendToPlayer(player, new SyncDigestionPacket(data.getDigestion()));
+                PacketDistributor.sendToPlayer(player, new SyncDigestionPacket(data.getDigestion(), data.getEffectiveMaxDigestion()));
 
                 // 生成粒子指引轨迹（分8波生成，每5tick一波，持续约1.75秒）
                 // 固定起点，避免玩家移动导致后续波次轨迹偏移

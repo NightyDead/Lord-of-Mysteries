@@ -2,6 +2,7 @@ package com.nightydead.lordofmysteries.network;
 
 import com.nightydead.lordofmysteries.LordofMysteries;
 import com.nightydead.lordofmysteries.data.ModAttachments;
+import com.nightydead.lordofmysteries.data.PlayerData;
 import com.nightydead.lordofmysteries.skills.StructureDivinationHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -29,7 +30,6 @@ public record C2SStructureDivinationPacket(ResourceLocation structureKey) implem
 
     private static final int SPIRITUALITY_COST = 20;
     private static final int SEARCH_RADIUS = 6000;
-    private static final float DIGESTION_GAIN = 0.01F;
     private static final int SANITY_LOSS = 5;
 
     public static final StreamCodec<FriendlyByteBuf, C2SStructureDivinationPacket> STREAM_CODEC =
@@ -59,33 +59,38 @@ public record C2SStructureDivinationPacket(ResourceLocation structureKey) implem
                     return;
                 }
 
-                if (data.getSpirituality() < SPIRITUALITY_COST) {
+                // 灵性检查（含堆叠消耗倍率）
+                int effectiveCost = Math.round(SPIRITUALITY_COST * data.getStackCostMultiplier());
+                if (data.getSpirituality() < effectiveCost) {
                     player.displayClientMessage(
-                            Component.literal("§c灵性不足，无法施展占卜（需要 " + SPIRITUALITY_COST + " 点灵性）。"), true);
+                            Component.literal("§c灵性不足，无法施展占卜（需要 " + effectiveCost + " 点灵性）。"), true);
                     return;
                 }
 
-                data.addSpirituality(-SPIRITUALITY_COST);
+                data.addSpirituality(-effectiveCost);
                 player.setData(ModAttachments.PLAYER_DATA.get(), data);
                 PacketDistributor.sendToPlayer(player,
                         new SyncSpiritualityPacket(data.getSpirituality(), data.getMaxSpiritual()));
 
+                // 搜索最近结构（搜索半径含堆叠能力倍率）
+                int effectiveRadius = Math.round(SEARCH_RADIUS * data.getStackPowerMultiplier());
                 BlockPos nearest = StructureDivinationHandler.findNearestStructure(
-                        player, packet.structureKey(), SEARCH_RADIUS);
+                        player, packet.structureKey(), effectiveRadius);
 
                 if (nearest == null) {
                     data.addSanity(-SANITY_LOSS);
                     player.setData(ModAttachments.PLAYER_DATA.get(), data);
                     PacketDistributor.sendToPlayer(player, new SyncSanityPacket(data.getSanity()));
                     player.displayClientMessage(
-                            Component.literal("§7灵摆毫无反应… " + SEARCH_RADIUS
+                            Component.literal("§7灵摆毫无反应… " + effectiveRadius
                                     + " 格内未发现目标结构。"), true);
                     return;
                 }
 
-                data.addDigestion(DIGESTION_GAIN);
+                int gain = PlayerData.getDigestionGain(data.getCurrentSequence());
+                data.addDigestion(gain);
                 player.setData(ModAttachments.PLAYER_DATA.get(), data);
-                PacketDistributor.sendToPlayer(player, new SyncDigestionPacket(data.getDigestion()));
+                PacketDistributor.sendToPlayer(player, new SyncDigestionPacket(data.getDigestion(), data.getEffectiveMaxDigestion()));
 
                 // 固定起点，避免玩家移动导致后续波次轨迹偏移
                 Vec3 startPos = player.getEyePosition();

@@ -70,7 +70,7 @@
   "hud.lordofmysteries.identity.format": "%s Pathway (Sequence %s)",
   "hud.lordofmysteries.sanity.text": "Sanity: %s / 100",
   "hud.lordofmysteries.spirituality.text": "Spirituality: %s / %s",
-  "hud.lordofmysteries.digestion.text": "Potion Digestion: %s / 100",
+  "hud.lordofmysteries.digestion.text": "Potion Digestion: %s / %s",
 
   "pathway.lordofmysteries.none": "None",
   "pathway.lordofmysteries.fool": "The Fool",
@@ -407,6 +407,7 @@
   "message.lordofmysteries.absorption.start": "§d[Characteristics] §fYou try to forcefully absorb a mass of freshly raw characteristics...",
   "message.lordofmysteries.sanity.collapse.irreversible": "§4[Sanity Collapse] §cThe remnant sanity failed to stand against the madness. Your loss of control has become irreversible...",
   "message.lordofmysteries.sanity.collapse.immediate": "§4[Sanity Collapse] §cAlthough the potion was successfully integrated, your mental defense line completely shattered! You lost control due to zero sanity!",
+  "message.lordofmysteries.sanity.insufficient": "§c[Sanity Exhausted] §4Your mind can no longer endure another divine impact — sanity would reach zero!",
   "message.lordofmysteries.rejection.mortal": "§c[Divine Rejection] §4A mortal flesh attempts to steal a high-order position without a proper ritual for %s!",
   "message.lordofmysteries.cross_pathway.miracle": "§4[Aberration] §eA miracle happened! You managed to forcefully contain a potion from a foreign pathway...",
   "message.lordofmysteries.rejection.beyonder": "§c[Divine Imbalance] §4You did not perform the proper ritual for Sequence %d! The divinity tore your flesh apart instantly!",

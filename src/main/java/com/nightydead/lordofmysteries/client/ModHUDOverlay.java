@@ -127,17 +127,17 @@ public class ModHUDOverlay {
             currentY += 18; //
 
             // ==================== 🌟 3. 魔药消化度 (仅非凡者可见) ====================
-            float digestion = ClientDataCache.getDigestion(); //
-            // 刚喝完魔药时 digestion 为 0.0F，转换成整数即为 0
-            int digestionValue = (int) (digestion * 100); //
-            int digColor = digestion >= 1.0F ? 0xFFFFFF55 : 0xFF55FFFF; //
+            int digestion = ClientDataCache.getDigestion(); //
+            int maxDigestion = ClientDataCache.getMaxDigestion(); //
+            int digColor = digestion >= maxDigestion ? 0xFFFFFF55 : 0xFF55FFFF; // 完全消化为金色，否则青色
 
-            // 完美重构：改写为 "魔药消化度: X / 100" 的硬核数值形式显示
-            graphics.drawString(font, Component.translatable("hud.lordofmysteries.digestion.text", digestionValue), startX, currentY, digColor, true); //
+            // 显示为 "魔药消化度: X / Y" 格式
+            graphics.drawString(font, Component.translatable("hud.lordofmysteries.digestion.text", digestion, maxDigestion), startX, currentY, digColor, true); //
 
             // 绘制消化条
             graphics.fill(startX, currentY + 10, startX + 100, currentY + 14, 0x55555555); //
-            int digBarWidth = (int) (Math.clamp(digestion, 0.0F, 1.0F) * 100); //
+            float digPercent = maxDigestion > 0 ? Math.clamp((float) digestion / maxDigestion, 0.0F, 1.0F) : 0.0F;
+            int digBarWidth = (int) (digPercent * 100); //
             graphics.fill(startX, currentY + 10, startX + digBarWidth, currentY + 14, digColor); //
         }
     }

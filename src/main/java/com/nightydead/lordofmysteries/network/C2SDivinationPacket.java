@@ -2,6 +2,7 @@ package com.nightydead.lordofmysteries.network;
 
 import com.nightydead.lordofmysteries.LordofMysteries;
 import com.nightydead.lordofmysteries.data.ModAttachments;
+import com.nightydead.lordofmysteries.data.PlayerData;
 import com.nightydead.lordofmysteries.skills.DivinationHandler;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -32,8 +33,6 @@ public record C2SDivinationPacket() implements CustomPacketPayload {
 
     /** 占卜灵性消耗 */
     private static final int SPIRITUALITY_COST = 20;
-    /** 占卜成功增加的消化进度（1%） */
-    private static final float DIGESTION_GAIN = 0.01F;
     /** 占卜失败扣除的理智值 */
     private static final int SANITY_LOSS = 5;
 
@@ -80,15 +79,16 @@ public record C2SDivinationPacket() implements CustomPacketPayload {
                     return;
                 }
 
-                // ==================== 灵性预扣检查 ====================
-                if (data.getSpirituality() < SPIRITUALITY_COST) {
+                // ==================== 灵性预扣检查（含堆叠消耗倍率） ====================
+                int effectiveCost = Math.round(SPIRITUALITY_COST * data.getStackCostMultiplier());
+                if (data.getSpirituality() < effectiveCost) {
                     player.displayClientMessage(
-                            Component.literal("§c灵性不足，无法施展占卜（需要 " + SPIRITUALITY_COST + " 点灵性）。"), true);
+                            Component.literal("§c灵性不足，无法施展占卜（需要 " + effectiveCost + " 点灵性）。"), true);
                     return;
                 }
 
                 // ==================== 扣除灵性（无论成败均消耗） ====================
-                data.addSpirituality(-SPIRITUALITY_COST);
+                data.addSpirituality(-effectiveCost);
                 player.setData(ModAttachments.PLAYER_DATA.get(), data);
                 PacketDistributor.sendToPlayer(player,
                         new SyncSpiritualityPacket(data.getSpirituality(), data.getMaxSpiritual()));
@@ -126,9 +126,10 @@ public record C2SDivinationPacket() implements CustomPacketPayload {
                 }
 
                 // ==================== 成功：增加消化度 ====================
-                data.addDigestion(DIGESTION_GAIN);
+                int gain = PlayerData.getDigestionGain(data.getCurrentSequence());
+                data.addDigestion(gain);
                 player.setData(ModAttachments.PLAYER_DATA.get(), data);
-                PacketDistributor.sendToPlayer(player, new SyncDigestionPacket(data.getDigestion()));
+                PacketDistributor.sendToPlayer(player, new SyncDigestionPacket(data.getDigestion(), data.getEffectiveMaxDigestion()));
 
                 // 生成粒子指引轨迹（分8波生成，每5tick一波，持续约1.75秒）
                 // 固定起点，避免玩家移动导致后续波次轨迹偏移

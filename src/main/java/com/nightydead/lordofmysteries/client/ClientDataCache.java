@@ -19,8 +19,10 @@ public class ClientDataCache {
     private static int spirituality = 0;
     /** 灵性上限值 */
     private static int maxSpirituality = 0;
-    /** 魔药消化进度，范围 0.0F~1.0F（1.0F 表示完全消化） */
-    private static float digestion = 0.0F;
+    /** 魔药消化进度（绝对值） */
+    private static int digestion = 0;
+    /** 当前序列的消化度上限 */
+    private static int maxDigestion = 0;
     /** 当前途径 ID（如 "fool"），"none" 表示凡人 */
     private static String pathway = "none";
     /** 当前序列号（0~9，数字越小等级越高），10 表示凡人 */
@@ -54,9 +56,13 @@ public class ClientDataCache {
     // ==================== 消化度 (Digestion) ====================
 
     /** 设置魔药消化进度 */
-    public static void setDigestion(float value) { digestion = value; }
+    public static void setDigestion(int value) { digestion = value; }
     /** 获取魔药消化进度 */
-    public static float getDigestion() { return digestion; }
+    public static int getDigestion() { return digestion; }
+    /** 设置消化度上限 */
+    public static void setMaxDigestion(int value) { maxDigestion = value; }
+    /** 获取消化度上限 */
+    public static int getMaxDigestion() { return maxDigestion; }
 
     // ==================== 灵视状态 (Spirit Vision) ====================
 

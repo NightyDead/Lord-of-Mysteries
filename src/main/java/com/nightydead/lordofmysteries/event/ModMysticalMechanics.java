@@ -87,6 +87,17 @@ public class ModMysticalMechanics {
      */
     private static void executeAbsorptionLogic(Player player, PlayerData data, String pathway, int seq, boolean isPotion) {
         int ticksBefore = data.getSdcTicks();
+        int sanityCost = calculateSanityPenalty(seq);
+
+        // 📚 理智前提检查：吸收会扣除理智，若扣除后理智≤0则直接失控
+        if (data.getSanity() - sanityCost <= 0) {
+            player.displayClientMessage(Component.translatable("message.lordofmysteries.sanity.insufficient"), true);
+            handleContaminationAndMadness(player, data, pathway, seq);
+            if (player instanceof ServerPlayer serverPlayer) {
+                syncAllData(serverPlayer, data);
+            }
+            return;
+        }
 
         // 判断是否为凡人首次走上超凡道路
         boolean isNormalHuman = "none".equals(data.getCurrentPathway()) || data.getCurrentSequence() >= 10;
@@ -97,7 +108,7 @@ public class ModMysticalMechanics {
         }
 
         // 扣除理智值
-        data.addSanity(-calculateSanityPenalty(seq));
+        data.addSanity(-sanityCost);
 
         if (player instanceof ServerPlayer serverPlayer) {
             syncAllData(serverPlayer, data);
@@ -136,7 +147,7 @@ public class ModMysticalMechanics {
             data.setCurrentPathway(pathway);
             data.setCurrentSequence(seq);
             data.addAbsorbedRecord(pathway, seq);
-            data.setDigestion(0.0F);
+            data.setDigestion(0);
             // 先触发序列专属回调（设置灵性上限等），再将灵性充满至新上限
             invokeOnAbsorbed(player, pathway, seq);
             data.setSpirituality(data.getMaxSpiritual());
@@ -159,7 +170,7 @@ public class ModMysticalMechanics {
                 data.setCurrentPathway(pathway);
                 data.setCurrentSequence(seq);
                 data.addAbsorbedRecord(pathway, seq);
-                data.setDigestion(0.0F);
+                data.setDigestion(0);
                 // 跨途径奇迹：先触发新序列回调，再将灵性充满
                 invokeOnAbsorbed(player, pathway, seq);
                 data.setSpirituality(data.getMaxSpiritual());
@@ -179,13 +190,13 @@ public class ModMysticalMechanics {
                 return;
             }
 
-            double finalChance = (isPotion && data.getDigestion() >= 1.0F) ? 1.0 :
-            (isPotion ? calculatePotionSuccessChance(seq) : calculateRawCharacteristicChance(seq)) * (data.getDigestion() + 0.1);
+            double finalChance = (isPotion && data.getDigestion() >= data.getEffectiveMaxDigestion()) ? 1.0 :
+            (isPotion ? calculatePotionSuccessChance(seq) : calculateRawCharacteristicChance(seq)) * (data.getDigestionRatio() + 0.1f);
 
             if (player.level().random.nextDouble() < finalChance) {
                 data.setCurrentSequence(seq);
                 data.addAbsorbedRecord(pathway, seq);
-                data.setDigestion(0.0F);
+                data.setDigestion(0);
                 // 先触发序列专属回调（设置灵性上限等），再将灵性充满至新上限
                 invokeOnAbsorbed(player, pathway, seq);
                 data.setSpirituality(data.getMaxSpiritual());
@@ -196,14 +207,59 @@ public class ModMysticalMechanics {
                 handleContaminationAndMadness(player, data, pathway, seq);
             }
         }
-        // 场景 3：同序列堆叠
+        // 场景 3：同序列堆叠（已有同途径同序列特性，再次吸收增强）
         else if (seq >= data.getCurrentSequence()) {
-            if (data.getDigestion() >= 1.0F && player.level().random.nextDouble() < (isPotion ? 0.40 : 0.10)) {
-                data.addAbsorbedRecord(pathway, seq);
-                player.displayClientMessage(Component.translatable("message.lordofmysteries.characteristic.stack", seq), true);
-            } else {
-                handleContaminationAndMadness(player, data, pathway, seq);
-            }
+            handleSameSequenceStacking(player, data, pathway, seq, isPotion);
+        } else {
+            handleContaminationAndMadness(player, data, pathway, seq);
+        }
+    }
+
+    /**
+     * 处理同序列堆叠吸收逻辑
+     * <p>
+     * <b>成功率：</b>1/N（N 为吸收后的总份数）。已有 1 份再喝 = 1/2 = 50%，已有 2 份再喝 = 1/3 ≈ 33%
+     * <b>前提：</b>理智扣除后必须 > 0（由 executeAbsorptionLogic 预先校验）
+     * <p>
+     * <b>成功后属性变更（以单份为基准）：</b>
+     * <ul>
+     *   <li>灵性上限 +10%/份（2份=110%, 3份=120%...）</li>
+     *   <li>能力消耗 -10%/份（2份=90%, 3份=80%...）</li>
+     *   <li>能力强度 +10%/份</li>
+     *   <li>消化度上限 ×N</li>
+     *   <li>理智上限 -20%/份（2份=80, 3份=60, 4份=40...）</li>
+     * </ul>
+     */
+    private static void handleSameSequenceStacking(Player player, PlayerData data, String pathway, int seq, boolean isPotion) {
+        int currentStack = data.getSameSeqStackCount();
+        int newTotal = currentStack + 2; // N = 已有份数 + 新吸收的 1 份
+        double successRate = 1.0 / newTotal;
+
+        if (player.level().random.nextDouble() < successRate) {
+            data.addAbsorbedRecord(pathway, seq);
+            data.setSameSeqStackCount(currentStack + 1);
+
+            int newCount = currentStack + 1; // 新的堆叠次数
+
+            // 理智上限：100 × (1 - 0.2 × stackCount)
+            int newMaxSanity = (int) Math.round(100 * (1 - 0.2 * newCount));
+            newMaxSanity = Math.max(1, newMaxSanity); // 最低保留 1 点
+            data.setMaxSanity(newMaxSanity);
+            data.setSanity(Math.min(data.getSanity(), data.getMaxSanity()));
+
+            // 灵性上限：base × (1 + 0.1 × stackCount)
+            float oldSpiritMult = 1.0F + 0.1F * currentStack;
+            int baseSpirituality = Math.round(data.getMaxSpiritual() / oldSpiritMult);
+            float newSpiritMult = 1.0F + 0.1F * newCount;
+            int newMaxSpirituality = Math.round(baseSpirituality * newSpiritMult);
+            data.setMaxSpirituality(newMaxSpirituality);
+            data.setSpirituality(Math.min(data.getSpirituality(), newMaxSpirituality));
+
+            player.displayClientMessage(Component.translatable("message.lordofmysteries.characteristic.stack", seq), true);
+            player.displayClientMessage(Component.literal("§e📚 同序列堆叠×" + (newCount + 1)
+                    + " | 灵性上限 " + String.format("%.0f%%", newSpiritMult * 100)
+                    + " | 消耗 " + String.format("%.0f%%", (1 - 0.1 * newCount) * 100)
+                    + " | 理智上限 " + newMaxSanity), true);
         } else {
             handleContaminationAndMadness(player, data, pathway, seq);
         }
@@ -301,7 +357,7 @@ public class ModMysticalMechanics {
     public static void syncAllData(ServerPlayer player, PlayerData data) {
         PacketDistributor.sendToPlayer(player, new SyncSanityPacket(data.getSanity()));
         PacketDistributor.sendToPlayer(player, new SyncSpiritualityPacket(data.getSpirituality(), data.getMaxSpiritual()));
-        PacketDistributor.sendToPlayer(player, new SyncDigestionPacket(data.getDigestion()));
+        PacketDistributor.sendToPlayer(player, new SyncDigestionPacket(data.getDigestion(), data.getEffectiveMaxDigestion()));
         PacketDistributor.sendToPlayer(player, new SyncPathwayPacket(data.getCurrentPathway(), data.getCurrentSequence()));
         // 👁️ 同步灵视状态，确保客户端登录/定期兑底时灵视 HUD 和实体发光正确渲染
         PacketDistributor.sendToPlayer(player, new SyncVisionPacket(data.isVisionActive()));
