@@ -2,7 +2,9 @@ package com.nightydead.lordofmysteries.datagen;
 
 import com.nightydead.lordofmysteries.LordofMysteries;
 import com.nightydead.lordofmysteries.item.ModItems;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
@@ -33,18 +35,30 @@ public class ModItemModelsProvider extends ItemModelProvider {
      */
     @Override
     protected void registerModels() {
-        // 批量生成全途径非凡特性物品模型
+        // 通用纹理路径（尚未为每个物品制作独立纹理，统一使用通用纹理）
+        ResourceLocation charTexture = modLoc("item/characteristic/aggregated_characteristic");
+        ResourceLocation potionTexture = modLoc("item/potion/seer_potion");
+
+        // 批量生成全途径非凡特性物品模型（必须加 item/ 前缀，否则模型会生成到错误的 models/ 目录下）
         for (Map.Entry<String, Map<Integer, Supplier<Item>>> pwEntry : ModItems.CHARACTERISTIC_MAP.entrySet()) {
             for (Map.Entry<Integer, Supplier<Item>> seqEntry : pwEntry.getValue().entrySet()) {
-                basicItem(seqEntry.getValue().get());
+                ResourceLocation key = BuiltInRegistries.ITEM.getKey(seqEntry.getValue().get());
+                withExistingParent("item/" + key.getPath(), mcLoc("item/generated"))
+                        .texture("layer0", charTexture);
             }
         }
         // 批量生成全途径魔药物品模型
         for (Map.Entry<String, Map<Integer, Supplier<Item>>> pwEntry : ModItems.POTION_MAP.entrySet()) {
             for (Map.Entry<Integer, Supplier<Item>> seqEntry : pwEntry.getValue().entrySet()) {
-                basicItem(seqEntry.getValue().get());
+                ResourceLocation key = BuiltInRegistries.ITEM.getKey(seqEntry.getValue().get());
+                withExistingParent("item/" + key.getPath(), mcLoc("item/generated"))
+                        .texture("layer0", potionTexture);
             }
         }
+
+        // 聚合非凡特性（独立注册，不在 CHARACTERISTIC_MAP 中，需单独生成模型）
+        withExistingParent("item/characteristic/aggregated_characteristic", mcLoc("item/generated"))
+                .texture("layer0", charTexture);
 
         basicItem(ModItems.LAVA_OCTOPUS_BLOOD.get());
         basicItem(ModItems.STAR_CRYSTAL.get());

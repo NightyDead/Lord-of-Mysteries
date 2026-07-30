@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cauldron",
+  "textures": {
+    "content": "lordofmysteries:block/alchemy_cauldron/cauldron_liquid_success",
+    "inside": "lordofmysteries:block/alchemy_cauldron/cauldron_inside"
+  }
+}

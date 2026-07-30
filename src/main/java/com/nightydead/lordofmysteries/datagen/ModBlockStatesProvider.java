@@ -65,13 +65,17 @@ public class ModBlockStatesProvider extends BlockStateProvider {
 
         // 为 4 种状态分别创建模型，继承原版炼药锅外形，覆盖内部液体纹理
         var emptyModel = models().withExistingParent("alchemy_cauldron_empty", mcLoc("block/cauldron"))
-                .texture("inner", modLoc("block/alchemy_cauldron/empty"));
+                .texture("content", modLoc("block/alchemy_cauldron/cauldron_inside"))
+                .texture("inside", modLoc("block/alchemy_cauldron/cauldron_inside"));
         var itemsModel = models().withExistingParent("alchemy_cauldron_contains_items", mcLoc("block/cauldron"))
-                .texture("inner", modLoc("block/alchemy_cauldron/contains_items"));
+                .texture("content", modLoc("block/alchemy_cauldron/cauldron_inside"))
+                .texture("inside", modLoc("block/alchemy_cauldron/cauldron_inside"));
         var successModel = models().withExistingParent("alchemy_cauldron_success", mcLoc("block/cauldron"))
-                .texture("inner", modLoc("block/alchemy_cauldron/success"));
+                .texture("content", modLoc("block/alchemy_cauldron/cauldron_liquid_success"))
+                .texture("inside", modLoc("block/alchemy_cauldron/cauldron_inside"));
         var failedModel = models().withExistingParent("alchemy_cauldron_failed", mcLoc("block/cauldron"))
-                .texture("inner", modLoc("block/alchemy_cauldron/failed"));
+                .texture("content", modLoc("block/alchemy_cauldron/cauldron_liquid_failed"))
+                .texture("inside", modLoc("block/alchemy_cauldron/cauldron_inside"));
 
         // 使用 getVariantBuilder 构建多状态方块
         getVariantBuilder(cauldron)

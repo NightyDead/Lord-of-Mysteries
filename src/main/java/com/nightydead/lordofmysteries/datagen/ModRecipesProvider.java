@@ -83,7 +83,7 @@ public class ModRecipesProvider extends RecipeProvider implements IConditionBuil
                 .define('F', ItemTags.FLOWERS)
                 .define('S', Items.STICK)
                 .unlockedBy("has_iron_ingot", has(Items.IRON_INGOT))
-                .save(recipeOutput, "lordofmysteries:ritual_dagger");
+                .save(recipeOutput);
 
         //炼药锅：原版炼药锅 +8个黑石围一圈
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.ALCHEMY_CAULDRON.get())
@@ -93,7 +93,7 @@ public class ModRecipesProvider extends RecipeProvider implements IConditionBuil
                 .define('B', Items.BLACKSTONE)
                 .define('C', Items.CAULDRON)
                 .unlockedBy("has_cauldron", has(Items.CAULDRON))
-                .save(recipeOutput, "lordofmysteries:alchemy_cauldron");
+                .save(recipeOutput);
 
         super.buildRecipes(recipeOutput);
     }

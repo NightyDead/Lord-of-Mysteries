@@ -51,13 +51,14 @@ public class ModDataGenerator {
         // 注册物品标签提供者（依赖方块标签的查找结果）
         gen.addProvider(event.includeServer(), new ModItemTagsProvider(packOutput, lookupProvider, blockTagsProvider.contentsGetter(), existingFileHelper));
 
-        // 注册物品模型提供者
-        gen.addProvider(event.includeServer(), new ModItemModelsProvider(packOutput, existingFileHelper));
-        // 注册方块状态与模型提供者
-        gen.addProvider(event.includeServer(), new ModBlockStatesProvider(packOutput, existingFileHelper));
         // 注册英文语言文件提供者
         gen.addProvider(event.includeServer(), new ModEnUsLangProvider(packOutput));
         // 注册中文语言文件提供者
         gen.addProvider(event.includeServer(), new ModZhCnLangProvider(packOutput));
+
+        // 注册物品模型提供者
+        gen.addProvider(event.includeServer(), new ModItemModelsProvider(packOutput, existingFileHelper));
+        // 注册方块状态与模型提供者
+        gen.addProvider(event.includeServer(), new ModBlockStatesProvider(packOutput, existingFileHelper));
     }
 }

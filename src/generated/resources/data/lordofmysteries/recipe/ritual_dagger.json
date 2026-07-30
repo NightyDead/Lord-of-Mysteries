@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "F": {
+      "tag": "minecraft:flowers"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "I",
+    "F",
+    "S"
+  ],
+  "result": {
+    "count": 1,
+    "id": "lordofmysteries:ritual_dagger"
+  }
+}
