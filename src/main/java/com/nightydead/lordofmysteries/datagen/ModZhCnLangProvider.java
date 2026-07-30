@@ -104,6 +104,7 @@ public class ModZhCnLangProvider extends LanguageProvider {
         add(ModItems.STAR_CRYSTAL.get(), "星水晶");
         add(ModItems.PURE_WATER.get(), "纯水");
         add(ModItems.RITUAL_DAGGER.get(), "仪式匕首");
+        add(ModItems.MYSTIC_DUST.get(), "神秘粉尘");
         add("item.lordofmysteries.pure_water.pure_water.effect.empty", "纯水");
         add("tooltip.lordofmysteries.pure_water.desc", "炼药的基础溶剂，纯净无杂质。");
 
@@ -120,6 +121,7 @@ public class ModZhCnLangProvider extends LanguageProvider {
         add(ModBlocks.POISON_HEMLOCK_HERB.get(), "毒堇");
         add(ModBlocks.DRAGON_BLOOD_HERB.get(), "龙血草");
         add(ModBlocks.ALCHEMY_CAULDRON.get(), "炼药锅");
+        add(ModBlocks.RITUAL_ALTAR.get(), "仪式祭坛");
 
         // ==================== 创造模式标签页 ====================
         add("itemGroup.characteristic_tab", "非凡特性");

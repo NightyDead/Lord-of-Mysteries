@@ -43,6 +43,11 @@ public class ModBlockStatesProvider extends BlockStateProvider {
 
         // 炼药锅：生成 4 种状态的方块模型（空/有物品/成功/失败）
         registerCauldronStates();
+
+        // 仪式祭坛：多层阶梯式自定义模型（手动编写于 src/main/resources，引用原版纹理）
+        var ritualAltarModel = models().getExistingFile(modLoc("block/ritual_altar"));
+        simpleBlock(ModBlocks.RITUAL_ALTAR.get(), ritualAltarModel);
+        simpleBlockItem(ModBlocks.RITUAL_ALTAR.get(), ritualAltarModel);
     }
 
     /**

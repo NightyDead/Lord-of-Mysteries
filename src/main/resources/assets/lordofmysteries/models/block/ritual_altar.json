@@ -1,0 +1,77 @@
+{
+    "parent": "block/block",
+    "textures": {
+        "particle": "minecraft:block/obsidian",
+        "obsidian": "minecraft:block/obsidian",
+        "blackstone": "minecraft:block/polished_blackstone",
+        "cloth_side": "minecraft:block/enchanting_table_side",
+        "cloth_top": "minecraft:block/enchanting_table_top"
+    },
+    "elements": [
+        {
+            "comment": "底座 - 黑曜石 16×16×3",
+            "from": [0, 0, 0],
+            "to": [16, 3, 16],
+            "faces": {
+                "down":  {"uv": [0, 0, 16, 16], "texture": "#obsidian", "cullface": "down"},
+                "up":    {"uv": [0, 0, 16, 16], "texture": "#blackstone"},
+                "north": {"uv": [0, 13, 16, 16], "texture": "#obsidian", "cullface": "north"},
+                "south": {"uv": [0, 13, 16, 16], "texture": "#obsidian", "cullface": "south"},
+                "west":  {"uv": [0, 13, 16, 16], "texture": "#obsidian", "cullface": "west"},
+                "east":  {"uv": [0, 13, 16, 16], "texture": "#obsidian", "cullface": "east"}
+            }
+        },
+        {
+            "comment": "下收束层 - 黑石 10×10×3",
+            "from": [3, 3, 3],
+            "to": [13, 6, 13],
+            "faces": {
+                "down":  {"uv": [3, 3, 13, 13], "texture": "#blackstone"},
+                "up":    {"uv": [3, 3, 13, 13], "texture": "#obsidian"},
+                "north": {"uv": [3, 10, 13, 13], "texture": "#blackstone"},
+                "south": {"uv": [3, 10, 13, 13], "texture": "#blackstone"},
+                "west":  {"uv": [3, 10, 13, 13], "texture": "#blackstone"},
+                "east":  {"uv": [3, 10, 13, 13], "texture": "#blackstone"}
+            }
+        },
+        {
+            "comment": "束腰 - 附魔台纹理 6×6×4",
+            "from": [5, 6, 5],
+            "to": [11, 10, 11],
+            "faces": {
+                "down":  {"uv": [5, 5, 11, 11], "texture": "#obsidian"},
+                "up":    {"uv": [5, 5, 11, 11], "texture": "#blackstone"},
+                "north": {"uv": [5, 6, 11, 10], "texture": "#blackstone"},
+                "south": {"uv": [5, 6, 11, 10], "texture": "#blackstone"},
+                "west":  {"uv": [5, 6, 11, 10], "texture": "#blackstone"},
+                "east":  {"uv": [5, 6, 11, 10], "texture": "#blackstone"}
+            }
+        },
+        {
+            "comment": "上扩展层 - 黑石 10×10×3",
+            "from": [3, 10, 3],
+            "to": [13, 13, 13],
+            "faces": {
+                "down":  {"uv": [3, 3, 13, 13], "texture": "#blackstone"},
+                "up":    {"uv": [3, 3, 13, 13], "texture": "#obsidian"},
+                "north": {"uv": [3, 3, 13, 6], "texture": "#blackstone"},
+                "south": {"uv": [3, 3, 13, 6], "texture": "#blackstone"},
+                "west":  {"uv": [3, 3, 13, 6], "texture": "#blackstone"},
+                "east":  {"uv": [3, 3, 13, 6], "texture": "#blackstone"}
+            }
+        },
+        {
+            "comment": "顶部 - 黑曜石 16×16×3",
+            "from": [0, 13, 0],
+            "to": [16, 16, 16],
+            "faces": {
+                "down":  {"uv": [0, 0, 16, 16], "texture": "#obsidian"},
+                "up":    {"uv": [0, 0, 16, 16], "texture": "#cloth_top", "cullface": "up"},
+                "north": {"uv": [0, 0, 16, 3], "texture": "#cloth_side", "cullface": "north"},
+                "south": {"uv": [0, 0, 16, 3], "texture": "#cloth_side", "cullface": "south"},
+                "west":  {"uv": [0, 0, 16, 3], "texture": "#cloth_side", "cullface": "west"},
+                "east":  {"uv": [0, 0, 16, 3], "texture": "#cloth_side", "cullface": "east"}
+            }
+        }
+    ]
+}

@@ -66,6 +66,10 @@ public class ModBlocks {
                             .mapColor(MapColor.METAL)
                             .noOcclusion()));
 
+    /** 仪式祭坛 - 晋升仪式核心装置，支持右键放置物品展示，Shift+右键取出 */
+    public static final DeferredBlock<RitualAltarBlock> RITUAL_ALTAR =
+            registerBlock("ritual_altar", RitualAltarBlock::new);
+
     /**
      * 注册方块对应的方块物品（使方块可以被拾取和放置在物品栏中）
      *

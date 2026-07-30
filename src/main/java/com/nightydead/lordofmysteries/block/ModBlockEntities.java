@@ -24,6 +24,12 @@ public class ModBlockEntities {
                     BlockEntityType.Builder.of(AlchemyCauldronBlockEntity::new,
                             ModBlocks.ALCHEMY_CAULDRON.get()).build(null));
 
+    /** 仪式祭坛方块实体类型 */
+    public static final Supplier<BlockEntityType<RitualAltarBlockEntity>> RITUAL_ALTAR =
+            BLOCK_ENTITY_TYPES.register("ritual_altar", () ->
+                    BlockEntityType.Builder.of(RitualAltarBlockEntity::new,
+                            ModBlocks.RITUAL_ALTAR.get()).build(null));
+
     /**
      * 将方块实体注册表绑定到模组事件总线
      *

@@ -105,6 +105,7 @@ public class ModEnUsLangProvider extends LanguageProvider {
         add(ModItems.STAR_CRYSTAL.get(), "Star Crystal");
         add(ModItems.PURE_WATER.get(), "Pure Water");
         add(ModItems.RITUAL_DAGGER.get(), "Ritual Dagger");
+        add(ModItems.MYSTIC_DUST.get(), "Mystic Dust");
         add("item.lordofmysteries.pure_water.pure_water.effect.empty", "Pure Water");
         add("tooltip.lordofmysteries.pure_water.desc", "The base solvent for potion brewing, pure and impurity-free.");
 
@@ -121,6 +122,7 @@ public class ModEnUsLangProvider extends LanguageProvider {
         add(ModBlocks.POISON_HEMLOCK_HERB.get(), "Poison Hemlock");
         add(ModBlocks.DRAGON_BLOOD_HERB.get(), "Dragon Blood Herb");
         add(ModBlocks.ALCHEMY_CAULDRON.get(), "Alchemy Cauldron");
+        add(ModBlocks.RITUAL_ALTAR.get(), "Ritual Altar");
 
         // ==================== 创造模式标签页 ====================
         add("itemGroup.characteristic_tab", "Characteristic");

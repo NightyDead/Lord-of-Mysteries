@@ -95,6 +95,24 @@ public class ModRecipesProvider extends RecipeProvider implements IConditionBuil
                 .unlockedBy("has_cauldron", has(Items.CAULDRON))
                 .save(recipeOutput);
 
+        // 神秘粉尘：1钻石 + 1青金石 → 4神秘粉尘
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.MYSTIC_DUST.get(), 4)
+                .requires(Items.DIAMOND)
+                .requires(Items.LAPIS_LAZULI)
+                .unlockedBy("has_diamond", has(Items.DIAMOND))
+                .save(recipeOutput);
+
+        // 仪式祭坛：黑曜石-黑曜石-黑曜石 / 黑石-钻石-黑石 / 黑曜石-黑曜石-黑曜石
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.RITUAL_ALTAR.get())
+                .pattern("OOO")
+                .pattern("BDB")
+                .pattern("OOO")
+                .define('B', Items.BLACKSTONE)
+                .define('D', Items.DIAMOND)
+                .define('O', Items.OBSIDIAN)
+                .unlockedBy("has_obsidian", has(Items.OBSIDIAN))
+                .save(recipeOutput);
+
         super.buildRecipes(recipeOutput);
     }
 }

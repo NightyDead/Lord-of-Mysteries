@@ -2,6 +2,7 @@ package com.nightydead.lordofmysteries;
 
 import com.nightydead.lordofmysteries.block.ModBlockEntities;
 import com.nightydead.lordofmysteries.client.AlchemyCauldronRenderer;
+import com.nightydead.lordofmysteries.client.RitualAltarRenderer;
 import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -56,5 +57,6 @@ public class LordofMysteriesClient {
     @SubscribeEvent
     static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerBlockEntityRenderer(ModBlockEntities.ALCHEMY_CAULDRON.get(), AlchemyCauldronRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.RITUAL_ALTAR.get(), RitualAltarRenderer::new);
     }
 }

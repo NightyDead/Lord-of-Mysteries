@@ -52,6 +52,10 @@ public class ModItems {
     public static final DeferredItem<Item> RITUAL_DAGGER =
             ITEMS.register("ritual_dagger", RitualDaggerItem::new);
 
+    // ==================== 神秘粉尘（仪式合成材料） ====================
+    public static final DeferredItem<Item> MYSTIC_DUST =
+            ITEMS.register("mystic_dust", () -> new Item(new Item.Properties()));
+
     // ==================== 全途径序列 0 唯一性占位（后续可用独立唯一性物品替代） ====================
     // 序列0特性同时作为该途径的「唯一性」+ 全套特性聚合体使用
 

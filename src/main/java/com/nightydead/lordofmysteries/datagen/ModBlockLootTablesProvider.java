@@ -43,6 +43,9 @@ public class ModBlockLootTablesProvider extends BlockLootSubProvider {
 
         // 炼药锅掉落自身（内部物品由 BlockEntity.onRemove 处理）
         dropSelf(ModBlocks.ALCHEMY_CAULDRON.get());
+
+        // 仪式祭坛掉落自身
+        dropSelf(ModBlocks.RITUAL_ALTAR.get());
     }
 
     /**

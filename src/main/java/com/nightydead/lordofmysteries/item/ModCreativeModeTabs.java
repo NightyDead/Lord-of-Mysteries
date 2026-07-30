@@ -74,6 +74,7 @@ public class ModCreativeModeTabs {
                     .displayItems((parameters, output) -> {
                         output.accept(ModBlocks.EXAMPLE_BLOCK);
                         output.accept(ModBlocks.ALCHEMY_CAULDRON);
+                        output.accept(ModBlocks.RITUAL_ALTAR);
                         output.accept(ModItems.RITUAL_DAGGER);
                     }).withTabsBefore(ResourceLocation.fromNamespaceAndPath(LordofMysteries.MODID, "potion_tab"))
                     .build());
@@ -114,6 +115,7 @@ public class ModCreativeModeTabs {
                         output.accept(ModBlocks.GOLD_MINT_HERB.get());
                         output.accept(ModBlocks.POISON_HEMLOCK_HERB.get());
                         output.accept(ModBlocks.DRAGON_BLOOD_HERB.get());
+                        output.accept(ModItems.MYSTIC_DUST.get());
                     }).withTabsBefore(ResourceLocation.fromNamespaceAndPath(LordofMysteries.MODID, "potion_auxiliary_materials"))
                     .build());
 
