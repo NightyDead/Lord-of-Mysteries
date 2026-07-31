@@ -71,6 +71,9 @@ public class ModItemModelsProvider extends ItemModelProvider {
         makeBlockItemModel("gold_mint_herb");
         makeBlockItemModel("poison_hemlock_herb");
         makeBlockItemModel("dragon_blood_herb");
+        makeBlockItemModel("mandrake_herb");
+        makeBlockItemModel("black_edged_sunflower");
+        makeBlockItemModel("golden_cloak_grass");
     }
 
     // 辅助方法：生成 BlockItem 使用的扁平生成的物品模型

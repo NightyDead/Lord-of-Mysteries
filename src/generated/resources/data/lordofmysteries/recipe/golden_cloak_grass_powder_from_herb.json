@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "lordofmysteries:golden_cloak_grass"
+    }
+  ],
+  "result": {
+    "count": 2,
+    "id": "lordofmysteries:auxiliary_material/golden_cloak_grass_powder"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "pathway": "fool",
+  "sequence": 8,
+  "main_materials": [
+    "adult_hornacis_gray_goat_unicorn_crystal",
+    "complete_human_face_rose"
+  ],
+  "auxiliary_materials": [
+    "pure_water",
+    "mandrake_juice",
+    "black_edged_sunflower_powder",
+    "golden_cloak_grass_powder",
+    "poison_hemlock_juice"
+  ],
+  "acquisition": "acquisition.lordofmysteries.potion_recipe.fool_8"
+}

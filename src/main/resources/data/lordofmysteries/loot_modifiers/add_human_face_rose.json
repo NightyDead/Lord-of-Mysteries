@@ -1,0 +1,14 @@
+{
+  "type": "lordofmysteries:block_drop",
+  "conditions": [
+    {
+      "condition": "neoforge:loot_table_id",
+      "loot_table_id": "minecraft:blocks/rose_bush"
+    }
+  ],
+  "item": "lordofmysteries:main_material/complete_human_face_rose",
+  "pathway": "fool",
+  "sequence": 8,
+  "chance": 0.30,
+  "require_full_moon": true
+}

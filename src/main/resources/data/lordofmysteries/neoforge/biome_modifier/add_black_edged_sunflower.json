@@ -1,0 +1,6 @@
+﻿{
+  "type": "neoforge:add_features",
+  "biomes": ["minecraft:plains", "minecraft:sunflower_plains", "minecraft:flower_forest"],
+  "features": "lordofmysteries:black_edged_sunflower_placed",
+  "step": "vegetal_decoration"
+}

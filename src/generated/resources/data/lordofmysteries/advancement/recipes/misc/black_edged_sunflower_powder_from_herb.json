@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_black_edged_sunflower": {
+      "conditions": {
+        "items": [
+          {
+            "items": "lordofmysteries:black_edged_sunflower"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "lordofmysteries:black_edged_sunflower_powder_from_herb"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_black_edged_sunflower"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "lordofmysteries:black_edged_sunflower_powder_from_herb"
+    ]
+  }
+}

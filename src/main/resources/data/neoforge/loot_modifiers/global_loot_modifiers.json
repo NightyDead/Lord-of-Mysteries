@@ -2,6 +2,8 @@
   "replace": false,
   "entries": [
     "lordofmysteries:seer_material_from_glow_squid",
-    "lordofmysteries:add_star_crystal"
+    "lordofmysteries:add_star_crystal",
+    "lordofmysteries:clown_material_from_goat",
+    "lordofmysteries:add_human_face_rose"
   ]
 }

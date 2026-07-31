@@ -32,6 +32,7 @@ public class BlockLootModifier extends LootModifier {
                     .and(Codec.STRING.fieldOf("pathway").forGetter(m -> m.pathway))
                     .and(Codec.INT.fieldOf("sequence").forGetter(m -> m.sequence))
                     .and(Codec.FLOAT.fieldOf("chance").forGetter(m -> m.chance))
+                    .and(Codec.BOOL.optionalFieldOf("require_full_moon", false).forGetter(m -> m.requireFullMoon))
                     .apply(inst, BlockLootModifier::new)
             )
     );
@@ -44,6 +45,8 @@ public class BlockLootModifier extends LootModifier {
     private final int sequence;
     /** 基础掉落概率 */
     private final float chance;
+    /** 是否仅在满月时掉落 */
+    private final boolean requireFullMoon;
 
     /**
      * 构造方块掉落修饰器
@@ -55,15 +58,32 @@ public class BlockLootModifier extends LootModifier {
      * @param chance       基础掉落概率
      */
     public BlockLootModifier(LootItemCondition[] conditionsIn, Item item, String pathway, int sequence, float chance) {
+        this(conditionsIn, item, pathway, sequence, chance, false);
+    }
+
+    /**
+     * 构造方块掉落修饰器（满月条件可选）
+     */
+    public BlockLootModifier(LootItemCondition[] conditionsIn, Item item, String pathway, int sequence, float chance, boolean requireFullMoon) {
         super(conditionsIn);
         this.item = item;
         this.pathway = pathway;
         this.sequence = sequence;
         this.chance = chance;
+        this.requireFullMoon = requireFullMoon;
     }
 
     @Override
     protected @NotNull ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
+        // 满月条件检查：若 requireFullMoon 为 true，仅满月时掉落
+        if (this.requireFullMoon && context.getLevel() != null) {
+            long dayTime = context.getLevel().getDayTime();
+            int moonPhase = (int) ((dayTime / 24000L) % 8L);
+            if (moonPhase != 0) {
+                return generatedLoot;
+            }
+        }
+
         int fortuneLevel = 0;
 
         if (context.hasParam(LootContextParams.TOOL)) {

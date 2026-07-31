@@ -8,5 +8,10 @@
     "input": "minecraft:potion",
     "ingredient": "lordofmysteries:poison_hemlock_herb",
     "output": "lordofmysteries:auxiliary_material/poison_hemlock_juice"
+  },
+  {
+    "input": "minecraft:potion",
+    "ingredient": "lordofmysteries:mandrake_herb",
+    "output": "lordofmysteries:auxiliary_material/mandrake_juice"
   }
 ]

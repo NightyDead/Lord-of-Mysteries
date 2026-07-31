@@ -1,0 +1,17 @@
+{
+  "type": "lordofmysteries:entity_drop",
+  "conditions": [
+    {
+      "condition": "minecraft:entity_properties",
+      "entity": "this",
+      "predicate": {
+        "type": "minecraft:goat",
+        "flags": { "is_baby": false }
+      }
+    }
+  ],
+  "item": "lordofmysteries:main_material/adult_hornacis_gray_goat_unicorn_crystal",
+  "pathway": "fool",
+  "sequence": 8,
+  "chance": 0.3
+}

@@ -1,0 +1,16 @@
+{
+  "type": "lordofmysteries:potion_brewing",
+  "auxiliary_ingredients": [
+    { "item": "lordofmysteries:pure_water/pure_water" },
+    { "item": "lordofmysteries:auxiliary_material/mandrake_juice" },
+    { "item": "lordofmysteries:auxiliary_material/black_edged_sunflower_powder" },
+    { "item": "lordofmysteries:auxiliary_material/golden_cloak_grass_powder" },
+    { "item": "lordofmysteries:auxiliary_material/poison_hemlock_juice" }
+  ],
+  "main_ingredients_order": [
+    { "item": "lordofmysteries:main_material/adult_hornacis_gray_goat_unicorn_crystal" },
+    { "item": "lordofmysteries:main_material/complete_human_face_rose" }
+  ],
+  "pathway": "fool",
+  "sequence": 8
+}

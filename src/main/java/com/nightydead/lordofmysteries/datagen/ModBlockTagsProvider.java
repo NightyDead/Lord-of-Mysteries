@@ -47,11 +47,14 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         tag(BlockTags.NEEDS_DIAMOND_TOOL)
                 .add(ModBlocks.RITUAL_ALTAR.get());
 
-        // 添加四种神秘学草药到小花标签，允许它们种植在泥土、草方块上
+        // 添加各种神秘学草药到小花标签，允许它们种植在泥土、草方块上
         tag(BlockTags.SMALL_FLOWERS)
                 .add(ModBlocks.NIGHT_PERFUME_HERB.get())
                 .add(ModBlocks.GOLD_MINT_HERB.get())
                 .add(ModBlocks.POISON_HEMLOCK_HERB.get())
-                .add(ModBlocks.DRAGON_BLOOD_HERB.get());
+                .add(ModBlocks.DRAGON_BLOOD_HERB.get())
+                .add(ModBlocks.MANDRAKE_HERB.get())
+                .add(ModBlocks.BLACK_EDGED_SUNFLOWER.get())
+                .add(ModBlocks.GOLDEN_CLOAK_GRASS.get());
     }
 }

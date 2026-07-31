@@ -88,6 +88,8 @@ public class ModCreativeModeTabs {
                         // 🚀 直接接受带组件的注册单例
                         output.accept(ModItems.LAVA_OCTOPUS_BLOOD.get());
                         output.accept(ModItems.STAR_CRYSTAL.get());
+                        output.accept(ModItems.ADULT_HORNACIS_GRAY_GOAT_UNICORN_CRYSTAL.get());
+                        output.accept(ModItems.COMPLETE_HUMAN_FACE_ROSE.get());
                     }).withTabsBefore(ResourceLocation.fromNamespaceAndPath(LordofMysteries.MODID, "mod_block_tab"))
                     .build());
 
@@ -102,6 +104,9 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.POISON_HEMLOCK_JUICE.get());
                         output.accept(ModItems.GOLD_MINT_LEAF.get());
                         output.accept(ModItems.DRAGON_BLOOD_POWDER.get());
+                        output.accept(ModItems.MANDRAKE_JUICE.get());
+                        output.accept(ModItems.BLACK_EDGED_SUNFLOWER_POWDER.get());
+                        output.accept(ModItems.GOLDEN_CLOAK_GRASS_POWDER.get());
                     }).withTabsBefore(ResourceLocation.fromNamespaceAndPath(LordofMysteries.MODID, "potion_material_tab"))
                     .build());
 
@@ -115,6 +120,9 @@ public class ModCreativeModeTabs {
                         output.accept(ModBlocks.GOLD_MINT_HERB.get());
                         output.accept(ModBlocks.POISON_HEMLOCK_HERB.get());
                         output.accept(ModBlocks.DRAGON_BLOOD_HERB.get());
+                        output.accept(ModBlocks.MANDRAKE_HERB.get());
+                        output.accept(ModBlocks.BLACK_EDGED_SUNFLOWER.get());
+                        output.accept(ModBlocks.GOLDEN_CLOAK_GRASS.get());
                         output.accept(ModItems.MYSTIC_DUST.get());
                     }).withTabsBefore(ResourceLocation.fromNamespaceAndPath(LordofMysteries.MODID, "potion_auxiliary_materials"))
                     .build());

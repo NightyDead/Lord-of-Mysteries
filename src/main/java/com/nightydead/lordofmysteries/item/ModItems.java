@@ -177,11 +177,23 @@ public class ModItems {
         PATHWAY_DATA.values().forEach(PathwayDef::registerAll);
     }
 
+    // ==================== 占卜家途径序列 8 小丑主材料 ====================
+    /** 成年霍纳奇斯灰山羊独角结晶 - 占卜家途径序列 8 魔药主材 */
+    public static final DeferredItem<Item> ADULT_HORNACIS_GRAY_GOAT_UNICORN_CRYSTAL = registerMainMaterial("adult_hornacis_gray_goat_unicorn_crystal", "fool", 8);
+    /** 完整的人脸玫瑰 - 占卜家途径序列 8 魔药主材 */
+    public static final DeferredItem<Item> COMPLETE_HUMAN_FACE_ROSE = registerMainMaterial("complete_human_face_rose", "fool", 8);
+
     // ==================== 魔药辅助材料 ====================
     public static final DeferredItem<Item> NIGHT_PERFUME_JUICE = registerAuxiliaryMaterial("night_perfume_juice");
     public static final DeferredItem<Item> GOLD_MINT_LEAF = registerAuxiliaryMaterial("gold_mint_leaf");
     public static final DeferredItem<Item> POISON_HEMLOCK_JUICE = registerAuxiliaryMaterial("poison_hemlock_juice");
     public static final DeferredItem<Item> DRAGON_BLOOD_POWDER = registerAuxiliaryMaterial("dragon_blood_powder");
+    /** 曼陀罗汁液 */
+    public static final DeferredItem<Item> MANDRAKE_JUICE = registerAuxiliaryMaterial("mandrake_juice");
+    /** 黑边太阳花粉末 */
+    public static final DeferredItem<Item> BLACK_EDGED_SUNFLOWER_POWDER = registerAuxiliaryMaterial("black_edged_sunflower_powder");
+    /** 金斗篷草粉末 */
+    public static final DeferredItem<Item> GOLDEN_CLOAK_GRASS_POWDER = registerAuxiliaryMaterial("golden_cloak_grass_powder");
 
 
     /**

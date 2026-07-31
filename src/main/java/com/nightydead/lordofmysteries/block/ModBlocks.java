@@ -56,6 +56,21 @@ public class ModBlocks {
             registerBlock("dragon_blood_herb",
                     () -> new FlowerBlock(MobEffects.FIRE_RESISTANCE, 5.0F, BlockBehaviour.Properties.of().noCollission().instabreak().sound(SoundType.GRASS).pushReaction(net.minecraft.world.level.material.PushReaction.DESTROY)));
 
+    /** 曼陀罗 - 剧毒植物，小丑魔药辅材来源 */
+    public static final DeferredBlock<Block> MANDRAKE_HERB =
+            registerBlock("mandrake_herb",
+                    () -> new FlowerBlock(MobEffects.POISON, 5.0F, BlockBehaviour.Properties.of().noCollission().instabreak().sound(SoundType.GRASS).pushReaction(PushReaction.DESTROY)));
+
+    /** 黑边太阳花 - 小丑魔药辅材来源 */
+    public static final DeferredBlock<Block> BLACK_EDGED_SUNFLOWER =
+            registerBlock("black_edged_sunflower",
+                    () -> new FlowerBlock(MobEffects.GLOWING, 5.0F, BlockBehaviour.Properties.of().noCollission().instabreak().sound(SoundType.GRASS).pushReaction(PushReaction.DESTROY)));
+
+    /** 金斗篷草 - 小丑魔药辅材来源 */
+    public static final DeferredBlock<Block> GOLDEN_CLOAK_GRASS =
+            registerBlock("golden_cloak_grass",
+                    () -> new FlowerBlock(MobEffects.ABSORPTION, 5.0F, BlockBehaviour.Properties.of().noCollission().instabreak().sound(SoundType.GRASS).pushReaction(PushReaction.DESTROY)));
+
     /** 炼药锅 - 无UI交互的魔药炼制装置，支持右键放入/取出材料、灵性注入触发酿造 */
     public static final DeferredBlock<AlchemyCauldronBlock> ALCHEMY_CAULDRON =
             registerBlock("alchemy_cauldron",

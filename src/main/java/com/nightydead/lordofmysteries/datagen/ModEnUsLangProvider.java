@@ -103,6 +103,8 @@ public class ModEnUsLangProvider extends LanguageProvider {
         // ==================== 魔药主材与特殊物品 ====================
         add(ModItems.LAVA_OCTOPUS_BLOOD.get(), "Lava Octopus Blood");
         add(ModItems.STAR_CRYSTAL.get(), "Star Crystal");
+        add(ModItems.ADULT_HORNACIS_GRAY_GOAT_UNICORN_CRYSTAL.get(), "Adult Hornacis Gray Goat Unicorn Crystal");
+        add(ModItems.COMPLETE_HUMAN_FACE_ROSE.get(), "Complete Human-Face Rose");
         add(ModItems.PURE_WATER.get(), "Pure Water");
         add(ModItems.RITUAL_DAGGER.get(), "Ritual Dagger");
         add(ModItems.MYSTIC_DUST.get(), "Mystic Dust");
@@ -114,6 +116,9 @@ public class ModEnUsLangProvider extends LanguageProvider {
         add(ModItems.GOLD_MINT_LEAF.get(), "Gold Mint Leaf");
         add(ModItems.POISON_HEMLOCK_JUICE.get(), "Poison Hemlock Juice");
         add(ModItems.DRAGON_BLOOD_POWDER.get(), "Dragon Blood Powder");
+        add(ModItems.MANDRAKE_JUICE.get(), "Mandrake Juice");
+        add(ModItems.BLACK_EDGED_SUNFLOWER_POWDER.get(), "Black-Edged Sunflower Powder");
+        add(ModItems.GOLDEN_CLOAK_GRASS_POWDER.get(), "Golden Cloak Grass Powder");
 
         // ==================== 方块 ====================
         add(ModBlocks.EXAMPLE_BLOCK.get(), "Example Block");
@@ -121,6 +126,9 @@ public class ModEnUsLangProvider extends LanguageProvider {
         add(ModBlocks.GOLD_MINT_HERB.get(), "Gold Mint Herb");
         add(ModBlocks.POISON_HEMLOCK_HERB.get(), "Poison Hemlock");
         add(ModBlocks.DRAGON_BLOOD_HERB.get(), "Dragon Blood Herb");
+        add(ModBlocks.MANDRAKE_HERB.get(), "Mandrake");
+        add(ModBlocks.BLACK_EDGED_SUNFLOWER.get(), "Black-Edged Sunflower");
+        add(ModBlocks.GOLDEN_CLOAK_GRASS.get(), "Golden Cloak Grass");
         add(ModBlocks.ALCHEMY_CAULDRON.get(), "Alchemy Cauldron");
         add(ModBlocks.RITUAL_ALTAR.get(), "Ritual Altar");
 
@@ -257,6 +265,7 @@ public class ModEnUsLangProvider extends LanguageProvider {
 
         // ==================== 获取方式描述 ====================
         add("acquisition.lordofmysteries.potion_recipe.fool_9", "Kill a Lava Octopus in volcanic biomes; mine Star Crystal ore in deep caves.");
+        add("acquisition.lordofmysteries.potion_recipe.fool_8", "Adult Hornacis Gray Goat Unicorn Crystal: chance drop from adult Goat; Complete Human-Face Rose: chance drop from Rose Bush on full moon night; Pure Water: smelt Water Bottle; Mandrake Juice & Poison Hemlock Juice: brew; Black-Edged Sunflower Powder & Golden Cloak Grass Powder: craft");
 
         // ==================== 非凡者系统消息 ====================
         add("message.lordofmysteries.absorption.start", "§d[Characteristics] §fYou try to forcefully absorb a mass of freshly raw characteristics...");

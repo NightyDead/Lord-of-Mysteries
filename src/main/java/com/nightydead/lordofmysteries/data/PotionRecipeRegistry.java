@@ -35,7 +35,7 @@ public class PotionRecipeRegistry {
 
         Map<String, PotionRecipeData> builtin = new HashMap<>();
         // 手动列出所有内置配方文件
-        String[] builtinFiles = {"fool_9"};
+        String[] builtinFiles = {"fool_9", "fool_8"};
         for (String fileName : builtinFiles) {
             String path = "/data/lordofmysteries/lordofmysteries/potion_recipes/" + fileName + ".json";
             try (var in = PotionRecipeRegistry.class.getResourceAsStream(path)) {

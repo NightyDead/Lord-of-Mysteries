@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "lordofmysteries:black_edged_sunflower"
+    }
+  ],
+  "result": {
+    "count": 2,
+    "id": "lordofmysteries:auxiliary_material/black_edged_sunflower_powder"
+  }
+}

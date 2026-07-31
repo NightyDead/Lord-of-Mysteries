@@ -102,6 +102,8 @@ public class ModZhCnLangProvider extends LanguageProvider {
         // ==================== 魔药主材与特殊物品 ====================
         add(ModItems.LAVA_OCTOPUS_BLOOD.get(), "拉瓦章鱼血液");
         add(ModItems.STAR_CRYSTAL.get(), "星水晶");
+        add(ModItems.ADULT_HORNACIS_GRAY_GOAT_UNICORN_CRYSTAL.get(), "成年霍纳奇斯灰山羊独角结晶");
+        add(ModItems.COMPLETE_HUMAN_FACE_ROSE.get(), "完整的人脸玫瑰");
         add(ModItems.PURE_WATER.get(), "纯水");
         add(ModItems.RITUAL_DAGGER.get(), "仪式匕首");
         add(ModItems.MYSTIC_DUST.get(), "神秘粉尘");
@@ -113,6 +115,9 @@ public class ModZhCnLangProvider extends LanguageProvider {
         add(ModItems.GOLD_MINT_LEAF.get(), "金薄荷叶");
         add(ModItems.POISON_HEMLOCK_JUICE.get(), "毒堇汁");
         add(ModItems.DRAGON_BLOOD_POWDER.get(), "龙血草粉末");
+        add(ModItems.MANDRAKE_JUICE.get(), "曼陀罗汁液");
+        add(ModItems.BLACK_EDGED_SUNFLOWER_POWDER.get(), "黑边太阳花粉末");
+        add(ModItems.GOLDEN_CLOAK_GRASS_POWDER.get(), "金斗篷草粉末");
 
         // ==================== 方块 ====================
         add(ModBlocks.EXAMPLE_BLOCK.get(), "示例方块");
@@ -120,6 +125,9 @@ public class ModZhCnLangProvider extends LanguageProvider {
         add(ModBlocks.GOLD_MINT_HERB.get(), "金薄荷");
         add(ModBlocks.POISON_HEMLOCK_HERB.get(), "毒堇");
         add(ModBlocks.DRAGON_BLOOD_HERB.get(), "龙血草");
+        add(ModBlocks.MANDRAKE_HERB.get(), "曼陀罗");
+        add(ModBlocks.BLACK_EDGED_SUNFLOWER.get(), "黑边太阳花");
+        add(ModBlocks.GOLDEN_CLOAK_GRASS.get(), "金斗篷草");
         add(ModBlocks.ALCHEMY_CAULDRON.get(), "炼药锅");
         add(ModBlocks.RITUAL_ALTAR.get(), "仪式祭坛");
 
@@ -256,6 +264,7 @@ public class ModZhCnLangProvider extends LanguageProvider {
 
         // ==================== 获取方式描述 ====================
         add("acquisition.lordofmysteries.potion_recipe.fool_9", "拉瓦章鱼血液：击杀荧光鱿鱼概率掉落；星水晶：挖掘紫水晶簇概率掉落；纯水：熔炉或烟熏炉烧制水瓶；夜香草汁液、毒堇汁：酿造台酿造；金薄荷叶、龙血草粉末：合成获取");
+        add("acquisition.lordofmysteries.potion_recipe.fool_8", "成年霍纳奇斯灰山羊独角结晶：击杀成年山羊概率掉落；完整的人脸玫瑰：满月夜晚破坏玫瑰丛概率掉落；纯水：熔炉或烟熏炉烧制水瓶；曼陀罗汁液、毒堇汁：酿造台酿造；黑边太阳花粉末、金斗篷草粉末：合成获取");
 
         // ==================== 非凡者系统消息 ====================
         add("message.lordofmysteries.absorption.start", "§d[特性容纳] §f你尝试强行吸收一团聚合的生鲜非凡特性...");

@@ -54,6 +54,18 @@ public class ModRecipesProvider extends RecipeProvider implements IConditionBuil
                 .unlockedBy("has_dragon_blood_herb", has(ModBlocks.DRAGON_BLOOD_HERB.get()))
                 .save(recipeOutput, "lordofmysteries:dragon_blood_powder_from_herb");
 
+        // 黑边太阳花 → 2个黑边太阳花粉末（无形状配方）
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.BLACK_EDGED_SUNFLOWER_POWDER.get(), 2)
+                .requires(ModBlocks.BLACK_EDGED_SUNFLOWER.get())
+                .unlockedBy("has_black_edged_sunflower", has(ModBlocks.BLACK_EDGED_SUNFLOWER.get()))
+                .save(recipeOutput, "lordofmysteries:black_edged_sunflower_powder_from_herb");
+
+        // 金斗篷草 → 2个金斗篷草粉末（无形状配方）
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.GOLDEN_CLOAK_GRASS_POWDER.get(), 2)
+                .requires(ModBlocks.GOLDEN_CLOAK_GRASS.get())
+                .unlockedBy("has_golden_cloak_grass", has(ModBlocks.GOLDEN_CLOAK_GRASS.get()))
+                .save(recipeOutput, "lordofmysteries:golden_cloak_grass_powder_from_herb");
+
         // 水瓶 → 纯水（熔炉烧制，200 tick）
         SimpleCookingRecipeBuilder.smelting(
                         Ingredient.of(Items.POTION),

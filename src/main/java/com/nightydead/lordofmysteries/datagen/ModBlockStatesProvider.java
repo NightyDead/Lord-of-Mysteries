@@ -35,11 +35,14 @@ public class ModBlockStatesProvider extends BlockStateProvider {
         // 示例方块：生成立方体模型及对应的物品模型
         simpleBlockWithItem(ModBlocks.EXAMPLE_BLOCK.get(), cubeAll(ModBlocks.EXAMPLE_BLOCK.get()));
 
-        // 为四种神秘学草药生成十字交叉模型 (Cross Model)，使用 cutout 渲染层实现透明效果
+        // 为各种神秘学草药生成十字交叉模型 (Cross Model)，使用 cutout 渲染层实现透明效果
         makeFlower(ModBlocks.NIGHT_PERFUME_HERB.get());
         makeFlower(ModBlocks.GOLD_MINT_HERB.get());
         makeFlower(ModBlocks.POISON_HEMLOCK_HERB.get());
         makeFlower(ModBlocks.DRAGON_BLOOD_HERB.get());
+        makeFlower(ModBlocks.MANDRAKE_HERB.get());
+        makeFlower(ModBlocks.BLACK_EDGED_SUNFLOWER.get());
+        makeFlower(ModBlocks.GOLDEN_CLOAK_GRASS.get());
 
         // 炼药锅：生成 4 种状态的方块模型（空/有物品/成功/失败）
         registerCauldronStates();

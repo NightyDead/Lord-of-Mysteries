@@ -35,11 +35,14 @@ public class ModBlockLootTablesProvider extends BlockLootSubProvider {
         // 示例方块掉落自身
         dropSelf(ModBlocks.EXAMPLE_BLOCK.get());
 
-        // 四种神秘学草药掉落自身
+        // 各种神秘学草药掉落自身
         dropSelf(ModBlocks.NIGHT_PERFUME_HERB.get());
         dropSelf(ModBlocks.GOLD_MINT_HERB.get());
         dropSelf(ModBlocks.POISON_HEMLOCK_HERB.get());
         dropSelf(ModBlocks.DRAGON_BLOOD_HERB.get());
+        dropSelf(ModBlocks.MANDRAKE_HERB.get());
+        dropSelf(ModBlocks.BLACK_EDGED_SUNFLOWER.get());
+        dropSelf(ModBlocks.GOLDEN_CLOAK_GRASS.get());
 
         // 炼药锅掉落自身（内部物品由 BlockEntity.onRemove 处理）
         dropSelf(ModBlocks.ALCHEMY_CAULDRON.get());
