@@ -108,6 +108,7 @@ public class ModEnUsLangProvider extends LanguageProvider {
         add(ModItems.PURE_WATER.get(), "Pure Water");
         add(ModItems.RITUAL_DAGGER.get(), "Ritual Dagger");
         add(ModItems.MYSTIC_DUST.get(), "Mystic Dust");
+        add(ModItems.KNOWLEDGE_VESSEL.get(), "Knowledge Vessel");
         add("item.lordofmysteries.pure_water.pure_water.effect.empty", "Pure Water");
         add("tooltip.lordofmysteries.pure_water.desc", "The base solvent for potion brewing, pure and impurity-free.");
 
@@ -299,6 +300,9 @@ public class ModEnUsLangProvider extends LanguageProvider {
         add("message.lordofmysteries.divination.no_response", "§7The pendulum is unresponsive... No target %s found within %s blocks.");
         add("message.lordofmysteries.divination.success", "§6[Divination Revelation] §7The pendulum points towards %s, %s blocks away.");
         add("message.lordofmysteries.divination.failed", "§cDivination failed");
+        add("message.lordofmysteries.knowledge_divination.no_combination", "§cKnowledge divination requires a Knowledge Vessel in one hand and a potion main material in the other.");
+        add("message.lordofmysteries.knowledge_divination.no_recipe", "§cUnable to decipher a potion recipe from this main material.");
+        add("message.lordofmysteries.knowledge_divination.success", "§6[Knowledge Divination] §aThe Knowledge Vessel transformed into the %s Sequence %s potion recipe! Cost: §b%s§a spirituality, §c%s§a sanity.");
 
         // ==================== 同序列堆叠详情 ====================
         add("message.lordofmysteries.stack.detail", "§e📚 Same-Sequence Stack ×%s | Spirituality Cap %s | Cost %s | Sanity Cap %s");

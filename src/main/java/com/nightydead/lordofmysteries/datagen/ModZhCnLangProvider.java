@@ -107,6 +107,7 @@ public class ModZhCnLangProvider extends LanguageProvider {
         add(ModItems.PURE_WATER.get(), "纯水");
         add(ModItems.RITUAL_DAGGER.get(), "仪式匕首");
         add(ModItems.MYSTIC_DUST.get(), "神秘粉尘");
+        add(ModItems.KNOWLEDGE_VESSEL.get(), "知识载体");
         add("item.lordofmysteries.pure_water.pure_water.effect.empty", "纯水");
         add("tooltip.lordofmysteries.pure_water.desc", "炼药的基础溶剂，纯净无杂质。");
 
@@ -298,6 +299,9 @@ public class ModZhCnLangProvider extends LanguageProvider {
         add("message.lordofmysteries.divination.no_response", "§7灵摆毫无反应… %s 格内未发现目标%s。");
         add("message.lordofmysteries.divination.success", "§6【占卜启示】§7 灵摆指向 %s 格外的%s");
         add("message.lordofmysteries.divination.failed", "§c占卜失败");
+        add("message.lordofmysteries.knowledge_divination.no_combination", "§c知识载体占卜需要一手持知识载体、另一手持魔药主材。");
+        add("message.lordofmysteries.knowledge_divination.no_recipe", "§c无法从主材中解读出对应的魔药配方。");
+        add("message.lordofmysteries.knowledge_divination.success", "§6【知识占卜】§a知识载体化作【%s·%s序列】的魔药配方！消耗了 §b%s§a 灵性、§c%s§a 理智。");
 
         // ==================== 同序列堆叠详情 ====================
         add("message.lordofmysteries.stack.detail", "§e📚 同序列堆叠×%s | 灵性上限 %s | 消耗 %s | 理智上限 %s");

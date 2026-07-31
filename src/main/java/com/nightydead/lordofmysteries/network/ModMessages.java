@@ -34,6 +34,8 @@ public class ModMessages {
             C2SToggleVisionPacket.register(registrar);
             // 🔮 注册占卜请求包（客户端 → 服务器）
             C2SDivinationPacket.register(registrar);
+            // 📖 注册知识载体占卜请求包（客户端 → 服务器）
+            C2SKnowledgeDivinationPacket.register(registrar);
             // 🌿 注册群系占卜请求包（客户端 → 服务器）
             C2SBiomeDivinationPacket.register(registrar);
             // 🏛️ 注册结构占卜请求包（客户端 → 服务器）

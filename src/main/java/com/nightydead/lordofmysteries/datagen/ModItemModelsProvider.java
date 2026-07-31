@@ -65,6 +65,7 @@ public class ModItemModelsProvider extends ItemModelProvider {
         basicItem(ModItems.PURE_WATER.get());
         basicItem(ModItems.RITUAL_DAGGER.get());
         basicItem(ModItems.MYSTIC_DUST.get());
+        basicItem(ModItems.KNOWLEDGE_VESSEL.get());
 
         // 为植物的 BlockItem 生成 2D 物品模型，指向 textures/block/ 目录下的贴图
         makeBlockItemModel("night_perfume_herb");

@@ -2,7 +2,10 @@ package com.nightydead.lordofmysteries.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
+import com.nightydead.lordofmysteries.item.ModItems;
+import com.nightydead.lordofmysteries.item.custom.MainMaterialItem;
 import com.nightydead.lordofmysteries.network.C2SDivinationPacket;
+import com.nightydead.lordofmysteries.network.C2SKnowledgeDivinationPacket;
 import com.nightydead.lordofmysteries.skills.ModSkills;
 import com.nightydead.lordofmysteries.skills.ModSkills.SkillEntry;
 import net.minecraft.client.Minecraft;
@@ -174,6 +177,12 @@ public class DivinationSkillWheelScreen extends Screen {
         if (selectedSector >= 0 && selectedSector < skills.size()) {
             SkillEntry skill = skills.get(selectedSector);
             if (skill.id().equals(ModSkills.ID_DIVINATION)) {
+                // 知识载体占卜：知识载体 + 魔药主材 → 发送网络包后正常关闭轮盘
+                if (isHoldingKnowledgeVesselAndMainMaterial()) {
+                    PacketDistributor.sendToServer(new C2SKnowledgeDivinationPacket());
+                    onClose();
+                    return;
+                }
                 // 群系占卜：setScreen 会自动清理轮盘，无需走 onClose
                 if (isHoldingCompassAndPlant()) {
                     Minecraft.getInstance().setScreen(new BiomeDivinationScreen());
@@ -189,6 +198,24 @@ public class DivinationSkillWheelScreen extends Screen {
             }
         }
         onClose();
+    }
+
+    /**
+     * 检查玩家是否一手持知识载体、另一手持魔药主材（组合顺序不限）
+     */
+    private static boolean isHoldingKnowledgeVesselAndMainMaterial() {
+        var player = Minecraft.getInstance().player;
+        if (player == null) return false;
+
+        ItemStack main = player.getMainHandItem();
+        ItemStack off = player.getOffhandItem();
+
+        boolean mainVessel = main.is(ModItems.KNOWLEDGE_VESSEL.get());
+        boolean offVessel = off.is(ModItems.KNOWLEDGE_VESSEL.get());
+        boolean mainMaterial = main.getItem() instanceof MainMaterialItem;
+        boolean offMaterial = off.getItem() instanceof MainMaterialItem;
+
+        return (mainVessel && offMaterial) || (offVessel && mainMaterial);
     }
 
     /**

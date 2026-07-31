@@ -124,6 +124,7 @@ public class ModCreativeModeTabs {
                         output.accept(ModBlocks.BLACK_EDGED_SUNFLOWER.get());
                         output.accept(ModBlocks.GOLDEN_CLOAK_GRASS.get());
                         output.accept(ModItems.MYSTIC_DUST.get());
+                        output.accept(ModItems.KNOWLEDGE_VESSEL.get());
                     }).withTabsBefore(ResourceLocation.fromNamespaceAndPath(LordofMysteries.MODID, "potion_auxiliary_materials"))
                     .build());
 

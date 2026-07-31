@@ -279,6 +279,22 @@ public class ModMysticalMechanics {
     }
 
     /**
+     * 理智归零即时失控（能力扣除理智后调用，如知识载体占卜）
+     * 与玩家Tick理智兜底逻辑保持一致：提示崩溃、施加负面效果并启动失控倒计时
+     * <p>
+     * 注意：不记录污染来源（区别于吸收失败的失控，避免污染历史混入占卜配方）
+     *
+     * @param player 失控玩家
+     * @param data   玩家非凡数据
+     */
+    public static void triggerMadnessOnSanityZero(Player player, PlayerData data) {
+        player.displayClientMessage(Component.translatable("message.lordofmysteries.sanity.collapse.immediate"), true);
+        player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 300, 0));
+        player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 300, 0));
+        data.setSdcTicks(300); // 15 秒失控倒计时
+    }
+
+    /**
      * 调用序列的 onAbsorbed 回调
      * 用于触发序列专属的晋升逻辑（如设置灵性上限、赋予被动能力等）
      *

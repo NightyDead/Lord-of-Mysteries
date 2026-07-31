@@ -114,6 +114,16 @@ public class ModRecipesProvider extends RecipeProvider implements IConditionBuil
                 .unlockedBy("has_diamond", has(Items.DIAMOND))
                 .save(recipeOutput);
 
+        // 知识载体：纸居中 + 8个神秘粉尘环绕（有形状配方）
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.KNOWLEDGE_VESSEL.get())
+                .pattern("DDD")
+                .pattern("DPD")
+                .pattern("DDD")
+                .define('D', ModItems.MYSTIC_DUST.get())
+                .define('P', Items.PAPER)
+                .unlockedBy("has_mystic_dust", has(ModItems.MYSTIC_DUST.get()))
+                .save(recipeOutput);
+
         // 仪式祭坛：黑曜石-黑曜石-黑曜石 / 黑石-钻石-黑石 / 黑曜石-黑曜石-黑曜石
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.RITUAL_ALTAR.get())
                 .pattern("OOO")
