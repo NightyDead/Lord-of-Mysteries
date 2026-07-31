@@ -147,6 +147,15 @@ public class ModEnUsLangProvider extends LanguageProvider {
         add("message.lordofmysteries.cauldron.need_spirituality", "§c[Alchemy Cauldron] §4Not enough spirituality! You need at least 5 points.");
         add("message.lordofmysteries.cauldron.brewed_block", "§e[Alchemy Cauldron] §fThe cauldron has finished brewing. Collect the result first.");
 
+        // ==================== 仪式祭坛交互消息 ====================
+        add("message.lordofmysteries.ritual.need_open_sky", "§c[Ritual Altar] The ritual must be performed under the open sky!");
+        add("message.lordofmysteries.ritual.need_aggregated", "§c[Ritual Altar] An Aggregated Characteristic must be placed on the altar!");
+        add("message.lordofmysteries.ritual.no_features", "§c[Ritual Altar] No separable characteristics in the aggregated mass!");
+        add("message.lordofmysteries.ritual.need_spirituality", "§c[Ritual Altar] Not enough spirituality! Requires %s points.");
+        add("message.lordofmysteries.ritual.need_sanity", "§c[Ritual Altar] Not enough sanity! Requires %s points.");
+        add("message.lordofmysteries.ritual.success", "§6[Ritual Altar] §eLightning strikes! The characteristic has been separated!");
+        add("message.lordofmysteries.ritual.separate_failed", "§c[Ritual Altar] §4Separation failed! Aggregated characteristic data is corrupted, unable to identify.");
+
         // ==================== 仪式匕首消息 ====================
         add("message.lordofmysteries.ritual_dagger.cauldron_brew", "§5[Ritual Dagger] §fYou channel spirituality through the dagger into the cauldron...");
 
@@ -261,9 +270,33 @@ public class ModEnUsLangProvider extends LanguageProvider {
         add("message.lordofmysteries.contamination.loss_of_control", "§c[Incomprehensible Contamination] §4You have lost control!");
         add("message.lordofmysteries.madness.whisper", "§5You hear incomprehensible murmurs... Consciousness fading away...");
         add("message.lordofmysteries.madness.failed", "§4Your sanity completely collapsed. You became a victim of loss of control.");
+        add("message.lordofmysteries.potion.consumed", "§d[Divine Resonance] §fThe %s Pathway · Sequence %d potion surges within you. From now on, you walk the path of the Beyonder!");
+        add("message.lordofmysteries.characteristic.dropped", "§e[Characteristic Precipitated] §fYour Beyonder characteristics have precipitated into an aggregated mass...");
+        add("message.lordofmysteries.characteristic.stack", "§6[Resonance] §fYou successfully integrated an additional Sequence %d characteristic. Your abilities are enhanced!");
         add("entity.lordofmysteries.madness_zombie", "§4Lost Control: %s");
         add("message.lordofmysteries.ritual.checking", "§d[Ritual Checking] §fYou are attempting to contain the divinity of %s Pathway · Sequence %d. The law is verifying the surrounding environment...");
         add("message.lordofmysteries.ritual.failed.bizarro_sorcerer", "§c[Ritual Failed] §4The number of 'spectators' (living entities) around you is only %d/15! Failed to weave a grand drama capable of deceiving the laws, ritual unestablished!");
+
+        // ==================== 灵视系统消息 ====================
+        add("message.lordofmysteries.vision.mortal_blocked", "§cA mortal body cannot touch the spirit world. You failed to activate Spirit Vision.");
+        add("message.lordofmysteries.vision.no_spirituality", "§cSpirituality depleted, unable to activate Spirit Vision.");
+        add("message.lordofmysteries.vision.activated", "§5[Mystical Revelation] §7The spirit light spreads in your eyes. You have activated Spirit Vision...");
+        add("message.lordofmysteries.vision.deactivated", "§7The spirit light fades away. You have deactivated Spirit Vision.");
+        add("message.lordofmysteries.vision.spirituality_exhausted", "§cSpirituality exhausted! Spirit Vision forcibly closed, you feel dizzy and disoriented...");
+
+        // ==================== 占卜系统消息 ====================
+        add("message.lordofmysteries.divination.not_seer", "§cOnly a Beyonder of the Fool pathway can perform %s divination.");
+        add("message.lordofmysteries.divination.no_spirituality", "§cNot enough spirituality to perform divination (requires %s points).");
+        add("message.lordofmysteries.divination.no_response", "§7The pendulum is unresponsive... No target %s found within %s blocks.");
+        add("message.lordofmysteries.divination.success", "§6[Divination Revelation] §7The pendulum points towards %s, %s blocks away.");
+        add("message.lordofmysteries.divination.failed", "§cDivination failed");
+
+        // ==================== 同序列堆叠详情 ====================
+        add("message.lordofmysteries.stack.detail", "§e📚 Same-Sequence Stack ×%s | Spirituality Cap %s | Cost %s | Sanity Cap %s");
+
+        // ==================== HUD 动态文本 ====================
+        add("hud.lordofmysteries.vision.active_title", "👁 Spirit Vision Active");
+        add("hud.lordofmysteries.vision.running", "§b⚡ Spirit Vision Running");
 
         // ==================== 配置界面 ====================
         add("lordofmysteries.configuration.title", "Lord of Mysteries Configs");

@@ -36,8 +36,8 @@ public class RitualAltarRenderer implements BlockEntityRenderer<RitualAltarBlock
 
         poseStack.pushPose();
 
-        // 移动到祭坛顶部中心上方（祭坛模型高度 16px = 1.0，物品悬浮在略上方）
-        poseStack.translate(0.5, 1.15, 0.5);
+        // 移动到祭坛顶部中心上方（祭坛模型高度 16px = 1.0，物品悬浮在更高处）
+        poseStack.translate(0.5, 1.35, 0.5);
 
         if (items.size() == 1) {
             // 单个物品：居中悬浮

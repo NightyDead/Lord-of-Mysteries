@@ -139,6 +139,15 @@ public class ModZhCnLangProvider extends LanguageProvider {
         add("message.lordofmysteries.cauldron.brew.failed", "§c[炼药锅] §4炼制失败！材料已被污染扭曲...");
         add("message.lordofmysteries.cauldron.brew.failed_no_main", "§7[炼药锅] 炼制失败，但没有主材参与，材料已消散。");
         add("message.lordofmysteries.cauldron.brew.penalty", "§4[炼药锅] §c失败的炼制涌出混乱的能量，抽取了你的生命与理智！");
+
+        // ==================== 仪式祭坛交互消息 ====================
+        add("message.lordofmysteries.ritual.need_open_sky", "§c[仪式祭坛] 仪式必须在露天下进行！");
+        add("message.lordofmysteries.ritual.need_aggregated", "§c[仪式祭坛] 祭坛上需要放置聚合非凡特性！");
+        add("message.lordofmysteries.ritual.no_features", "§c[仪式祭坛] 聚合非凡特性中没有可分离的特性！");
+        add("message.lordofmysteries.ritual.need_spirituality", "§c[仪式祭坛] 灵性不足！需要消耗 %s 点灵性。");
+        add("message.lordofmysteries.ritual.need_sanity", "§c[仪式祭坛] 理智不足！需要消耗 %s 点理智。");
+        add("message.lordofmysteries.ritual.success", "§6[仪式祭坛] §e闪电劈落！特性已分离！");
+        add("message.lordofmysteries.ritual.separate_failed", "§c[仪式祭坛] §4分离失败！聚合特性数据异常，无法识别。");
         add("message.lordofmysteries.cauldron.potion_taken", "§a[炼药锅] §f你从锅中取出了魔药。");
         add("message.lordofmysteries.cauldron.characteristic_taken", "§e[炼药锅] §f你取出了聚合的非凡特性。");
         add("message.lordofmysteries.cauldron.use_bottle", "§e[炼药锅] §f请使用玻璃瓶来收集魔药。");
@@ -260,9 +269,33 @@ public class ModZhCnLangProvider extends LanguageProvider {
         add("message.lordofmysteries.contamination.loss_of_control", "§c[不可直视的高维污染] §4你失控了！");
         add("message.lordofmysteries.madness.whisper", "§5你听到了无法理解的呢喃... 意识正在消散...");
         add("message.lordofmysteries.madness.failed", "§4你的理智彻底崩溃，你成为了失控的牺牲品。");
+        add("message.lordofmysteries.potion.consumed", "§d[神性共鸣] §f%s途径 · 序列 %d 的魔药在你体内激荡，从此你将踏足非凡！");
+        add("message.lordofmysteries.characteristic.dropped", "§e[特性析出] §f你的非凡特性已经析出为一团聚合体...");
+        add("message.lordofmysteries.characteristic.stack", "§6[同序列共鸣] §f你成功容纳了额外的序列 %d 特性，能力得到增强！");
         add("entity.lordofmysteries.madness_zombie", "§4失控的 %s");
         add("message.lordofmysteries.ritual.checking", "§d[仪式检查] §f你正在试图容纳 %s途径 · 序列 %d 的神性，法则正在审核周围的环境...");
         add("message.lordofmysteries.ritual.failed.bizarro_sorcerer", "§c[仪式失败] §4你周围的\"观众\"（活体生物）数量仅有 %d/15 个！无法交织出足以欺骗规律的盛大戏剧，仪式未成立！");
+
+        // ==================== 灵视系统消息 ====================
+        add("message.lordofmysteries.vision.mortal_blocked", "§c凡俗之躯无法触碰灵界，你未能开启灵视。");
+        add("message.lordofmysteries.vision.no_spirituality", "§c灵性枯竭，无法开启灵视。");
+        add("message.lordofmysteries.vision.activated", "§5【神秘学启示】§7 灵光在你眼底蔓延，你开启了灵视...");
+        add("message.lordofmysteries.vision.deactivated", "§7 灵光隐去，你退出了灵视。");
+        add("message.lordofmysteries.vision.spirituality_exhausted", "§c灵性枯竭！灵视被迫关闭，你感到一阵头晕目眩...");
+
+        // ==================== 占卜系统消息 ====================
+        add("message.lordofmysteries.divination.not_seer", "§c唯有占卜家途径的非凡者才能施展%s占卜。");
+        add("message.lordofmysteries.divination.no_spirituality", "§c灵性不足，无法施展占卜（需要 %s 点灵性）。");
+        add("message.lordofmysteries.divination.no_response", "§7灵摆毫无反应… %s 格内未发现目标%s。");
+        add("message.lordofmysteries.divination.success", "§6【占卜启示】§7 灵摆指向 %s 格外的%s");
+        add("message.lordofmysteries.divination.failed", "§c占卜失败");
+
+        // ==================== 同序列堆叠详情 ====================
+        add("message.lordofmysteries.stack.detail", "§e📚 同序列堆叠×%s | 灵性上限 %s | 消耗 %s | 理智上限 %s");
+
+        // ==================== HUD 动态文本 ====================
+        add("hud.lordofmysteries.vision.active_title", "👁 灵视状态已激活 (Spirit Vision)");
+        add("hud.lordofmysteries.vision.running", "§b⚡ 灵视运行中");
 
         // ==================== 配置界面 ====================
         add("lordofmysteries.configuration.title", "诡秘之主配置");

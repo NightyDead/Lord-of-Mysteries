@@ -256,10 +256,11 @@ public class ModMysticalMechanics {
             data.setSpirituality(Math.min(data.getSpirituality(), newMaxSpirituality));
 
             player.displayClientMessage(Component.translatable("message.lordofmysteries.characteristic.stack", seq), true);
-            player.displayClientMessage(Component.literal("§e📚 同序列堆叠×" + (newCount + 1)
-                    + " | 灵性上限 " + String.format("%.0f%%", newSpiritMult * 100)
-                    + " | 消耗 " + String.format("%.0f%%", (1 - 0.1 * newCount) * 100)
-                    + " | 理智上限 " + newMaxSanity), true);
+            player.displayClientMessage(Component.translatable("message.lordofmysteries.stack.detail",
+                    newCount + 1,
+                    String.format("%.0f%%", newSpiritMult * 100),
+                    String.format("%.0f%%", (1 - 0.1 * newCount) * 100),
+                    newMaxSanity), true);
         } else {
             handleContaminationAndMadness(player, data, pathway, seq);
         }

@@ -1,5 +1,6 @@
 package com.nightydead.lordofmysteries.block;
 
+import com.nightydead.lordofmysteries.item.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -61,6 +62,42 @@ public class RitualAltarBlockEntity extends BlockEntity {
         setChanged();
         syncToClient();
         return removed;
+    }
+
+    /** 查找祭坛上第一个聚合非凡特性的索引，未找到返回 -1 */
+    public int findAggregatedCharacteristicIndex() {
+        for (int i = 0; i < items.size(); i++) {
+            if (items.get(i).is(ModItems.AGGREGATED_CHARACTERISTIC.get())) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /** 获取指定索引的物品（不修改列表） */
+    public ItemStack getItem(int index) {
+        if (index >= 0 && index < items.size()) {
+            return items.get(index);
+        }
+        return ItemStack.EMPTY;
+    }
+
+    /** 更新指定索引的物品并同步 */
+    public void setItem(int index, ItemStack stack) {
+        if (index >= 0 && index < items.size()) {
+            items.set(index, stack);
+            setChanged();
+            syncToClient();
+        }
+    }
+
+    /** 移除指定索引的物品并同步 */
+    public void removeItemAt(int index) {
+        if (index >= 0 && index < items.size()) {
+            items.remove(index);
+            setChanged();
+            syncToClient();
+        }
     }
 
     // ==================== NBT 序列化 ====================

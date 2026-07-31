@@ -55,7 +55,7 @@ public record C2SStructureDivinationPacket(ResourceLocation structureKey) implem
             player.getExistingData(ModAttachments.PLAYER_DATA.get()).ifPresent(data -> {
                 if (data.getCurrentSequence() >= 10 || !"fool".equals(data.getCurrentPathway())) {
                     player.displayClientMessage(
-                            Component.literal("§c唯有占卜家途径的非凡者才能施展结构占卜。"), true);
+                            Component.translatable("message.lordofmysteries.divination.not_seer", "结构"), true);
                     return;
                 }
 
@@ -63,7 +63,7 @@ public record C2SStructureDivinationPacket(ResourceLocation structureKey) implem
                 int effectiveCost = Math.round(SPIRITUALITY_COST * data.getStackCostMultiplier());
                 if (data.getSpirituality() < effectiveCost) {
                     player.displayClientMessage(
-                            Component.literal("§c灵性不足，无法施展占卜（需要 " + effectiveCost + " 点灵性）。"), true);
+                            Component.translatable("message.lordofmysteries.divination.no_spirituality", effectiveCost), true);
                     return;
                 }
 
@@ -82,8 +82,7 @@ public record C2SStructureDivinationPacket(ResourceLocation structureKey) implem
                     player.setData(ModAttachments.PLAYER_DATA.get(), data);
                     PacketDistributor.sendToPlayer(player, new SyncSanityPacket(data.getSanity()));
                     player.displayClientMessage(
-                            Component.literal("§7灵摆毫无反应… " + effectiveRadius
-                                    + " 格内未发现目标结构。"), true);
+                            Component.translatable("message.lordofmysteries.divination.no_response", effectiveRadius, "结构"), true);
                     return;
                 }
 
@@ -106,8 +105,8 @@ public record C2SStructureDivinationPacket(ResourceLocation structureKey) implem
                 String structureName = Component.translatable(
                         "structure." + packet.structureKey().getNamespace() + "." + packet.structureKey().getPath()
                 ).getString();
-                Component successMsg = Component.literal("§6【占卜启示】§7 灵摆指向 "
-                        + dist + " 格外的" + structureName + "…");
+                Component successMsg = Component.translatable("message.lordofmysteries.divination.success",
+                        dist, structureName);
                 player.displayClientMessage(successMsg, true);
                 player.getServer().tell(new TickTask(baseTick + 40,
                         () -> player.displayClientMessage(successMsg, true)));

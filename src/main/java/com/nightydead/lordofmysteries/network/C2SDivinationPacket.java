@@ -75,7 +75,7 @@ public record C2SDivinationPacket() implements CustomPacketPayload {
             player.getExistingData(ModAttachments.PLAYER_DATA.get()).ifPresent(data -> {
                 if (data.getCurrentSequence() >= 10 || !"fool".equals(data.getCurrentPathway())) {
                     player.displayClientMessage(
-                            Component.literal("§c唯有占卜家途径的非凡者才能施展矿物占卜。"), true);
+                            Component.translatable("message.lordofmysteries.divination.not_seer", "矿物"), true);
                     return;
                 }
 
@@ -83,7 +83,7 @@ public record C2SDivinationPacket() implements CustomPacketPayload {
                 int effectiveCost = Math.round(SPIRITUALITY_COST * data.getStackCostMultiplier());
                 if (data.getSpirituality() < effectiveCost) {
                     player.displayClientMessage(
-                            Component.literal("§c灵性不足，无法施展占卜（需要 " + effectiveCost + " 点灵性）。"), true);
+                            Component.translatable("message.lordofmysteries.divination.no_spirituality", effectiveCost), true);
                     return;
                 }
 
@@ -106,7 +106,7 @@ public record C2SDivinationPacket() implements CustomPacketPayload {
                     player.setData(ModAttachments.PLAYER_DATA.get(), data);
                     PacketDistributor.sendToPlayer(player, new SyncSanityPacket(data.getSanity()));
                     player.displayClientMessage(
-                            Component.literal("§c占卜失败"), true);
+                            Component.translatable("message.lordofmysteries.divination.failed"), true);
                     return;
                 }
 
@@ -120,8 +120,8 @@ public record C2SDivinationPacket() implements CustomPacketPayload {
                     player.setData(ModAttachments.PLAYER_DATA.get(), data);
                     PacketDistributor.sendToPlayer(player, new SyncSanityPacket(data.getSanity()));
                     player.displayClientMessage(
-                            Component.literal("§7灵摆毫无反应… " + DivinationHandler.SEARCH_RADIUS
-                                    + " 格内未发现对应的矿石。"), true);
+                            Component.translatable("message.lordofmysteries.divination.no_response",
+                                    DivinationHandler.SEARCH_RADIUS, "矿石"), true);
                     return;
                 }
 
@@ -143,8 +143,8 @@ public record C2SDivinationPacket() implements CustomPacketPayload {
                 }
 
                 int dist = (int) Math.sqrt(player.blockPosition().distSqr(nearest));
-                Component successMsg = Component.literal("§6【占卜启示】§7 灵摆指向 "
-                        + dist + " 格外的" + held.getDisplayName().getString() + "矿脉…");
+                Component successMsg = Component.translatable("message.lordofmysteries.divination.success",
+                        dist, held.getDisplayName().getString() + "矿脉");
                 player.displayClientMessage(successMsg, true);
                 // 40 tick 后重发一次，延长显示时间
                 player.getServer().tell(new TickTask(baseTick + 40,

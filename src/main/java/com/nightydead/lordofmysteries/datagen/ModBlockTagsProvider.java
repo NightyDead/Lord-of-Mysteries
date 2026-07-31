@@ -40,7 +40,12 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
     protected void addTags(HolderLookup.Provider provider) {
         // 示例方块标记为镐子可挖掘
         tag(BlockTags.MINEABLE_WITH_PICKAXE)
-        .add(ModBlocks.EXAMPLE_BLOCK.get());
+                .add(ModBlocks.EXAMPLE_BLOCK.get())
+                .add(ModBlocks.RITUAL_ALTAR.get());
+
+        // 仪式祭坛需要钻石镐及以上才能破坏掉落（等同黑曜石）
+        tag(BlockTags.NEEDS_DIAMOND_TOOL)
+                .add(ModBlocks.RITUAL_ALTAR.get());
 
         // 添加四种神秘学草药到小花标签，允许它们种植在泥土、草方块上
         tag(BlockTags.SMALL_FLOWERS)

@@ -56,7 +56,7 @@ public class ModHUDOverlay {
             graphics.fill(0, 0, width, height, 0x2F003366);
 
             // 在面板顶部显示灵视激活状态
-            graphics.drawString(font, Component.literal("👁 灵视状态已激活 (Spirit Vision)"), startX, currentY, 0x55FFFFFF, true);
+            graphics.drawString(font, Component.translatable("hud.lordofmysteries.vision.active_title"), startX, currentY, 0x55FFFFFF, true);
             currentY += 15;
         }
 
@@ -92,7 +92,7 @@ public class ModHUDOverlay {
 
         // 如果开启了灵视，在身份牌上方显示灵视运行标记
         if (ClientDataCache.isSpiritVisionActive() && !isMortal) {
-            graphics.drawString(font, Component.literal("§b⚡ 灵视运行中"), startX, currentY, 0xFF55FFFF, true);
+            graphics.drawString(font, Component.translatable("hud.lordofmysteries.vision.running"), startX, currentY, 0xFF55FFFF, true);
             currentY += 12;
         }
 

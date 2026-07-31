@@ -9,6 +9,7 @@ import com.nightydead.lordofmysteries.item.custom.PotionRecipeItem;
 import com.nightydead.lordofmysteries.item.custom.PureWaterItem;
 import com.nightydead.lordofmysteries.item.custom.RitualDaggerItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -256,6 +257,25 @@ public class ModItems {
     public static Item getPureCharacteristic(String pathway, int sequence) {
         Map<Integer, Supplier<Item>> seqMap = CHARACTERISTIC_MAP.get(pathway.toLowerCase());
         return seqMap != null && seqMap.containsKey(sequence) ? seqMap.get(sequence).get() : null;
+    }
+
+    /**
+     * 通过显示名称反向查找对应的魔药主材物品
+     * 用于仪式祭坛从失败酿造聚合特性中分离主材时定位物品
+     *
+     * @param displayName 物品显示名称（与 ItemStack.getHoverName().getString() 匹配）
+     * @return 匹配的主材物品，找不到返回 null
+     */
+    public static Item findMainMaterialByDisplayName(String displayName) {
+        for (var entry : ITEMS.getEntries()) {
+            Item item = entry.get();
+            if (item instanceof MainMaterialItem) {
+                if (new ItemStack(item).getHoverName().getString().equals(displayName)) {
+                    return item;
+                }
+            }
+        }
+        return null;
     }
 
     /**

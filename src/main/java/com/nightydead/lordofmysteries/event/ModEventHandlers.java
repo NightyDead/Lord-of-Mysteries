@@ -223,7 +223,7 @@ public class ModEventHandlers {
                 player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 200, 0));
                 player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 200, 0));
 
-                player.displayClientMessage(Component.literal("§c灵性枯竭！灵视被迫关闭，你感到一阵头晕目眩..."), true);
+                player.displayClientMessage(Component.translatable("message.lordofmysteries.vision.spirituality_exhausted"), true);
                 return; // 灵视已关闭，跳过后续发光逻辑
             }
         }
@@ -237,7 +237,7 @@ public class ModEventHandlers {
             }
             player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 200, 0));
             player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 200, 0));
-            player.displayClientMessage(Component.literal("§c灵性枯竭！灵视被迫关闭，你感到一阵头晕目眩..."), true);
+            player.displayClientMessage(Component.translatable("message.lordofmysteries.vision.spirituality_exhausted"), true);
             return;
         }
 
