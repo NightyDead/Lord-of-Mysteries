@@ -7,7 +7,9 @@ import com.nightydead.lordofmysteries.LordofMysteries;
 
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -74,5 +76,10 @@ public class PotionRecipeRegistry {
     /** 获取已加载的配方总数 */
     public static int size() {
         return recipes.size();
+    }
+
+    /** 获取所有已加载配方的 key 快照（格式 "pathway:sequence"），供随机选择等场景使用 */
+    public static List<String> getAllKeys() {
+        return new ArrayList<>(recipes.keySet());
     }
 }

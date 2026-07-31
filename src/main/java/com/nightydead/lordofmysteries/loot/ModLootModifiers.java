@@ -27,6 +27,10 @@ public class ModLootModifiers {
     public static final Supplier<MapCodec<BlockLootModifier>> BLOCK_DROP =
             LOOT_MODIFIER_SERIALIZERS.register("block_drop", () -> BlockLootModifier.CODEC.get());
 
+    /** 箱子战利品修饰器 - 结构箱子概率掉落魔药配方 */
+    public static final Supplier<MapCodec<ChestLootModifier>> CHEST_LOOT =
+            LOOT_MODIFIER_SERIALIZERS.register("chest_loot", () -> ChestLootModifier.CODEC.get());
+
     /**
      * 将战利品修饰器注册表绑定到模组事件总线
      *
