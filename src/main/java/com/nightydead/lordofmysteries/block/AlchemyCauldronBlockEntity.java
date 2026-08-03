@@ -1,9 +1,10 @@
-package com.nightydead.lordofmysteries.block;
+    package com.nightydead.lordofmysteries.block;
 
 import com.nightydead.lordofmysteries.data.ModAttachments;
 import com.nightydead.lordofmysteries.data.ModDataComponents;
 import com.nightydead.lordofmysteries.data.PlayerData;
 import com.nightydead.lordofmysteries.item.ModItems;
+import com.nightydead.lordofmysteries.item.custom.CharacteristicItem;
 import com.nightydead.lordofmysteries.item.custom.MainMaterialItem;
 import com.nightydead.lordofmysteries.recipe.ModRecipes;
 import com.nightydead.lordofmysteries.recipe.PotionRecipe;
@@ -61,8 +62,12 @@ public class AlchemyCauldronBlockEntity extends BlockEntity {
     private String resultPathway = "";
     /** 酿造结果对应的序列号 */
     private int resultSequence = 0;
-    /** 失败酿造的主材信息列表（格式 "pathway:sequence"） */
+    /** 失败酿造的主材信息列表（格式 "pathway:sequence" 或主材显示名称） */
     private List<String> failedMainMaterials = new ArrayList<>();
+    /** 失败酿造产物中是否包含非凡特性条目（"途径:序列"） */
+    private boolean failedHasCharacteristics = false;
+    /** 失败酿造产物中是否包含魔药主材条目（显示名称） */
+    private boolean failedHasMainMaterials = false;
 
     public AlchemyCauldronBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.ALCHEMY_CAULDRON.get(), pos, state);
@@ -143,15 +148,30 @@ public class AlchemyCauldronBlockEntity extends BlockEntity {
                         "message.lordofmysteries.cauldron.brew.success"), true);
             }
         } else {
-            // 酿造失败：收集主材信息
+            // 酿造失败：按放入顺序收集主材名与非凡特性条目（非凡特性不灭：吞入的材料全部还原析出）
             failedMainMaterials = new ArrayList<>();
+            failedHasCharacteristics = false;
+            failedHasMainMaterials = false;
             for (ItemStack stack : items) {
                 if (stack.getItem() instanceof MainMaterialItem) {
                     failedMainMaterials.add(stack.getHoverName().getString());
+                    failedHasMainMaterials = true;
+                } else if (isCharacteristicItem(stack)) {
+                    // 单体特性 → 记录 "途径:序列"；聚合特性 → 展开全部条目
+                    String key = getCharacteristicKey(stack);
+                    if (key != null) {
+                        failedMainMaterials.add(key);
+                    } else {
+                        List<String> aggregated = stack.get(ModDataComponents.AGGREGATED_FEATURES.get());
+                        if (aggregated != null) {
+                            failedMainMaterials.addAll(aggregated);
+                        }
+                    }
+                    failedHasCharacteristics = true;
                 }
             }
 
-            // 如果没有主材，不产生任何产物，直接重置
+            // 如果没有主材也没有非凡特性，不产生任何产物，直接重置
             if (failedMainMaterials.isEmpty()) {
                 if (player != null) {
                     player.displayClientMessage(Component.translatable(
@@ -161,7 +181,7 @@ public class AlchemyCauldronBlockEntity extends BlockEntity {
                 return;
             }
 
-            // 有主材时，设置为失败状态并生成聚合非凡特性
+            // 有可还原材料时，设置为失败状态并生成聚合非凡特性
             brewState = STATE_FAILED;
             resultType = "characteristic";
             // 对范围内玩家施加失败惩罚
@@ -208,14 +228,17 @@ public class AlchemyCauldronBlockEntity extends BlockEntity {
 
     /**
      * 创建失败酿造的聚合非凡特性
-     * 带有 FAILED_BREW_MARKER 标记，Tooltip 显示"魔药主材"而非途径/序列
+     * - 纯非凡特性失败 → 普通聚合特性（条目为 "途径:序列"，可直接被仪式祭坛分离/吞服）
+     * - 含魔药主材失败 → 带 FAILED_BREW_MARKER 标记（条目可能混合主材名与特性条目）
      */
     private ItemStack createFailedCharacteristic() {
         ItemStack stack = new ItemStack(ModItems.AGGREGATED_CHARACTERISTIC.get());
         if (!failedMainMaterials.isEmpty()) {
             stack.set(ModDataComponents.AGGREGATED_FEATURES.get(), new ArrayList<>(failedMainMaterials));
         }
-        stack.set(ModDataComponents.FAILED_BREW_MARKER.get(), true);
+        if (failedHasMainMaterials) {
+            stack.set(ModDataComponents.FAILED_BREW_MARKER.get(), true);
+        }
         return stack;
     }
 
@@ -247,12 +270,12 @@ public class AlchemyCauldronBlockEntity extends BlockEntity {
 
     /**
      * 验证物品栏中的材料顺序
-     * 规则：所有辅材（AuxiliaryMaterial / PureWater / 原版物品）必须在所有主材（MainMaterialItem）之前
+     * 规则：所有辅材（AuxiliaryMaterial / PureWater / 原版物品）必须在所有主材（MainMaterialItem / 非凡特性）之前
      */
     private boolean validateMaterialOrder() {
         boolean seenMainMaterial = false;
         for (ItemStack stack : items) {
-            boolean isMain = stack.getItem() instanceof MainMaterialItem;
+            boolean isMain = stack.getItem() instanceof MainMaterialItem || isCharacteristicItem(stack);
             if (isMain) {
                 seenMainMaterial = true;
             } else if (seenMainMaterial) {
@@ -266,24 +289,38 @@ public class AlchemyCauldronBlockEntity extends BlockEntity {
     /**
      * 检查当前物品栏是否匹配指定配方
      * 辅材无序匹配，主材无序匹配（仅需主材在辅材之后放入，由 validateMaterialOrder 保证）
+     * 非凡特性可替代全部魔药主材：恰好 1 个与配方同途径同序列的单体特性 → 主材部分匹配成功
      */
     private boolean matchesRecipe(PotionRecipe recipe) {
         List<Ingredient> auxIngredients = recipe.getAuxiliaryIngredients();
         List<Ingredient> mainIngredients = recipe.getMainIngredientsOrder();
 
-        // 分离物品栏中的辅材和主材
+        // 分离物品栏中的辅材和主材（非凡特性视为主材类）
         List<ItemStack> auxItems = new ArrayList<>();
         List<ItemStack> mainItems = new ArrayList<>();
         for (ItemStack stack : items) {
-            if (stack.getItem() instanceof MainMaterialItem) {
+            if (stack.getItem() instanceof MainMaterialItem || isCharacteristicItem(stack)) {
                 mainItems.add(stack);
             } else {
                 auxItems.add(stack);
             }
         }
 
-        // 数量必须完全匹配
-        if (auxItems.size() != auxIngredients.size() || mainItems.size() != mainIngredients.size()) {
+        // 辅材数量必须完全匹配
+        if (auxItems.size() != auxIngredients.size()) {
+            return false;
+        }
+
+        // 特性替代主材：恰好 1 个单体特性且途径/序列与配方一致 → 替代全部主材
+        if (mainItems.size() == 1) {
+            String key = getCharacteristicKey(mainItems.get(0));
+            if (key != null) {
+                return key.equals(recipe.getPathway().toLowerCase() + ":" + recipe.getSequence());
+            }
+        }
+
+        // 传统主材匹配：数量必须完全匹配
+        if (mainItems.size() != mainIngredients.size()) {
             return false;
         }
 
@@ -316,6 +353,25 @@ public class AlchemyCauldronBlockEntity extends BlockEntity {
         }
 
         return true;
+    }
+
+    // ==================== 非凡特性辅助 ====================
+
+    /** 判断物品是否为非凡特性（单体或聚合特性物品） */
+    private static boolean isCharacteristicItem(ItemStack stack) {
+        return stack.getItem() instanceof CharacteristicItem;
+    }
+
+    /**
+     * 获取单体非凡特性的"途径:序列"键
+     * 聚合特性（无 PATHWAY/SEQUENCE 组件）与非特性物品返回 null
+     */
+    private static String getCharacteristicKey(ItemStack stack) {
+        if (!(stack.getItem() instanceof CharacteristicItem)) return null;
+        String pathway = stack.get(ModDataComponents.PATHWAY.get());
+        Integer sequence = stack.get(ModDataComponents.SEQUENCE.get());
+        if (pathway == null || sequence == null) return null;
+        return pathway.toLowerCase() + ":" + sequence;
     }
 
     // ==================== 失败惩罚 ====================
@@ -365,6 +421,8 @@ public class AlchemyCauldronBlockEntity extends BlockEntity {
         resultPathway = "";
         resultSequence = 0;
         failedMainMaterials.clear();
+        failedHasCharacteristics = false;
+        failedHasMainMaterials = false;
         setChanged();
         syncToClient();
     }
@@ -429,6 +487,8 @@ public class AlchemyCauldronBlockEntity extends BlockEntity {
             }
             tag.put("FailedMainMaterials", mainMatList);
         }
+        tag.putBoolean("FailedHasCharacteristics", failedHasCharacteristics);
+        tag.putBoolean("FailedHasMainMaterials", failedHasMainMaterials);
     }
 
     @Override
@@ -459,6 +519,8 @@ public class AlchemyCauldronBlockEntity extends BlockEntity {
                 failedMainMaterials.add(mainMatList.getString(i));
             }
         }
+        failedHasCharacteristics = tag.getBoolean("FailedHasCharacteristics");
+        failedHasMainMaterials = tag.getBoolean("FailedHasMainMaterials");
     }
 
     // ==================== 客户端同步 ====================

@@ -22,7 +22,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.player.Player;
@@ -44,12 +43,6 @@ import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
 
 /**
  * 模组事件处理器类
@@ -59,20 +52,10 @@ import java.util.UUID;
 @EventBusSubscriber(modid = LordofMysteries.MODID)
 public class ModEventHandlers {
 
-    /** 灵视感知半径（方块单位），与客户端 VisionGlowHandler 保持一致 */
-    private static final double VISION_RANGE = 32.0D;
-    /** 服务端发光扫描频率：每 10 tick 扫描一次 */
-    private static final int VISION_SCAN_INTERVAL = 10;
     /** 灵视灵性消耗频率：每 8 tick（0.4秒）消耗 2 点灵性（约 5点/秒，100点 ~20秒耗尽） */
     private static final int VISION_SPIRITUALITY_DRAIN_INTERVAL = 8;
     /** 灵视每次消耗的灵性点数 */
     private static final int VISION_SPIRITUALITY_DRAIN_AMOUNT = 2;
-
-    /**
-     * 服务端灵视发光追踪：记录每个玩家通过灵视标记为发光的实体 ID 集合
-     * 用于在灵视关闭时精确还原发光状态，避免误清其他来源的发光效果
-     */
-    private static final Map<UUID, Set<Integer>> serverVisionGlowingEntities = new HashMap<>();
 
     /**
      * 玩家登录事件 - 在玩家加入世界时同步所有神秘学数据到客户端
@@ -167,39 +150,26 @@ public class ModEventHandlers {
             ModMysticalMechanics.syncAllData(serverPlayer, data);
         }
 
-        // 6. 🔮 灵视发光处理（服务端权威模式）
-        // 在服务端设置 setGlowingTag，通过实体数据同步到客户端渲染，避免单人模式下客户端设置被覆盖
-        handleVisionGlowing(player, data);
+        // 6. 🔮 灵视灵性消耗管理（发光渲染完全由客户端 VisionGlowHandler 本地处理，
+        // 服务端不设置实体发光标记，避免实体数据同步导致其他玩家也看到发光）
+        handleVisionDrain(player, data);
     }
 
     /**
-     * 服务端灵视发光处理
-     * 当玩家灵视激活时，扫描周围活体生物并在服务端设置发光标记
-     * 关闭灵视时，精确清除所有由灵视标记的发光实体
+     * 服务端灵视灵性消耗处理
+     * 灵视激活时持续消耗灵性，灵性耗尽时自动关闭灵视并施加反胃 + 失明 debuff
+     * <p>
+     * 注意：灵视的实体发光效果由客户端 {@code VisionGlowHandler} 纯本地标记实现，
+     * 服务端不再调用 setGlowingTag，保证联机时只有开启灵视的玩家本人能看到发光。
      *
      * @param player 当前 Tick 的玩家
      * @param data   玩家非凡数据
      */
-    private static void handleVisionGlowing(Player player, PlayerData data) {
+    private static void handleVisionDrain(Player player, PlayerData data) {
         if (player.level().isClientSide()) return;
 
-        UUID playerId = player.getUUID();
         boolean visionActive = data.isVisionActive();
-
-        if (!visionActive) {
-            // 灵视关闭时：清除该玩家标记的所有发光实体
-            Set<Integer> tracked = serverVisionGlowingEntities.remove(playerId);
-            if (tracked != null && !tracked.isEmpty()) {
-                for (int entityId : tracked) {
-                    var entity = player.level().getEntity(entityId);
-                    if (entity instanceof net.minecraft.world.entity.LivingEntity livingEntity) {
-                        livingEntity.setGlowingTag(false);
-                    }
-                }
-                tracked.clear();
-            }
-            return;
-        }
+        if (!visionActive) return;
 
         // ==================== 🔮 灵视灵性消耗机制 ====================
         // 灵视持续消耗灵性：每 8 tick（0.4秒）消耗 2 点灵性，约 20 秒耗尽
@@ -224,7 +194,7 @@ public class ModEventHandlers {
                 player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 200, 0));
 
                 player.displayClientMessage(Component.translatable("message.lordofmysteries.vision.spirituality_exhausted"), true);
-                return; // 灵视已关闭，跳过后续发光逻辑
+                return; // 灵视已关闭
             }
         }
 
@@ -239,36 +209,6 @@ public class ModEventHandlers {
             player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 200, 0));
             player.displayClientMessage(Component.translatable("message.lordofmysteries.vision.spirituality_exhausted"), true);
             return;
-        }
-
-        // ==================== 🔮 灵视发光扫描 ====================
-        // 灵视激活时：每 VISION_SCAN_INTERVAL tick 扫描一次
-        if (player.tickCount % VISION_SCAN_INTERVAL != 0) return;
-
-        Set<Integer> tracked = serverVisionGlowingEntities.computeIfAbsent(playerId, k -> new HashSet<>());
-
-        // 清理已失效的实体记录
-        Iterator<Integer> iterator = tracked.iterator();
-        while (iterator.hasNext()) {
-            int entityId = iterator.next();
-            var entity = player.level().getEntity(entityId);
-            if (entity == null || !entity.isAlive()) {
-                iterator.remove();
-            }
-        }
-
-        // 扫描并标记周围活体生物为发光状态
-        var nearbyEntities = player.level().getEntitiesOfClass(
-                LivingEntity.class,
-                player.getBoundingBox().inflate(VISION_RANGE),
-                entity -> entity != player && entity.isAlive()
-        );
-
-        for (LivingEntity entity : nearbyEntities) {
-            if (!entity.isCurrentlyGlowing()) {
-                entity.setGlowingTag(true); // 服务端设置，通过实体数据同步到客户端
-                tracked.add(entity.getId());
-            }
         }
     }
 
@@ -385,7 +325,8 @@ public class ModEventHandlers {
 
             // 🛡️ 权威防护 2：严禁套娃！已经是我们定制的不灭实体对象直接放行
             if (itemEntity instanceof IndestructibleItemEntity) return;
-            if (itemEntity.getOwner() == null && itemEntity.tickCount == 0) return;
+            // 其余物品实体（含玩家死亡/失控僵尸掉落、炼药锅/祭坛掉落、战利品、按 Q 丢弃等刚生成的无主实体）
+            // 一律在下方按物品类型统一转化为不灭实体，确保特性/主材/魔药不灭（掉入虚空也会被传送回出生点）
 
             // 🔮 1. 拦截魔药落地：将其安全转化为专属于魔药的【不灭实体】！
             if (stack.getItem() instanceof ModPotionItem) {

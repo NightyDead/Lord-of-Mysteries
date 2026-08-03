@@ -6,6 +6,7 @@ import com.nightydead.lordofmysteries.item.ModItems;
 import com.nightydead.lordofmysteries.item.custom.MainMaterialItem;
 import com.nightydead.lordofmysteries.network.C2SDivinationPacket;
 import com.nightydead.lordofmysteries.network.C2SKnowledgeDivinationPacket;
+import com.nightydead.lordofmysteries.skills.DivinationHandler;
 import com.nightydead.lordofmysteries.skills.ModSkills;
 import com.nightydead.lordofmysteries.skills.ModSkills.SkillEntry;
 import net.minecraft.client.Minecraft;
@@ -184,17 +185,26 @@ public class DivinationSkillWheelScreen extends Screen {
                     return;
                 }
                 // 群系占卜：setScreen 会自动清理轮盘，无需走 onClose
-                if (isHoldingCompassAndPlant()) {
+                if (isHoldingPendulumAndPlant()) {
                     Minecraft.getInstance().setScreen(new BiomeDivinationScreen());
                     return;
                 }
-                // 结构占卜：指南针 + 岩石类方块
-                if (isHoldingCompassAndStone()) {
+                // 结构占卜：黄水晶灵摆 + 岩石类方块
+                if (isHoldingPendulumAndStone()) {
                     Minecraft.getInstance().setScreen(new StructureDivinationScreen());
                     return;
                 }
-                // 矿物占卜：发送网络包后正常关闭轮盘
-                PacketDistributor.sendToServer(new C2SDivinationPacket());
+                // 矿物占卜：黄水晶灵摆 + 矿物类物品，发送网络包后正常关闭轮盘
+                if (isHoldingPendulumAndMineral()) {
+                    PacketDistributor.sendToServer(new C2SDivinationPacket());
+                } else {
+                    // 未同时手持灵摆与矿物 → 提示后关闭轮盘，不发送占卜请求
+                    var player = Minecraft.getInstance().player;
+                    if (player != null) {
+                        player.displayClientMessage(
+                                Component.translatable("message.lordofmysteries.divination.need_mineral"), true);
+                    }
+                }
             }
         }
         onClose();
@@ -219,21 +229,39 @@ public class DivinationSkillWheelScreen extends Screen {
     }
 
     /**
-     * 检查玩家是否一手持指南针、另一手持植物类物品
+     * 检查玩家是否一手持黄水晶灵摆、另一手持植物类物品
      */
-    private static boolean isHoldingCompassAndPlant() {
+    private static boolean isHoldingPendulumAndPlant() {
         var player = Minecraft.getInstance().player;
         if (player == null) return false;
 
         ItemStack main = player.getMainHandItem();
         ItemStack off = player.getOffhandItem();
 
-        boolean mainCompass = main.is(Items.COMPASS);
-        boolean offCompass = off.is(Items.COMPASS);
+        boolean mainPendulum = main.is(ModItems.CITRINE_PENDULUM.get());
+        boolean offPendulum = off.is(ModItems.CITRINE_PENDULUM.get());
         boolean mainPlant = isPlantItem(main);
         boolean offPlant = isPlantItem(off);
 
-        return (mainCompass && offPlant) || (offCompass && mainPlant);
+        return (mainPendulum && offPlant) || (offPendulum && mainPlant);
+    }
+
+    /**
+     * 检查玩家是否一手持黄水晶灵摆、另一手持矿物类物品（矿石、粗矿、锭、粒等）
+     */
+    private static boolean isHoldingPendulumAndMineral() {
+        var player = Minecraft.getInstance().player;
+        if (player == null) return false;
+
+        ItemStack main = player.getMainHandItem();
+        ItemStack off = player.getOffhandItem();
+
+        boolean mainPendulum = main.is(ModItems.CITRINE_PENDULUM.get());
+        boolean offPendulum = off.is(ModItems.CITRINE_PENDULUM.get());
+        boolean mainMineral = DivinationHandler.isMineralItem(main.getItem());
+        boolean offMineral = DivinationHandler.isMineralItem(off.getItem());
+
+        return (mainPendulum && offMineral) || (offPendulum && mainMineral);
     }
 
     /**
@@ -270,21 +298,21 @@ public class DivinationSkillWheelScreen extends Screen {
     }
 
     /**
-     * 检查玩家是否一手持指南针、另一手持岩石类方块
+     * 检查玩家是否一手持黄水晶灵摆、另一手持岩石类方块
      */
-    private static boolean isHoldingCompassAndStone() {
+    private static boolean isHoldingPendulumAndStone() {
         var player = Minecraft.getInstance().player;
         if (player == null) return false;
 
         ItemStack main = player.getMainHandItem();
         ItemStack off = player.getOffhandItem();
 
-        boolean mainCompass = main.is(Items.COMPASS);
-        boolean offCompass = off.is(Items.COMPASS);
+        boolean mainPendulum = main.is(ModItems.CITRINE_PENDULUM.get());
+        boolean offPendulum = off.is(ModItems.CITRINE_PENDULUM.get());
         boolean mainStone = isStoneItem(main);
         boolean offStone = isStoneItem(off);
 
-        return (mainCompass && offStone) || (offCompass && mainStone);
+        return (mainPendulum && offStone) || (offPendulum && mainStone);
     }
 
     /**

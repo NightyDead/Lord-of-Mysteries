@@ -9,6 +9,7 @@ import com.nightydead.lordofmysteries.item.ModCreativeModeTabs;
 import com.nightydead.lordofmysteries.item.ModItems;
 import com.nightydead.lordofmysteries.loot.ModLootModifiers;
 import com.nightydead.lordofmysteries.network.ModMessages;
+import com.nightydead.lordofmysteries.villager.ModVillagerTrades;
 import com.nightydead.lordofmysteries.recipe.ModRecipes;
 import com.nightydead.lordofmysteries.data.PotionRecipeRegistry;
 import org.slf4j.Logger;
@@ -93,6 +94,9 @@ public class LordofMysteries {
 
         // 加载内置魔药配方
         PotionRecipeRegistry.loadBuiltin();
+
+        // 注册原版牧师的魔药配方纸交易（需在主线程串行执行）
+        event.enqueueWork(ModVillagerTrades::register);
 
         if (Config.LOG_DIRT_BLOCK.getAsBoolean()) {
             LOGGER.info("DIRT BLOCK >> {}", BuiltInRegistries.BLOCK.getKey(Blocks.DIRT));

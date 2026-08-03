@@ -3,8 +3,12 @@ package com.nightydead.lordofmysteries.datagen;
 import com.nightydead.lordofmysteries.LordofMysteries;
 import com.nightydead.lordofmysteries.block.AlchemyCauldronBlock;
 import com.nightydead.lordofmysteries.block.ModBlocks;
+import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
+import net.minecraft.world.level.block.AmethystClusterBlock;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.DoublePlantBlock;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
 import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
@@ -41,7 +45,14 @@ public class ModBlockStatesProvider extends BlockStateProvider {
         makeFlower(ModBlocks.POISON_HEMLOCK_HERB.get());
         makeFlower(ModBlocks.DRAGON_BLOOD_HERB.get());
         makeFlower(ModBlocks.MANDRAKE_HERB.get());
-        makeFlower(ModBlocks.BLACK_EDGED_SUNFLOWER.get());
+
+        // 黑边太阳花：双格植物（原版向日葵同款结构），下半格茎叶、上半格带黑边的花头；模型手写于 src/main/resources
+        var sunflowerBottomModel = models().getExistingFile(modLoc("block/black_edged_sunflower_bottom"));
+        var sunflowerTopModel = models().getExistingFile(modLoc("block/black_edged_sunflower_top"));
+        getVariantBuilder(ModBlocks.BLACK_EDGED_SUNFLOWER.get())
+                .partialState().with(DoublePlantBlock.HALF, DoubleBlockHalf.LOWER).modelForState().modelFile(sunflowerBottomModel).addModel()
+                .partialState().with(DoublePlantBlock.HALF, DoubleBlockHalf.UPPER).modelForState().modelFile(sunflowerTopModel).addModel();
+
         makeFlower(ModBlocks.GOLDEN_CLOAK_GRASS.get());
 
         // 炼药锅：生成 4 种状态的方块模型（空/有物品/成功/失败）
@@ -51,6 +62,19 @@ public class ModBlockStatesProvider extends BlockStateProvider {
         var ritualAltarModel = models().getExistingFile(modLoc("block/ritual_altar"));
         simpleBlock(ModBlocks.RITUAL_ALTAR.get(), ritualAltarModel);
         simpleBlockItem(ModBlocks.RITUAL_ALTAR.get(), ritualAltarModel);
+
+        // 黄水晶簇：十字交叉模型（复用紫水晶簇布局），6 朝向旋转，cutout 透明渲染
+        var citrineModel = models().withExistingParent("block/citrine_cluster", mcLoc("block/cross"))
+                .texture("cross", modLoc("block/citrine_cluster"))
+                .renderType("cutout");
+        getVariantBuilder(ModBlocks.CITRINE_CLUSTER.get())
+                .partialState().with(AmethystClusterBlock.FACING, Direction.DOWN).modelForState().modelFile(citrineModel).rotationX(180).addModel()
+                .partialState().with(AmethystClusterBlock.FACING, Direction.EAST).modelForState().modelFile(citrineModel).rotationX(90).rotationY(90).addModel()
+                .partialState().with(AmethystClusterBlock.FACING, Direction.NORTH).modelForState().modelFile(citrineModel).rotationX(90).addModel()
+                .partialState().with(AmethystClusterBlock.FACING, Direction.SOUTH).modelForState().modelFile(citrineModel).rotationX(90).rotationY(180).addModel()
+                .partialState().with(AmethystClusterBlock.FACING, Direction.UP).modelForState().modelFile(citrineModel).addModel()
+                .partialState().with(AmethystClusterBlock.FACING, Direction.WEST).modelForState().modelFile(citrineModel).rotationX(90).rotationY(270).addModel();
+        simpleBlockItem(ModBlocks.CITRINE_CLUSTER.get(), citrineModel);
     }
 
     /**

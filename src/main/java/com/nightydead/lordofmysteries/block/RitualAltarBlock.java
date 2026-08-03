@@ -225,7 +225,7 @@ public class RitualAltarBlock extends Block implements EntityBlock {
 
     /**
      * 根据聚合特性中存储的特征字符串创建对应的分离物品
-     * - 失败酿造标记 → 特征字符串为显示名称 → 查找魔药主材物品
+     * - 失败酿造标记 → 特征字符串可能为魔药主材显示名称，或非凡特性条目（"途径:序列"），自适应解析
      * - 正常聚合特性 → 特征字符串为 "pathway:sequence" → 查找非凡特性物品
      *
      * @param feature  特征字符串
@@ -236,7 +236,18 @@ public class RitualAltarBlock extends Block implements EntityBlock {
         Boolean isFailedBrew = aggStack.get(ModDataComponents.FAILED_BREW_MARKER.get());
 
         if (Boolean.TRUE.equals(isFailedBrew)) {
-            // 失败酿造：特征字符串是魔药主材的显示名称
+            // 失败酿造：先尝试按非凡特性条目（"途径:序列"）解析，失败再按魔药主材显示名称查找
+            String[] parts = feature.split(":");
+            if (parts.length == 2) {
+                try {
+                    int sequence = Integer.parseInt(parts[1]);
+                    var characteristicItem = ModItems.getPureCharacteristic(parts[0], sequence);
+                    if (characteristicItem != null) {
+                        return new ItemStack(characteristicItem);
+                    }
+                } catch (NumberFormatException ignored) {
+                }
+            }
             var item = ModItems.findMainMaterialByDisplayName(feature);
             if (item != null) {
                 return new ItemStack(item);

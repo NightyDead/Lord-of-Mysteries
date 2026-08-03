@@ -2,6 +2,6 @@
   "parent": "minecraft:block/cross",
   "render_type": "minecraft:cutout",
   "textures": {
-    "cross": "lordofmysteries:block/black_edged_sunflower"
+    "cross": "lordofmysteries:block/citrine_cluster"
   }
 }

@@ -108,6 +108,8 @@ public class ModZhCnLangProvider extends LanguageProvider {
         add(ModItems.RITUAL_DAGGER.get(), "仪式匕首");
         add(ModItems.MYSTIC_DUST.get(), "神秘粉尘");
         add(ModItems.KNOWLEDGE_VESSEL.get(), "知识载体");
+        add(ModItems.CITRINE_SHARD.get(), "黄水晶碎片");
+        add(ModItems.CITRINE_PENDULUM.get(), "黄水晶灵摆");
         add("item.lordofmysteries.pure_water.pure_water.effect.empty", "纯水");
         add("tooltip.lordofmysteries.pure_water.desc", "炼药的基础溶剂，纯净无杂质。");
 
@@ -131,6 +133,7 @@ public class ModZhCnLangProvider extends LanguageProvider {
         add(ModBlocks.GOLDEN_CLOAK_GRASS.get(), "金斗篷草");
         add(ModBlocks.ALCHEMY_CAULDRON.get(), "炼药锅");
         add(ModBlocks.RITUAL_ALTAR.get(), "仪式祭坛");
+        add(ModBlocks.CITRINE_CLUSTER.get(), "黄水晶簇");
 
         // ==================== 创造模式标签页 ====================
         add("itemGroup.characteristic_tab", "非凡特性");
@@ -253,11 +256,12 @@ public class ModZhCnLangProvider extends LanguageProvider {
         add("tooltip.lordofmysteries.recipe.main_materials_title", "主材:");
         add("tooltip.lordofmysteries.recipe.aux_materials_title", "辅材:");
         add("tooltip.lordofmysteries.recipe.acquisition_title", "获取方式:");
-        add("tooltip.lordofmysteries.characteristic.failed_brew_title", "--- 炼制失败：魔药主材 ---");
+        add("tooltip.lordofmysteries.characteristic.failed_brew_title", "--- 炼制失败：材料析出 ---");
         add("tooltip.lordofmysteries.characteristic.failed_brew_material", "主材来源: %s（序列 %d）");
         add("tooltip.lordofmysteries.characteristic.info", "途径: %s · 序列 %d");
         add("tooltip.lordofmysteries.characteristic.law", "§5\"非凡特性不灭定律\"");
         add("tooltip.lordofmysteries.characteristic.aggregated_title", "--- 聚合的非凡特性 ---");
+        add("tooltip.lordofmysteries.characteristic.aggregated_warning", "§c直接吞服将击穿理智，立即失控！请使用仪式祭坛分离后再吸收");
         add("tooltip.lordofmysteries.potion.title", "--- 超凡魔药 ---");
         add("tooltip.lordofmysteries.potion.pathway", "途径: %s");
         add("tooltip.lordofmysteries.potion.sequence", "序列: %d");
@@ -271,6 +275,7 @@ public class ModZhCnLangProvider extends LanguageProvider {
         add("message.lordofmysteries.absorption.start", "§d[特性容纳] §f你尝试强行吸收一团聚合的生鲜非凡特性...");
         add("message.lordofmysteries.sanity.collapse.irreversible", "§4[理智崩溃] §c残存的理智未能阻挡疯狂，你的失控变得不可逆转...");
         add("message.lordofmysteries.sanity.collapse.immediate", "§4[理智崩溃] §c魔药虽然成功容纳，但你的精神防线已彻底瓦解！你因理智归零而失控了！");
+        add("message.lordofmysteries.sanity.collapse.aggregated", "§4[理智崩溃] §c强行吞服整团聚合的生鲜特性，你的理智瞬间被彻底击穿！");
         add("message.lordofmysteries.sanity.insufficient", "§c[理智不足] §4你的精神状态已无法承受再一次神性冲击，理智将归零！");
         add("message.lordofmysteries.rejection.mortal", "§c[神性排异] §4凡人之躯妄图窃取高位神职，且未举行对应的 %s 晋升仪式！");
         add("message.lordofmysteries.cross_pathway.miracle", "§4[异界错乱] §e奇迹发生了！你竟然强行容纳了异途径的魔药...");
@@ -299,6 +304,8 @@ public class ModZhCnLangProvider extends LanguageProvider {
         add("message.lordofmysteries.divination.no_response", "§7灵摆毫无反应… %s 格内未发现目标%s。");
         add("message.lordofmysteries.divination.success", "§6【占卜启示】§7 灵摆指向 %s 格外的%s");
         add("message.lordofmysteries.divination.failed", "§c占卜失败");
+        add("message.lordofmysteries.divination.need_pendulum", "§c占卜需要手持黄水晶灵摆。");
+        add("message.lordofmysteries.divination.need_mineral", "§c矿物占卜需要一手持黄水晶灵摆、另一手持矿物类物品。");
         add("message.lordofmysteries.knowledge_divination.no_combination", "§c知识载体占卜需要一手持知识载体、另一手持魔药主材。");
         add("message.lordofmysteries.knowledge_divination.no_recipe", "§c无法从主材中解读出对应的魔药配方。");
         add("message.lordofmysteries.knowledge_divination.success", "§6【知识占卜】§a知识载体化作【%s·%s序列】的魔药配方！消耗了 §b%s§a 灵性、§c%s§a 理智。");

@@ -5,8 +5,8 @@ import com.nightydead.lordofmysteries.item.ModItems;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.AmethystClusterBlock;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.FlowerBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
@@ -39,37 +39,37 @@ public class ModBlocks {
     /** 夜香草 - 吃掉或神秘学互动时可赋予幸运效果，持续5秒/100刻 */
     public static final DeferredBlock<Block> NIGHT_PERFUME_HERB =
             registerBlock("night_perfume_herb",
-                    () -> new FlowerBlock(MobEffects.NIGHT_VISION, 5.0F, BlockBehaviour.Properties.of().noCollission().instabreak().sound(SoundType.GRASS).pushReaction(PushReaction.DESTROY)));
+                    () -> new HerbBlock(MobEffects.NIGHT_VISION, 5.0F, BlockBehaviour.Properties.of().noCollission().instabreak().sound(SoundType.GRASS).pushReaction(PushReaction.DESTROY)));
 
     /** 金薄荷 - 魔药辅助材料来源植物 */
     public static final DeferredBlock<Block> GOLD_MINT_HERB =
             registerBlock("gold_mint_herb",
-                    () -> new FlowerBlock(MobEffects.LUCK, 5.0F, BlockBehaviour.Properties.of().noCollission().instabreak().sound(SoundType.GRASS).pushReaction(PushReaction.DESTROY)));
+                    () -> new HerbBlock(MobEffects.LUCK, 5.0F, BlockBehaviour.Properties.of().noCollission().instabreak().sound(SoundType.GRASS).pushReaction(PushReaction.DESTROY)));
 
     /** 毒堇 - 带有一点毒性效果的魔药辅助材料来源植物 */
     public static final DeferredBlock<Block> POISON_HEMLOCK_HERB =
             registerBlock("poison_hemlock_herb",
-                    () -> new FlowerBlock(MobEffects.POISON, 5.0F, BlockBehaviour.Properties.of().noCollission().instabreak().sound(SoundType.GRASS).pushReaction(PushReaction.DESTROY)));
+                    () -> new HerbBlock(MobEffects.POISON, 5.0F, BlockBehaviour.Properties.of().noCollission().instabreak().sound(SoundType.GRASS).pushReaction(PushReaction.DESTROY)));
 
     /** 龙血草 - 魔药辅助材料来源植物 */
     public static final DeferredBlock<Block> DRAGON_BLOOD_HERB =
             registerBlock("dragon_blood_herb",
-                    () -> new FlowerBlock(MobEffects.FIRE_RESISTANCE, 5.0F, BlockBehaviour.Properties.of().noCollission().instabreak().sound(SoundType.GRASS).pushReaction(net.minecraft.world.level.material.PushReaction.DESTROY)));
+                    () -> new HerbBlock(MobEffects.FIRE_RESISTANCE, 5.0F, BlockBehaviour.Properties.of().noCollission().instabreak().sound(SoundType.GRASS).pushReaction(net.minecraft.world.level.material.PushReaction.DESTROY)));
 
     /** 曼陀罗 - 剧毒植物，小丑魔药辅材来源 */
     public static final DeferredBlock<Block> MANDRAKE_HERB =
             registerBlock("mandrake_herb",
-                    () -> new FlowerBlock(MobEffects.POISON, 5.0F, BlockBehaviour.Properties.of().noCollission().instabreak().sound(SoundType.GRASS).pushReaction(PushReaction.DESTROY)));
+                    () -> new HerbBlock(MobEffects.POISON, 5.0F, BlockBehaviour.Properties.of().noCollission().instabreak().sound(SoundType.GRASS).pushReaction(PushReaction.DESTROY)));
 
-    /** 黑边太阳花 - 小丑魔药辅材来源 */
-    public static final DeferredBlock<Block> BLACK_EDGED_SUNFLOWER =
+    /** 黑边太阳花 - 小丑魔药辅材来源，双格植物（茎叶+带黑边的花头） */
+    public static final DeferredBlock<BlackEdgedSunflowerBlock> BLACK_EDGED_SUNFLOWER =
             registerBlock("black_edged_sunflower",
-                    () -> new FlowerBlock(MobEffects.GLOWING, 5.0F, BlockBehaviour.Properties.of().noCollission().instabreak().sound(SoundType.GRASS).pushReaction(PushReaction.DESTROY)));
+                    () -> new BlackEdgedSunflowerBlock(MobEffects.GLOWING, 5.0F, BlockBehaviour.Properties.of().noCollission().instabreak().sound(SoundType.GRASS).pushReaction(PushReaction.DESTROY)));
 
     /** 金斗篷草 - 小丑魔药辅材来源 */
     public static final DeferredBlock<Block> GOLDEN_CLOAK_GRASS =
             registerBlock("golden_cloak_grass",
-                    () -> new FlowerBlock(MobEffects.ABSORPTION, 5.0F, BlockBehaviour.Properties.of().noCollission().instabreak().sound(SoundType.GRASS).pushReaction(PushReaction.DESTROY)));
+                    () -> new HerbBlock(MobEffects.ABSORPTION, 5.0F, BlockBehaviour.Properties.of().noCollission().instabreak().sound(SoundType.GRASS).pushReaction(PushReaction.DESTROY)));
 
     /** 炼药锅 - 无UI交互的魔药炼制装置，支持右键放入/取出材料、灵性注入触发酿造 */
     public static final DeferredBlock<AlchemyCauldronBlock> ALCHEMY_CAULDRON =
@@ -84,6 +84,17 @@ public class ModBlocks {
     /** 仪式祭坛 - 晋升仪式核心装置，支持右键放置物品展示，Shift+右键取出 */
     public static final DeferredBlock<RitualAltarBlock> RITUAL_ALTAR =
             registerBlock("ritual_altar", RitualAltarBlock::new);
+
+    /** 黄水晶簇 - 洞穴中自然生成的水晶矿物，复用原版紫水晶簇的方块行为（发光、可附着生长） */
+    public static final DeferredBlock<AmethystClusterBlock> CITRINE_CLUSTER =
+            registerBlock("citrine_cluster", () -> new AmethystClusterBlock(7, 3, BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_YELLOW)
+                    .forceSolidOn()
+                    .noOcclusion()
+                    .randomTicks()
+                    .strength(1.5F)
+                    .sound(SoundType.AMETHYST_CLUSTER)
+                    .lightLevel(state -> 5)));
 
     /**
      * 注册方块对应的方块物品（使方块可以被拾取和放置在物品栏中）

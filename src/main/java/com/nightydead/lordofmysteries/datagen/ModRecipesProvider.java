@@ -124,6 +124,13 @@ public class ModRecipesProvider extends RecipeProvider implements IConditionBuil
                 .unlockedBy("has_mystic_dust", has(ModItems.MYSTIC_DUST.get()))
                 .save(recipeOutput);
 
+        // 黄水晶灵摆：1黄水晶碎片 + 1线（无形状配方）
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.CITRINE_PENDULUM.get())
+                .requires(ModItems.CITRINE_SHARD.get())
+                .requires(Items.STRING)
+                .unlockedBy("has_citrine_shard", has(ModItems.CITRINE_SHARD.get()))
+                .save(recipeOutput);
+
         // 仪式祭坛：黑曜石-黑曜石-黑曜石 / 黑石-钻石-黑石 / 黑曜石-黑曜石-黑曜石
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.RITUAL_ALTAR.get())
                 .pattern("OOO")

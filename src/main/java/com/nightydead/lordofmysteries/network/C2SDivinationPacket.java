@@ -3,6 +3,7 @@ package com.nightydead.lordofmysteries.network;
 import com.nightydead.lordofmysteries.LordofMysteries;
 import com.nightydead.lordofmysteries.data.ModAttachments;
 import com.nightydead.lordofmysteries.data.PlayerData;
+import com.nightydead.lordofmysteries.item.ModItems;
 import com.nightydead.lordofmysteries.skills.DivinationHandler;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -93,10 +94,23 @@ public record C2SDivinationPacket() implements CustomPacketPayload {
                 PacketDistributor.sendToPlayer(player,
                         new SyncSpiritualityPacket(data.getSpirituality(), data.getMaxSpiritual()));
 
-                // 识别手持矿物（主手优先，副手兜底）
-                ItemStack held = player.getMainHandItem();
-                if (held.isEmpty()) {
-                    held = player.getOffhandItem();
+                // ==================== 校验：必须一手持黄水晶灵摆、另一手持矿物类物品 ====================
+                ItemStack main = player.getMainHandItem();
+                ItemStack off = player.getOffhandItem();
+                boolean mainPendulum = main.is(ModItems.CITRINE_PENDULUM.get());
+                boolean offPendulum = off.is(ModItems.CITRINE_PENDULUM.get());
+                if (!mainPendulum && !offPendulum) {
+                    player.displayClientMessage(
+                            Component.translatable("message.lordofmysteries.divination.need_pendulum"), true);
+                    return;
+                }
+
+                // 识别手持矿物（灵摆之外的另一只手，主手优先、副手兜底）
+                ItemStack held = mainPendulum ? off : main;
+                if (held.isEmpty() || !DivinationHandler.isMineralItem(held.getItem())) {
+                    player.displayClientMessage(
+                            Component.translatable("message.lordofmysteries.divination.need_mineral"), true);
+                    return;
                 }
 
                 List<Block> targets = DivinationHandler.getOreTargets(held.getItem());

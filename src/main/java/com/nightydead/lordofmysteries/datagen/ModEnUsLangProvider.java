@@ -109,6 +109,8 @@ public class ModEnUsLangProvider extends LanguageProvider {
         add(ModItems.RITUAL_DAGGER.get(), "Ritual Dagger");
         add(ModItems.MYSTIC_DUST.get(), "Mystic Dust");
         add(ModItems.KNOWLEDGE_VESSEL.get(), "Knowledge Vessel");
+        add(ModItems.CITRINE_SHARD.get(), "Citrine Shard");
+        add(ModItems.CITRINE_PENDULUM.get(), "Citrine Pendulum");
         add("item.lordofmysteries.pure_water.pure_water.effect.empty", "Pure Water");
         add("tooltip.lordofmysteries.pure_water.desc", "The base solvent for potion brewing, pure and impurity-free.");
 
@@ -132,6 +134,7 @@ public class ModEnUsLangProvider extends LanguageProvider {
         add(ModBlocks.GOLDEN_CLOAK_GRASS.get(), "Golden Cloak Grass");
         add(ModBlocks.ALCHEMY_CAULDRON.get(), "Alchemy Cauldron");
         add(ModBlocks.RITUAL_ALTAR.get(), "Ritual Altar");
+        add(ModBlocks.CITRINE_CLUSTER.get(), "Citrine Cluster");
 
         // ==================== 创造模式标签页 ====================
         add("itemGroup.characteristic_tab", "Characteristic");
@@ -254,11 +257,12 @@ public class ModEnUsLangProvider extends LanguageProvider {
         add("tooltip.lordofmysteries.recipe.main_materials_title", "Main Materials:");
         add("tooltip.lordofmysteries.recipe.aux_materials_title", "Auxiliary Materials:");
         add("tooltip.lordofmysteries.recipe.acquisition_title", "Acquisition:");
-        add("tooltip.lordofmysteries.characteristic.failed_brew_title", "--- Failed Brew: Magic Main Material ---");
+        add("tooltip.lordofmysteries.characteristic.failed_brew_title", "--- Failed Brew: Material Precipitation ---");
         add("tooltip.lordofmysteries.characteristic.failed_brew_material", "Main Material: %s (Seq %d)");
         add("tooltip.lordofmysteries.characteristic.info", "Pathway: %s · Sequence %d");
         add("tooltip.lordofmysteries.characteristic.law", "§5\"The Law of Beyonder Characteristics Indestructibility\"");
         add("tooltip.lordofmysteries.characteristic.aggregated_title", "--- Aggregated Characteristics ---");
+        add("tooltip.lordofmysteries.characteristic.aggregated_warning", "§cDevouring directly shatters your sanity and causes instant loss of control! Separate it with a Ritual Altar first.");
         add("tooltip.lordofmysteries.potion.title", "--- Beyonder Potion ---");
         add("tooltip.lordofmysteries.potion.pathway", "Pathway: %s");
         add("tooltip.lordofmysteries.potion.sequence", "Sequence: %d");
@@ -272,6 +276,7 @@ public class ModEnUsLangProvider extends LanguageProvider {
         add("message.lordofmysteries.absorption.start", "§d[Characteristics] §fYou try to forcefully absorb a mass of freshly raw characteristics...");
         add("message.lordofmysteries.sanity.collapse.irreversible", "§4[Sanity Collapse] §cThe remnant sanity failed to stand against the madness. Your loss of control has become irreversible...");
         add("message.lordofmysteries.sanity.collapse.immediate", "§4[Sanity Collapse] §cAlthough the potion was successfully integrated, your mental defense line completely shattered! You lost control due to zero sanity!");
+        add("message.lordofmysteries.sanity.collapse.aggregated", "§4[Sanity Collapse] §cForcibly devouring the raw aggregated characteristic shattered your sanity in an instant!");
         add("message.lordofmysteries.sanity.insufficient", "§c[Sanity Exhausted] §4Your mind can no longer endure another divine impact — sanity would reach zero!");
         add("message.lordofmysteries.rejection.mortal", "§c[Divine Rejection] §4A mortal flesh attempts to steal a high-order position without a proper ritual for %s!");
         add("message.lordofmysteries.cross_pathway.miracle", "§4[Aberration] §eA miracle happened! You managed to forcefully contain a potion from a foreign pathway...");
@@ -300,6 +305,8 @@ public class ModEnUsLangProvider extends LanguageProvider {
         add("message.lordofmysteries.divination.no_response", "§7The pendulum is unresponsive... No target %s found within %s blocks.");
         add("message.lordofmysteries.divination.success", "§6[Divination Revelation] §7The pendulum points towards %s, %s blocks away.");
         add("message.lordofmysteries.divination.failed", "§cDivination failed");
+        add("message.lordofmysteries.divination.need_pendulum", "§cDivination requires holding a Citrine Pendulum.");
+        add("message.lordofmysteries.divination.need_mineral", "§cMineral divination requires a Citrine Pendulum in one hand and a mineral in the other.");
         add("message.lordofmysteries.knowledge_divination.no_combination", "§cKnowledge divination requires a Knowledge Vessel in one hand and a potion main material in the other.");
         add("message.lordofmysteries.knowledge_divination.no_recipe", "§cUnable to decipher a potion recipe from this main material.");
         add("message.lordofmysteries.knowledge_divination.success", "§6[Knowledge Divination] §aThe Knowledge Vessel transformed into the %s Sequence %s potion recipe! Cost: §b%s§a spirituality, §c%s§a sanity.");

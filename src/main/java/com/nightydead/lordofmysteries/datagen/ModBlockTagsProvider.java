@@ -41,7 +41,8 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         // 示例方块标记为镐子可挖掘
         tag(BlockTags.MINEABLE_WITH_PICKAXE)
                 .add(ModBlocks.EXAMPLE_BLOCK.get())
-                .add(ModBlocks.RITUAL_ALTAR.get());
+                .add(ModBlocks.RITUAL_ALTAR.get())
+                .add(ModBlocks.CITRINE_CLUSTER.get());
 
         // 仪式祭坛需要钻石镐及以上才能破坏掉落（等同黑曜石）
         tag(BlockTags.NEEDS_DIAMOND_TOOL)

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "lordofmysteries:item/main_material/complete_human_face_rose"
+  }
+}

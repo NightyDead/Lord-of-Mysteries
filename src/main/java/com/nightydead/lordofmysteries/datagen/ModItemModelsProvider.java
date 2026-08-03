@@ -62,10 +62,16 @@ public class ModItemModelsProvider extends ItemModelProvider {
 
         basicItem(ModItems.LAVA_OCTOPUS_BLOOD.get());
         basicItem(ModItems.STAR_CRYSTAL.get());
+        // 成年霍纳奇斯灰山羊独角结晶与人脸玫瑰：序列 8 小丑魔药主材
+        basicItem(ModItems.ADULT_HORNACIS_GRAY_GOAT_UNICORN_CRYSTAL.get());
+        basicItem(ModItems.COMPLETE_HUMAN_FACE_ROSE.get());
         basicItem(ModItems.PURE_WATER.get());
-        basicItem(ModItems.RITUAL_DAGGER.get());
+        // 仪式匕首：使用手持模型（handheld），获得与剑/工具一致的手持握姿（含 thirdperson/firstperson display 变换）
+        handheldItem(ModItems.RITUAL_DAGGER.get());
         basicItem(ModItems.MYSTIC_DUST.get());
         basicItem(ModItems.KNOWLEDGE_VESSEL.get());
+        basicItem(ModItems.CITRINE_SHARD.get());
+        basicItem(ModItems.CITRINE_PENDULUM.get());
 
         // 为植物的 BlockItem 生成 2D 物品模型，指向 textures/block/ 目录下的贴图
         makeBlockItemModel("night_perfume_herb");
@@ -73,7 +79,9 @@ public class ModItemModelsProvider extends ItemModelProvider {
         makeBlockItemModel("poison_hemlock_herb");
         makeBlockItemModel("dragon_blood_herb");
         makeBlockItemModel("mandrake_herb");
-        makeBlockItemModel("black_edged_sunflower");
+        // 黑边太阳花：物品图标与原版向日葵一致（花头），但使用带黑色描边的花头贴图
+        withExistingParent("black_edged_sunflower", mcLoc("item/generated"))
+                .texture("layer0", modLoc("block/black_edged_sunflower_head"));
         makeBlockItemModel("golden_cloak_grass");
     }
 

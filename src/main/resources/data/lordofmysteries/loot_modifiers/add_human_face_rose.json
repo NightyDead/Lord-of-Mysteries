@@ -9,6 +9,6 @@
   "item": "lordofmysteries:main_material/complete_human_face_rose",
   "pathway": "fool",
   "sequence": 8,
-  "chance": 0.30,
+  "chance": 0.50,
   "require_full_moon": true
 }

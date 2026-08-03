@@ -121,6 +121,17 @@ public class DivinationHandler {
     }
 
     /**
+     * 判断物品是否为可占卜的矿物类物品（矿石、粗矿、锭、粒、矿物块等）
+     * 与 getOreTargets 共用同一映射表，保证客户端触发判定与服务端识别完全一致
+     *
+     * @param item 待判断的物品
+     * @return 是矿物类物品返回 true，否则返回 false
+     */
+    public static boolean isMineralItem(Item item) {
+        return MINERAL_TO_ORES.containsKey(item);
+    }
+
+    /**
      * 在玩家周围搜索最近的目标矿石
      *
      * @param player   执行占卜的玩家

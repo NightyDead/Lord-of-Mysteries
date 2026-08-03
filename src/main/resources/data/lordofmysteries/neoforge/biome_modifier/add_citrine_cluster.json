@@ -1,0 +1,9 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#minecraft:is_overworld",
+  "features": [
+    "lordofmysteries:citrine_cluster_up_placed",
+    "lordofmysteries:citrine_cluster_down_placed"
+  ],
+  "step": "underground_decoration"
+}

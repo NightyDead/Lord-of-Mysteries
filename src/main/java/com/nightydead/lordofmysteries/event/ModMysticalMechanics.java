@@ -45,20 +45,30 @@ public class ModMysticalMechanics {
         var data = player.getData(ModAttachments.PLAYER_DATA.get());
 
         // 1. 处理"聚合特性"物品（死亡后析出的复合特性）
+        // 直接吞服聚合特性 = 强行容纳整团生鲜特性：不再逐条吸收，理智直接清空并触发失控倒计时
+        // 非凡特性不灭：吞入的每份特性都真实并入析出记录（同序列可多份共存，不去重），失控死亡时与原有已吸收特性一起析出为聚合特性
         if (stack.has(ModDataComponents.AGGREGATED_FEATURES.get())) {
+            player.displayClientMessage(Component.translatable("message.lordofmysteries.absorption.start"), true);
             List<String> features = stack.get(ModDataComponents.AGGREGATED_FEATURES.get());
-            if (features != null && !features.isEmpty()) {
-                player.displayClientMessage(Component.translatable("message.lordofmysteries.absorption.start"), true);
+            if (features != null) {
+                List<String> absorbed = data.getAbsorbedCharacteristics();
                 for (String featureStr : features) {
-                    try {
-                        String[] split = featureStr.split(":");
-                        String pathway = split[0];
-                        int seq = Integer.parseInt(split[1]);
-                        executeAbsorptionLogic(player, data, pathway, seq, false);
-                    } catch (Exception e) {
-                        System.out.println("解析聚合特性失败: " + featureStr);
+                    // 只并入合法特性记录（"途径:序列"），跳过失败酿造产物的主材名等非特性条目
+                    // 不去重：体内已有同序列特性再吞一份 = 两份共存，每份特性都必须真实析出（不灭定律）
+                    String[] split = featureStr.split(":");
+                    if (split.length == 2) {
+                        try {
+                            Integer.parseInt(split[1]);
+                            absorbed.add(featureStr);
+                        } catch (NumberFormatException ignored) {
+                        }
                     }
                 }
+            }
+            data.setSanity(0); // 清空理智值
+            triggerMadnessOnSanityZero(player, data); // 失明 + 反胃 + 300 tick 失控倒计时
+            if (player instanceof ServerPlayer serverPlayer) {
+                syncAllData(serverPlayer, data);
             }
             return;
         }

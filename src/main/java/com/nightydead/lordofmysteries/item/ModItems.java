@@ -57,6 +57,16 @@ public class ModItems {
     public static final DeferredItem<Item> MYSTIC_DUST =
             ITEMS.register("mystic_dust", () -> new Item(new Item.Properties()));
 
+    // ==================== 黄水晶碎片（黄水晶簇的掉落物） ====================
+    /** 黄水晶碎片 - 破坏黄水晶簇掉落，与紫水晶碎片具有相同的物品性质（堆叠 64、可作为合成材料） */
+    public static final DeferredItem<Item> CITRINE_SHARD =
+            ITEMS.register("citrine_shard", () -> new Item(new Item.Properties()));
+
+    // ==================== 黄水晶灵摆（占卜工具） ====================
+    /** 黄水晶灵摆 - 矿物/群系/结构占卜时手持的占卜工具，由 1 个黄水晶碎片 + 1 根线合成 */
+    public static final DeferredItem<Item> CITRINE_PENDULUM =
+            ITEMS.register("citrine_pendulum", () -> new Item(new Item.Properties()));
+
     // ==================== 知识载体（神秘知识容器） ====================
     public static final DeferredItem<Item> KNOWLEDGE_VESSEL =
             ITEMS.register("knowledge_vessel", () -> new Item(new Item.Properties()));

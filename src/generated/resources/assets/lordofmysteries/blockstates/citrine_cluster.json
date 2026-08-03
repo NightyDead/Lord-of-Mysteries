@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "lordofmysteries:block/citrine_cluster",
+      "x": 180
+    },
+    "facing=east": {
+      "model": "lordofmysteries:block/citrine_cluster",
+      "x": 90,
+      "y": 90
+    },
+    "facing=north": {
+      "model": "lordofmysteries:block/citrine_cluster",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "lordofmysteries:block/citrine_cluster",
+      "x": 90,
+      "y": 180
+    },
+    "facing=up": {
+      "model": "lordofmysteries:block/citrine_cluster"
+    },
+    "facing=west": {
+      "model": "lordofmysteries:block/citrine_cluster",
+      "x": 90,
+      "y": 270
+    }
+  }
+}

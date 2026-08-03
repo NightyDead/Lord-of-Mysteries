@@ -68,14 +68,25 @@ public class CharacteristicItem extends Item {
         // 检查是否为炼药锅失败酿造产物
         Boolean isFailedBrew = stack.get(ModDataComponents.FAILED_BREW_MARKER.get());
         if (Boolean.TRUE.equals(isFailedBrew)) {
-            // 失败酿造：显示"魔药主材"标题
+            // 失败酿造：显示"炼制失败"标题与还原条目（魔药主材名 / 非凡特性途径·序列）
             tooltipComponents.add(Component.translatable("tooltip.lordofmysteries.characteristic.failed_brew_title")
                     .withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
 
-            // 显示主材物品名称（从 AGGREGATED_FEATURES 中读取）
+            // 显示还原条目（从 AGGREGATED_FEATURES 中读取，混合解析）
             List<String> materialNames = stack.get(ModDataComponents.AGGREGATED_FEATURES.get());
             if (materialNames != null && !materialNames.isEmpty()) {
                 for (String name : materialNames) {
+                    String[] parts = name.split(":");
+                    if (parts.length == 2) {
+                        try {
+                            int seq = Integer.parseInt(parts[1]);
+                            String pathKey = "pathway." + LordofMysteries.MODID + "." + parts[0].toLowerCase();
+                            tooltipComponents.add(Component.literal("• ").append(Component.translatable("tooltip.lordofmysteries.characteristic.info", Component.translatable(pathKey), seq))
+                                    .withStyle(ChatFormatting.GRAY));
+                            continue;
+                        } catch (NumberFormatException ignored) {
+                        }
+                    }
                     tooltipComponents.add(Component.literal("• ").append(Component.literal(name))
                             .withStyle(ChatFormatting.GRAY));
                 }
@@ -106,6 +117,9 @@ public class CharacteristicItem extends Item {
                     tooltipComponents.add(Component.literal("• ").append(Component.translatable("tooltip.lordofmysteries.characteristic.info", Component.translatable(pathKey), Integer.parseInt(parts[1]))).withStyle(ChatFormatting.GRAY));
                 }
             }
+            // 聚合特性警告：直接吞服会击穿理智并失控
+            tooltipComponents.add(Component.translatable("tooltip.lordofmysteries.characteristic.aggregated_warning")
+                    .withStyle(ChatFormatting.RED));
         }
 
         tooltipComponents.add(Component.translatable("tooltip.lordofmysteries.characteristic.law").withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.ITALIC));
