@@ -191,6 +191,7 @@ public class ModEnUsLangProvider extends LanguageProvider {
         // ==================== 技能 ====================
         add("skill.lordofmysteries.spirit_vision", "Spirit Vision");
         add("skill.lordofmysteries.divination", "Divination");
+        add("skill.lordofmysteries.paper_knife", "Paper Knife");
         add("skill.lordofmysteries.wheel.mortal_hint", "Mortal");
 
         // ==================== UI 界面 ====================
@@ -307,6 +308,12 @@ public class ModEnUsLangProvider extends LanguageProvider {
         add("message.lordofmysteries.divination.failed", "§cDivination failed");
         add("message.lordofmysteries.divination.need_pendulum", "§cDivination requires holding a Citrine Pendulum.");
         add("message.lordofmysteries.divination.need_mineral", "§cMineral divination requires a Citrine Pendulum in one hand and a mineral in the other.");
+
+        // ==================== 化纸为刀系统消息 ====================
+        add("message.lordofmysteries.paper_knife.not_clown", "§cOnly a Clown (Fool pathway, Sequence 8 or higher) can use Paper Knife.");
+        add("message.lordofmysteries.paper_knife.no_spirituality", "§cNot enough spirituality to use Paper Knife (requires %s points).");
+        add("message.lordofmysteries.paper_knife.no_paper", "§cYou need paper in your inventory to use Paper Knife.");
+
         add("message.lordofmysteries.knowledge_divination.no_combination", "§cKnowledge divination requires a Knowledge Vessel in one hand and a potion main material in the other.");
         add("message.lordofmysteries.knowledge_divination.no_recipe", "§cUnable to decipher a potion recipe from this main material.");
         add("message.lordofmysteries.knowledge_divination.success", "§6[Knowledge Divination] §aThe Knowledge Vessel transformed into the %s Sequence %s potion recipe! Cost: §b%s§a spirituality, §c%s§a sanity.");

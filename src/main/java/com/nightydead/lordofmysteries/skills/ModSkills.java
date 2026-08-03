@@ -11,12 +11,15 @@ import java.util.List;
  * <p>
  * 凡人（无途径）→ 返回空列表，轮盘显示灰色空盘 + "凡人之躯"提示
  * 占卜家（愚者途径·序列9）→ 返回占卜技能
+ * 小丑（愚者途径·序列8及以上）→ 额外解锁化纸为刀
  * 灵视为通用技能，由 V 键直接切换，不走轮盘
  */
 public class ModSkills {
 
     /** 技能唯一标识 — 占卜 */
     public static final String ID_DIVINATION = "divination";
+    /** 技能唯一标识 — 化纸为刀 */
+    public static final String ID_PAPER_KNIFE = "paper_knife";
 
     /**
      * 技能条目：封装技能 ID、显示名称、扇区颜色
@@ -30,6 +33,13 @@ public class ModSkills {
             0xFFCCAA44
     );
 
+    /** 化纸为刀 — 纸张般的米白色调 */
+    public static final SkillEntry PAPER_KNIFE = new SkillEntry(
+            ID_PAPER_KNIFE,
+            Component.translatable("skill.lordofmysteries.paper_knife"),
+            0xFFDDD9C4
+    );
+
     /**
      * 根据玩家当前途径和序列号，返回可用技能列表
      *
@@ -41,9 +51,13 @@ public class ModSkills {
         if (pathway == null || pathway.equals("none") || sequence >= 10) {
             return List.of();
         }
-        if (pathway.equals("fool") && sequence <= 9) {
+        if (pathway.equals("fool")) {
             var skills = new ArrayList<SkillEntry>();
             skills.add(DIVINATION);
+            // 序列 8「小丑」及以上额外解锁化纸为刀
+            if (sequence <= 8) {
+                skills.add(PAPER_KNIFE);
+            }
             return skills;
         }
         return List.of();

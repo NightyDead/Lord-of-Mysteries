@@ -23,13 +23,13 @@ public class FoolPathway extends AbstractPathway {
 
     /**
      * 注册占卜家途径下的所有序列
-     * 目前仅注册序列 9「占卜家」，后续可按需添加：
-     * addSequence(new Seq8Clown());
+     * 目前注册序列 9「占卜家」、序列 8「小丑」，后续可按需添加：
      * addSequence(new Seq7Magician());
      * ...
      */
     @Override
     protected void registerSequences() {
         this.addSequence(new Seq9Seer());
+        this.addSequence(new Seq8Clown());
     }
 }

@@ -6,6 +6,7 @@ import com.nightydead.lordofmysteries.item.ModItems;
 import com.nightydead.lordofmysteries.item.custom.MainMaterialItem;
 import com.nightydead.lordofmysteries.network.C2SDivinationPacket;
 import com.nightydead.lordofmysteries.network.C2SKnowledgeDivinationPacket;
+import com.nightydead.lordofmysteries.network.C2SPaperKnifePacket;
 import com.nightydead.lordofmysteries.skills.DivinationHandler;
 import com.nightydead.lordofmysteries.skills.ModSkills;
 import com.nightydead.lordofmysteries.skills.ModSkills.SkillEntry;
@@ -205,6 +206,10 @@ public class DivinationSkillWheelScreen extends Screen {
                                 Component.translatable("message.lordofmysteries.divination.need_mineral"), true);
                     }
                 }
+            }
+            if (skill.id().equals(ModSkills.ID_PAPER_KNIFE)) {
+                // 化纸为刀：发送网络包，由服务端校验灵性与背包中的纸并发射纸刀
+                PacketDistributor.sendToServer(new C2SPaperKnifePacket());
             }
         }
         onClose();

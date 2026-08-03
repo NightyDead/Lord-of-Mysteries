@@ -190,6 +190,7 @@ public class ModZhCnLangProvider extends LanguageProvider {
         // ==================== 技能 ====================
         add("skill.lordofmysteries.spirit_vision", "灵视");
         add("skill.lordofmysteries.divination", "占卜");
+        add("skill.lordofmysteries.paper_knife", "化纸为刀");
         add("skill.lordofmysteries.wheel.mortal_hint", "凡人之躯");
 
         // ==================== UI 界面 ====================
@@ -306,6 +307,12 @@ public class ModZhCnLangProvider extends LanguageProvider {
         add("message.lordofmysteries.divination.failed", "§c占卜失败");
         add("message.lordofmysteries.divination.need_pendulum", "§c占卜需要手持黄水晶灵摆。");
         add("message.lordofmysteries.divination.need_mineral", "§c矿物占卜需要一手持黄水晶灵摆、另一手持矿物类物品。");
+
+        // ==================== 化纸为刀系统消息 ====================
+        add("message.lordofmysteries.paper_knife.not_clown", "§c唯有愚者途径序列8「小丑」及以上的非凡者才能使用化纸为刀。");
+        add("message.lordofmysteries.paper_knife.no_spirituality", "§c灵性不足，无法使用化纸为刀（需要 %s 点灵性）。");
+        add("message.lordofmysteries.paper_knife.no_paper", "§c背包里没有纸，无法使用化纸为刀。");
+
         add("message.lordofmysteries.knowledge_divination.no_combination", "§c知识载体占卜需要一手持知识载体、另一手持魔药主材。");
         add("message.lordofmysteries.knowledge_divination.no_recipe", "§c无法从主材中解读出对应的魔药配方。");
         add("message.lordofmysteries.knowledge_divination.success", "§6【知识占卜】§a知识载体化作【%s·%s序列】的魔药配方！消耗了 §b%s§a 灵性、§c%s§a 理智。");

@@ -31,6 +31,18 @@ public class ModEntities {
             );
 
     /**
+     * 化纸为刀的纸刀抛射物实体 (直线飞行、无重力，命中或超程即消失不可回收)
+     */
+    public static final DeferredHolder<EntityType<?>, EntityType<PaperKnifeEntity>> PAPER_KNIFE =
+            ENTITY_TYPES.register("paper_knife", () -> EntityType.Builder.<PaperKnifeEntity>of(
+                            PaperKnifeEntity::new, MobCategory.MISC)
+                    .sized(0.25F, 0.25F)
+                    .clientTrackingRange(8)
+                    .updateInterval(1)
+                    .build("paper_knife")
+            );
+
+    /**
      * 将实体类型注册表绑定到模组事件总线
      *
      * @param eventBus 模组事件总线

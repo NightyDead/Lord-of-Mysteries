@@ -3,7 +3,9 @@ package com.nightydead.lordofmysteries;
 import com.nightydead.lordofmysteries.block.ModBlockEntities;
 import com.nightydead.lordofmysteries.client.AlchemyCauldronRenderer;
 import com.nightydead.lordofmysteries.client.RitualAltarRenderer;
+import com.nightydead.lordofmysteries.entity.ModEntities;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
@@ -58,5 +60,7 @@ public class LordofMysteriesClient {
     static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerBlockEntityRenderer(ModBlockEntities.ALCHEMY_CAULDRON.get(), AlchemyCauldronRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.RITUAL_ALTAR.get(), RitualAltarRenderer::new);
+        // 化纸为刀：纸刀实体以纸的物品模型渲染
+        event.registerEntityRenderer(ModEntities.PAPER_KNIFE.get(), ThrownItemRenderer::new);
     }
 }

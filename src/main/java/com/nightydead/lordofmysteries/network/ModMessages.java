@@ -45,6 +45,8 @@ public class ModMessages {
             S2CStructureListPacket.register(registrar);
             // 📜 注册已学配方同步包（服务端 → 客户端）
             SyncLearnedRecipesPacket.register(registrar);
+            // 🗡️ 注册化纸为刀请求包（客户端 → 服务器）
+            C2SPaperKnifePacket.register(registrar);
         });
     }
 }
