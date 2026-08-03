@@ -34,9 +34,17 @@ public class ModKeyMappings {
             KEY_CATEGORY
     );
     
-    /** 🔮 定义"技能轮盘"按键，默认绑定为键盘 C 键（按下即打开轮盘，松开释放技能） */
-    public static final KeyMapping DIVINATION_WHEEL_KEY = new KeyMapping(
+    /** 🔮 定义"技能轮盘"按键，默认绑定为键盘 X 键（按住打开轮盘，松开记住选中） */
+    public static final KeyMapping SKILL_WHEEL_KEY = new KeyMapping(
             "key." + LordofMysteries.MODID + ".skill_wheel",
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_X,
+            KEY_CATEGORY
+    );
+
+    /** ⚡ 定义"使用选中技能"按键，默认绑定为键盘 C 键（执行当前选中的技能） */
+    public static final KeyMapping USE_SKILL_KEY = new KeyMapping(
+            "key." + LordofMysteries.MODID + ".use_skill",
             InputConstants.Type.KEYSYM,
             GLFW.GLFW_KEY_C,
             KEY_CATEGORY
@@ -49,9 +57,9 @@ public class ModKeyMappings {
             GLFW.GLFW_KEY_K,
             KEY_CATEGORY
     );
-    
-    /** C 键上一帧是否按下，用于检测按下瞬间（上升沿） */
-    private static boolean cWasDown = false;
+
+    /** X 键上一帧是否按下，用于检测按下瞬间（上升沿） */
+    private static boolean xWasDown = false;
 
     /**
      * 🚀 自动注册到 Mod 总线
@@ -60,7 +68,8 @@ public class ModKeyMappings {
     @SubscribeEvent
     public static void onRegisterKeyMappings(RegisterKeyMappingsEvent event) {
         event.register(TOGGLE_VISION_KEY);
-        event.register(DIVINATION_WHEEL_KEY);
+        event.register(SKILL_WHEEL_KEY);
+        event.register(USE_SKILL_KEY);
         event.register(KNOWLEDGE_PANEL_KEY);
     }
 
@@ -73,18 +82,29 @@ public class ModKeyMappings {
     public static void onClientTick(ClientTickEvent.Post event) {
         Minecraft mc = Minecraft.getInstance();
 
-        boolean cDown = DIVINATION_WHEEL_KEY.isDown();
+        boolean xDown = SKILL_WHEEL_KEY.isDown();
 
-        // ──────── 🔮 技能轮盘：C 键按下即开 ────────
+        // ──────── 🔮 技能轮盘：X 键按住打开，松开时由 Screen 记住选中并关闭 ────────
         // 上升沿检测：上一帧未按下，当前帧按下，且无其他 UI 遮挡
-        if (cDown && !cWasDown && mc.level != null && mc.screen == null) {
+        if (xDown && !xWasDown && mc.level != null && mc.screen == null) {
             var skills = ModSkills.getAvailableSkills(
                     ClientDataCache.getPathway(),
                     ClientDataCache.getSequence()
             );
             mc.setScreen(new DivinationSkillWheelScreen(skills));
         }
-        cWasDown = cDown;
+        xWasDown = xDown;
+
+        // ──────── ⚡ 使用选中技能：C 键（轮盘打开时由 Screen 的 keyPressed 处理，此处仅处理轮盘关闭状态） ────────
+        // 使用 consumeClick 消费"按下事件"计数，天然不会与轮盘内的处理重复触发
+        if (mc.level != null && mc.screen == null) {
+            while (USE_SKILL_KEY.consumeClick()) {
+                String selectedId = ClientDataCache.getSelectedSkillId();
+                if (selectedId != null) {
+                    DivinationSkillWheelScreen.executeSkill(ModSkills.getEntry(selectedId));
+                }
+            }
+        }
 
         // ──────── 👁️ 灵视：V 键即时切换（仅在无 UI 遮挡时） ────────
         if (mc.level != null && mc.screen == null) {

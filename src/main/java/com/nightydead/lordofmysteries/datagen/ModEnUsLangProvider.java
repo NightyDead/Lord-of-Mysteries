@@ -185,7 +185,8 @@ public class ModEnUsLangProvider extends LanguageProvider {
         // ==================== 按键绑定 ====================
         add("key.categories.lordofmysteries", "Lord of Mysteries - Powers");
         add("key.lordofmysteries.toggle_vision", "Toggle Spirit Vision");
-        add("key.lordofmysteries.skill_wheel", "Skill Wheel");
+        add("key.lordofmysteries.skill_wheel", "Skill Wheel (Select Skill)");
+        add("key.lordofmysteries.use_skill", "Use Selected Skill");
         add("key.lordofmysteries.knowledge_panel", "Knowledge Panel");
 
         // ==================== 技能 ====================
@@ -324,6 +325,7 @@ public class ModEnUsLangProvider extends LanguageProvider {
         // ==================== HUD 动态文本 ====================
         add("hud.lordofmysteries.vision.active_title", "👁 Spirit Vision Active");
         add("hud.lordofmysteries.vision.running", "§b⚡ Spirit Vision Running");
+        add("hud.lordofmysteries.selected_skill", "🎯 Selected: %s");
 
         // ==================== 配置界面 ====================
         add("lordofmysteries.configuration.title", "Lord of Mysteries Configs");

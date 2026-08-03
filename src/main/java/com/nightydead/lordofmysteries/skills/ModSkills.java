@@ -41,6 +41,18 @@ public class ModSkills {
     );
 
     /**
+     * 根据技能 ID 查找对应的技能条目
+     *
+     * @param id 技能唯一标识
+     * @return 技能条目，未找到返回 null
+     */
+    public static SkillEntry getEntry(String id) {
+        if (ID_DIVINATION.equals(id)) return DIVINATION;
+        if (ID_PAPER_KNIFE.equals(id)) return PAPER_KNIFE;
+        return null;
+    }
+
+    /**
      * 根据玩家当前途径和序列号，返回可用技能列表
      *
      * @param pathway  途径 ID（如 "fool"），null 或 "none" 表示凡人

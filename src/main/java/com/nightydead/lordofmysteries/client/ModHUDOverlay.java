@@ -1,6 +1,7 @@
 package com.nightydead.lordofmysteries.client;
 
 import com.nightydead.lordofmysteries.LordofMysteries;
+import com.nightydead.lordofmysteries.skills.ModSkills;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -139,6 +140,21 @@ public class ModHUDOverlay {
             float digPercent = maxDigestion > 0 ? Math.clamp((float) digestion / maxDigestion, 0.0F, 1.0F) : 0.0F;
             int digBarWidth = (int) (digPercent * 100); //
             graphics.fill(startX, currentY + 10, startX + digBarWidth, currentY + 14, digColor); //
+        }
+
+        // ==================== 🎯 右下角：当前选中技能（X 键轮盘选中，C 键使用） ====================
+        String selectedSkillId = ClientDataCache.getSelectedSkillId();
+        if (selectedSkillId != null) {
+            ModSkills.SkillEntry entry = ModSkills.getEntry(selectedSkillId);
+            if (entry != null) {
+                Component selectedText = Component.translatable(
+                        "hud.lordofmysteries.selected_skill", entry.name());
+                int textWidth = font.width(selectedText);
+                graphics.drawString(
+                        font, selectedText,
+                        width - textWidth - 10, height - 25,
+                        entry.color(), true);
+            }
         }
     }
 }

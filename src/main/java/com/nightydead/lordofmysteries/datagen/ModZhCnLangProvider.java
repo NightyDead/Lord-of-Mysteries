@@ -184,7 +184,8 @@ public class ModZhCnLangProvider extends LanguageProvider {
         // ==================== 按键绑定 ====================
         add("key.categories.lordofmysteries", "诡秘之主 - 超凡能力");
         add("key.lordofmysteries.toggle_vision", "开启/关闭 灵视");
-        add("key.lordofmysteries.skill_wheel", "技能轮盘");
+        add("key.lordofmysteries.skill_wheel", "技能轮盘（选择技能）");
+        add("key.lordofmysteries.use_skill", "使用选中技能");
         add("key.lordofmysteries.knowledge_panel", "知识面板");
 
         // ==================== 技能 ====================
@@ -323,6 +324,7 @@ public class ModZhCnLangProvider extends LanguageProvider {
         // ==================== HUD 动态文本 ====================
         add("hud.lordofmysteries.vision.active_title", "👁 灵视状态已激活 (Spirit Vision)");
         add("hud.lordofmysteries.vision.running", "§b⚡ 灵视运行中");
+        add("hud.lordofmysteries.selected_skill", "🎯 当前技能: %s");
 
         // ==================== 配置界面 ====================
         add("lordofmysteries.configuration.title", "诡秘之主配置");

@@ -34,6 +34,9 @@ public class ClientDataCache {
     /** 已学魔药配方集合，格式 "pathway:sequence" */
     private static Set<String> learnedRecipes = new HashSet<>();
 
+    /** 当前在技能轮盘中选中的技能 ID（null 表示未选中），供 C 键使用与右下角 HUD 显示 */
+    private static String selectedSkillId = null;
+
     // ==================== 理智 (Sanity) ====================
 
     /** 设置当前理智值 */
@@ -93,4 +96,11 @@ public class ClientDataCache {
     public static boolean hasLearnedRecipe(String pathway, int sequence) {
         return learnedRecipes.contains(pathway + ":" + sequence);
     }
+
+    // ==================== 选中技能 (Selected Skill) ====================
+
+    /** 设置当前选中的技能 ID（null 表示未选中） */
+    public static void setSelectedSkillId(String id) { selectedSkillId = id; }
+    /** 获取当前选中的技能 ID（null 表示未选中） */
+    public static String getSelectedSkillId() { return selectedSkillId; }
 }

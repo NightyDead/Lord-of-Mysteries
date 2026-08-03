@@ -2,6 +2,7 @@ package com.nightydead.lordofmysteries.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
+import com.nightydead.lordofmysteries.client.ClientDataCache;
 import com.nightydead.lordofmysteries.item.ModItems;
 import com.nightydead.lordofmysteries.item.custom.MainMaterialItem;
 import com.nightydead.lordofmysteries.network.C2SDivinationPacket;
@@ -24,15 +25,16 @@ import org.lwjgl.glfw.GLFW;
 import java.util.List;
 
 /**
- * 技能轮盘 Screen —— 长按 C 键弹出的径向选择菜单
+ * 技能轮盘 Screen —— 按住 X 键弹出的径向选择菜单，C 键使用选中技能
  * <p>
  * <b>扇区角度系统</b>：0° 为屏幕右侧，顺时针递增。
  * 扇区 i 覆盖 [i·2π/N, (i+1)·2π/N)，此设计使得 N=2 时天然产生水平分割线（上半=扇区1，下半=扇区0）。
  * <p>
  * <b>交互规则</b>：
  * <ul>
- *   <li>鼠标落入扇区 → 高亮，中心显示技能名</li>
- *   <li>松开 C 键或鼠标左键 → 执行选中技能并关闭</li>
+ *   <li>鼠标位于任意方向（不限轮盘范围）→ 按方向选中对应扇区，中心显示技能名</li>
+ *   <li>松开 X 键 → 关闭轮盘并记住当前选中（不执行），右下角 HUD 常驻显示</li>
+ *   <li>按 C 键或松开鼠标左键 → 执行选中技能并关闭</li>
  *   <li>ESC → 取消关闭，不触发技能</li>
  * </ul>
  */
@@ -50,6 +52,16 @@ public class DivinationSkillWheelScreen extends Screen {
     public DivinationSkillWheelScreen(List<SkillEntry> skills) {
         super(Component.empty());
         this.skills = skills;
+        // 默认选中上次使用的技能（若仍可用），实现"X 打开即可直接按 C 使用"
+        String last = ClientDataCache.getSelectedSkillId();
+        if (last != null) {
+            for (int i = 0; i < skills.size(); i++) {
+                if (skills.get(i).id().equals(last)) {
+                    this.selectedSector = i;
+                    break;
+                }
+            }
+        }
     }
 
     @Override
@@ -60,9 +72,22 @@ public class DivinationSkillWheelScreen extends Screen {
     // ==================== 输入 ====================
 
     @Override
-    public boolean keyReleased(int keyCode, int scanCode, int modifiers) {
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        // 按 C：执行当前选中的技能并关闭轮盘
+        // 轮盘打开期间键盘事件由 Screen 接管（KeyMapping 不计数），
+        // 与 ModKeyMappings 中 C 键的 consumeClick 检测天然互斥，不会重复触发
         if (keyCode == GLFW.GLFW_KEY_C) {
             executeAndClose();
+            return true;
+        }
+        return super.keyPressed(keyCode, scanCode, modifiers);
+    }
+
+    @Override
+    public boolean keyReleased(int keyCode, int scanCode, int modifiers) {
+        // 松开 X：关闭轮盘并记住选中（不执行），由 C 键或下次打开时使用
+        if (keyCode == GLFW.GLFW_KEY_X) {
+            onClose();
             return true;
         }
         if (keyCode == GLFW.GLFW_KEY_ESCAPE) {
@@ -87,7 +112,12 @@ public class DivinationSkillWheelScreen extends Screen {
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         centerX = width / 2;
         centerY = height / 2;
-        selectedSector = detectSector(mouseX, mouseY);
+        // 方向选中不限于轮盘范围：鼠标在中心内圆之外任意位置均按方向选中；
+        // 鼠标落回中心区域时保留当前选中，避免误清除上次选择
+        int detected = detectSector(mouseX, mouseY);
+        if (detected >= 0) {
+            selectedSector = detected;
+        }
 
         // 全屏半透明遮罩
         graphics.fill(0, 0, width, height, 0x44000000);
@@ -106,7 +136,8 @@ public class DivinationSkillWheelScreen extends Screen {
         double dx = mx - centerX;
         double dy = my - centerY;
         double dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < INNER_RADIUS || dist > OUTER_RADIUS) return -1;
+        // 仅内圆内不选中；外圈不限范围，鼠标在任何方向都能选中对应扇区
+        if (dist < INNER_RADIUS) return -1;
 
         // 0°=右，顺时针。N=2 时：扇区0=下半, 扇区1=上半
         double raw = Math.atan2(dy, dx);
@@ -175,44 +206,71 @@ public class DivinationSkillWheelScreen extends Screen {
 
     // ==================== 执行 ====================
 
+    /**
+     * 执行当前选中的技能并关闭轮盘（关闭时自动记住选中状态，供右下角 HUD 常驻显示）
+     */
     private void executeAndClose() {
         if (selectedSector >= 0 && selectedSector < skills.size()) {
-            SkillEntry skill = skills.get(selectedSector);
-            if (skill.id().equals(ModSkills.ID_DIVINATION)) {
-                // 知识载体占卜：知识载体 + 魔药主材 → 发送网络包后正常关闭轮盘
-                if (isHoldingKnowledgeVesselAndMainMaterial()) {
-                    PacketDistributor.sendToServer(new C2SKnowledgeDivinationPacket());
-                    onClose();
-                    return;
-                }
-                // 群系占卜：setScreen 会自动清理轮盘，无需走 onClose
-                if (isHoldingPendulumAndPlant()) {
-                    Minecraft.getInstance().setScreen(new BiomeDivinationScreen());
-                    return;
-                }
-                // 结构占卜：黄水晶灵摆 + 岩石类方块
-                if (isHoldingPendulumAndStone()) {
-                    Minecraft.getInstance().setScreen(new StructureDivinationScreen());
-                    return;
-                }
-                // 矿物占卜：黄水晶灵摆 + 矿物类物品，发送网络包后正常关闭轮盘
-                if (isHoldingPendulumAndMineral()) {
-                    PacketDistributor.sendToServer(new C2SDivinationPacket());
-                } else {
-                    // 未同时手持灵摆与矿物 → 提示后关闭轮盘，不发送占卜请求
-                    var player = Minecraft.getInstance().player;
-                    if (player != null) {
-                        player.displayClientMessage(
-                                Component.translatable("message.lordofmysteries.divination.need_mineral"), true);
-                    }
-                }
-            }
-            if (skill.id().equals(ModSkills.ID_PAPER_KNIFE)) {
-                // 化纸为刀：发送网络包，由服务端校验灵性与背包中的纸并发射纸刀
-                PacketDistributor.sendToServer(new C2SPaperKnifePacket());
-            }
+            executeSkill(skills.get(selectedSector));
         }
         onClose();
+    }
+
+    /**
+     * 执行指定技能（供轮盘与 C 键共用；C 键在轮盘关闭时直接调用本方法）
+     *
+     * @param skill 要执行的技能条目
+     * @return 是否识别并处理了该技能
+     */
+    public static boolean executeSkill(SkillEntry skill) {
+        if (skill == null) return false;
+        if (skill.id().equals(ModSkills.ID_DIVINATION)) {
+            // 知识载体占卜：知识载体 + 魔药主材 → 发送网络包
+            if (isHoldingKnowledgeVesselAndMainMaterial()) {
+                PacketDistributor.sendToServer(new C2SKnowledgeDivinationPacket());
+                return true;
+            }
+            // 群系占卜：黄水晶灵摆 + 植物类物品，切换到选择界面
+            if (isHoldingPendulumAndPlant()) {
+                Minecraft.getInstance().setScreen(new BiomeDivinationScreen());
+                return true;
+            }
+            // 结构占卜：黄水晶灵摆 + 岩石类方块，切换到选择界面
+            if (isHoldingPendulumAndStone()) {
+                Minecraft.getInstance().setScreen(new StructureDivinationScreen());
+                return true;
+            }
+            // 矿物占卜：黄水晶灵摆 + 矿物类物品，发送网络包
+            if (isHoldingPendulumAndMineral()) {
+                PacketDistributor.sendToServer(new C2SDivinationPacket());
+            } else {
+                // 未同时手持灵摆与矿物 → 提示
+                var player = Minecraft.getInstance().player;
+                if (player != null) {
+                    player.displayClientMessage(
+                            Component.translatable("message.lordofmysteries.divination.need_mineral"), true);
+                }
+            }
+            return true;
+        }
+        if (skill.id().equals(ModSkills.ID_PAPER_KNIFE)) {
+            // 化纸为刀：发送网络包，由服务端校验灵性与背包中的纸并发射纸刀
+            PacketDistributor.sendToServer(new C2SPaperKnifePacket());
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 关闭轮盘时把当前选中技能保存到客户端缓存，供右下角 HUD 常驻显示
+     * 群系/结构占卜通过 setScreen 切换界面时同样会经由 removed() 触发本方法
+     */
+    @Override
+    public void onClose() {
+        if (selectedSector >= 0 && selectedSector < skills.size()) {
+            ClientDataCache.setSelectedSkillId(skills.get(selectedSector).id());
+        }
+        super.onClose();
     }
 
     /**
