@@ -110,6 +110,7 @@ public class ModZhCnLangProvider extends LanguageProvider {
         add(ModItems.KNOWLEDGE_VESSEL.get(), "知识载体");
         add(ModItems.CITRINE_SHARD.get(), "黄水晶碎片");
         add(ModItems.CITRINE_PENDULUM.get(), "黄水晶灵摆");
+        add(ModItems.LAVA_OCTOPUS_SPAWN_EGG.get(), "拉瓦章鱼生物蛋");
         add("item.lordofmysteries.pure_water.pure_water.effect.empty", "纯水");
         add("tooltip.lordofmysteries.pure_water.desc", "炼药的基础溶剂，纯净无杂质。");
 
@@ -143,6 +144,8 @@ public class ModZhCnLangProvider extends LanguageProvider {
         add("itemGroup.potion_auxiliary_materials_tab", "魔药辅材");
         add("itemGroup.natural_item_tab", "自然物品");
         add("itemGroup.recipe_tab", "魔药配方");
+        add("itemGroup.mod_item_tab", "模组物品");
+        add("itemGroup.spawn_egg_tab", "模组生物蛋");
 
         // ==================== 炼药锅交互消息 ====================
         add("message.lordofmysteries.cauldron.item_added", "§a[炼药锅] §f材料已放入。");

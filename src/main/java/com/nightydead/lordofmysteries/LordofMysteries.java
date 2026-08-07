@@ -4,6 +4,7 @@ import com.nightydead.lordofmysteries.block.ModBlockEntities;
 import com.nightydead.lordofmysteries.block.ModBlocks;
 import com.nightydead.lordofmysteries.data.ModAttachments;
 import com.nightydead.lordofmysteries.data.ModDataComponents;
+import com.nightydead.lordofmysteries.entity.LavaOctopusEntity;
 import com.nightydead.lordofmysteries.entity.ModEntities;
 import com.nightydead.lordofmysteries.item.ModCreativeModeTabs;
 import com.nightydead.lordofmysteries.item.ModItems;
@@ -17,7 +18,12 @@ import org.slf4j.Logger;
 import com.mojang.logging.LogUtils;
 
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.entity.SpawnPlacementTypes;
+import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
@@ -26,6 +32,8 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
+import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 
 /**
@@ -64,13 +72,18 @@ public class LordofMysteries {
         ModAttachments.register(modEventBus);
         // 注册模组数据组件（DataComponent，用于物品 NBT 数据存储）
         ModDataComponents.register(modEventBus);
-        // 注册模组自定义实体（如不可破坏的物品实体）
+        // 注册模组自定义实体（如不可破坏的物品实体、拉瓦章鱼）
         ModEntities.register(modEventBus);
         // 注册模组网络数据包（理智、灵性、消化度、途径同步）
         ModMessages.register(modEventBus);
         ModLootModifiers.register(modEventBus);
         // 注册模组配方类型（魔药酿造配方）
         ModRecipes.register(modEventBus);
+
+        // 注册实体属性创建事件（拉瓦章鱼）
+        modEventBus.addListener(this::registerEntityAttributes);
+        // 注册实体生成规则事件（拉瓦章鱼：IN_LAVA + 岩浆湖范围检测）
+        modEventBus.addListener(this::registerSpawnPlacements);
 
         // 将本类注册到 NeoForge 全局事件总线，以便响应服务端事件（如 onServerStarting）
         // 注意：仅当本类中包含 @SubscribeEvent 注解的方法时才需要此行
@@ -114,6 +127,35 @@ public class LordofMysteries {
      * @param event 创造模式标签页内容构建事件
      */
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
+        // 将拉瓦章鱼生物蛋添加到原版生物蛋标签页
+        if (event.getTabKey() == CreativeModeTabs.SPAWN_EGGS) {
+            event.accept(ModItems.LAVA_OCTOPUS_SPAWN_EGG.get());
+        }
+    }
+
+    /**
+     * 注册实体属性
+     * 为拉瓦章鱼设置基础属性（与原版荧光鱿鱼相同：最大生命值10）
+     */
+    private void registerEntityAttributes(EntityAttributeCreationEvent event) {
+        event.put(ModEntities.LAVA_OCTOPUS.get(),
+                net.minecraft.world.entity.Mob.createMobAttributes()
+                        .add(Attributes.MAX_HEALTH, 10.0D)
+                        .build());
+    }
+
+    /**
+     * 注册实体生成规则
+     * 拉瓦章鱼：IN_LAVA 类型，需要岩浆范围足够大（7x7区域内至少35格岩浆）
+     */
+    private void registerSpawnPlacements(RegisterSpawnPlacementsEvent event) {
+        event.register(
+                ModEntities.LAVA_OCTOPUS.get(),
+                SpawnPlacementTypes.IN_LAVA,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                LavaOctopusEntity::checkLavaOctopusSpawnRules,
+                RegisterSpawnPlacementsEvent.Operation.REPLACE
+        );
     }
 
     /**

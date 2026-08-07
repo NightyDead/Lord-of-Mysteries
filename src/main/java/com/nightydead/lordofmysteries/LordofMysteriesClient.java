@@ -2,6 +2,7 @@ package com.nightydead.lordofmysteries;
 
 import com.nightydead.lordofmysteries.block.ModBlockEntities;
 import com.nightydead.lordofmysteries.client.AlchemyCauldronRenderer;
+import com.nightydead.lordofmysteries.client.LavaOctopusRenderer;
 import com.nightydead.lordofmysteries.client.RitualAltarRenderer;
 import com.nightydead.lordofmysteries.entity.ModEntities;
 import net.minecraft.client.Minecraft;
@@ -62,5 +63,7 @@ public class LordofMysteriesClient {
         event.registerBlockEntityRenderer(ModBlockEntities.RITUAL_ALTAR.get(), RitualAltarRenderer::new);
         // 化纸为刀：纸刀实体以纸的物品模型渲染
         event.registerEntityRenderer(ModEntities.PAPER_KNIFE.get(), ThrownItemRenderer::new);
+        // 拉瓦章鱼：使用荧光鱿鱼模型 + 岩浆色纹理渲染
+        event.registerEntityRenderer(ModEntities.LAVA_OCTOPUS.get(), LavaOctopusRenderer::new);
     }
 }

@@ -72,6 +72,8 @@ public class ModItemModelsProvider extends ItemModelProvider {
         basicItem(ModItems.KNOWLEDGE_VESSEL.get());
         basicItem(ModItems.CITRINE_SHARD.get());
         basicItem(ModItems.CITRINE_PENDULUM.get());
+        // 拉瓦章鱼生物蛋 - 使用原版模板生物蛋模型（颜色由 SpawnEggItem 构造函数中的 tint 指定）
+        withExistingParent("item/lava_octopus_spawn_egg", mcLoc("item/template_spawn_egg"));
 
         // 为植物的 BlockItem 生成 2D 物品模型，指向 textures/block/ 目录下的贴图
         makeBlockItemModel("night_perfume_herb");

@@ -43,6 +43,19 @@ public class ModEntities {
             );
 
     /**
+     * 拉瓦章鱼实体（继承荧光鱿鱼，在下界岩浆湖中生成）
+     * 使用 CREATURE 分类配合 IN_LAVA 生成类型
+     */
+    public static final DeferredHolder<EntityType<?>, EntityType<LavaOctopusEntity>> LAVA_OCTOPUS =
+            ENTITY_TYPES.register("lava_octopus", () -> EntityType.Builder.<LavaOctopusEntity>of(
+                            LavaOctopusEntity::new, MobCategory.CREATURE)
+                    .sized(0.8F, 0.8F)
+                    .clientTrackingRange(8)
+                    .updateInterval(2)
+                    .build("lava_octopus")
+            );
+
+    /**
      * 将实体类型注册表绑定到模组事件总线
      *
      * @param eventBus 模组事件总线

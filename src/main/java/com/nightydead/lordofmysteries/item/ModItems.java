@@ -8,8 +8,10 @@ import com.nightydead.lordofmysteries.item.custom.ModPotionItem;
 import com.nightydead.lordofmysteries.item.custom.PotionRecipeItem;
 import com.nightydead.lordofmysteries.item.custom.PureWaterItem;
 import com.nightydead.lordofmysteries.item.custom.RitualDaggerItem;
+import com.nightydead.lordofmysteries.entity.ModEntities;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.SpawnEggItem;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -70,6 +72,12 @@ public class ModItems {
     // ==================== 知识载体（神秘知识容器） ====================
     public static final DeferredItem<Item> KNOWLEDGE_VESSEL =
             ITEMS.register("knowledge_vessel", () -> new Item(new Item.Properties()));
+
+    // ==================== 拉瓦章鱼生物蛋 ====================
+    /** 拉瓦章鱼生物蛋 - 用于在创造模式中生成拉瓦章鱼，底色深红褐(0x993300)，斑点亮橙(0xFF6600) */
+    @SuppressWarnings("deprecation")
+    public static final DeferredItem<Item> LAVA_OCTOPUS_SPAWN_EGG =
+            ITEMS.register("lava_octopus_spawn_egg", () -> new SpawnEggItem(ModEntities.LAVA_OCTOPUS.get(), 0x993300, 0xFF6600, new Item.Properties()));
 
     // ==================== 全途径序列 0 唯一性占位（后续可用独立唯一性物品替代） ====================
     // 序列0特性同时作为该途径的「唯一性」+ 全套特性聚合体使用

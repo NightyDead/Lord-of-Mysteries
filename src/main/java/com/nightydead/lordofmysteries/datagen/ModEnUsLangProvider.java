@@ -111,6 +111,7 @@ public class ModEnUsLangProvider extends LanguageProvider {
         add(ModItems.KNOWLEDGE_VESSEL.get(), "Knowledge Vessel");
         add(ModItems.CITRINE_SHARD.get(), "Citrine Shard");
         add(ModItems.CITRINE_PENDULUM.get(), "Citrine Pendulum");
+        add(ModItems.LAVA_OCTOPUS_SPAWN_EGG.get(), "Lava Octopus Spawn Egg");
         add("item.lordofmysteries.pure_water.pure_water.effect.empty", "Pure Water");
         add("tooltip.lordofmysteries.pure_water.desc", "The base solvent for potion brewing, pure and impurity-free.");
 
@@ -144,6 +145,8 @@ public class ModEnUsLangProvider extends LanguageProvider {
         add("itemGroup.potion_auxiliary_materials_tab", "Potion Auxiliary Materials");
         add("itemGroup.natural_item_tab", "Natural Item");
         add("itemGroup.recipe_tab", "Potion Recipes");
+        add("itemGroup.mod_item_tab", "Mod Items");
+        add("itemGroup.spawn_egg_tab", "Spawn Eggs");
 
         // ==================== 炼药锅交互消息 ====================
         add("message.lordofmysteries.cauldron.item_added", "§a[Alchemy Cauldron] §fMaterial added.");

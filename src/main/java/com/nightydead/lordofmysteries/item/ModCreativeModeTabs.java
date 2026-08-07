@@ -75,7 +75,6 @@ public class ModCreativeModeTabs {
                         output.accept(ModBlocks.EXAMPLE_BLOCK);
                         output.accept(ModBlocks.ALCHEMY_CAULDRON);
                         output.accept(ModBlocks.RITUAL_ALTAR);
-                        output.accept(ModItems.RITUAL_DAGGER);
                     }).withTabsBefore(ResourceLocation.fromNamespaceAndPath(LordofMysteries.MODID, "potion_tab"))
                     .build());
 
@@ -110,7 +109,7 @@ public class ModCreativeModeTabs {
                     }).withTabsBefore(ResourceLocation.fromNamespaceAndPath(LordofMysteries.MODID, "potion_material_tab"))
                     .build());
 
-    /** 自然物品标签页 - 包含四种神秘学草药方块 */
+    /** 自然物品标签页 - 包含神秘学草药方块和自然矿物 */
     public static final Supplier<CreativeModeTab> NATURAL_ITEM_TAB =
             CREATIVE_MODE_TABS.register("natural_item_tab", () -> CreativeModeTab.builder()
                     .icon(() -> new ItemStack(ModBlocks.NIGHT_PERFUME_HERB.get()))
@@ -125,10 +124,30 @@ public class ModCreativeModeTabs {
                         output.accept(ModBlocks.GOLDEN_CLOAK_GRASS.get());
                         output.accept(ModBlocks.CITRINE_CLUSTER.get());
                         output.accept(ModItems.CITRINE_SHARD.get());
-                        output.accept(ModItems.CITRINE_PENDULUM.get());
-                        output.accept(ModItems.MYSTIC_DUST.get());
-                        output.accept(ModItems.KNOWLEDGE_VESSEL.get());
                     }).withTabsBefore(ResourceLocation.fromNamespaceAndPath(LordofMysteries.MODID, "potion_auxiliary_materials"))
+                    .build());
+
+    /** 模组物品标签页 - 包含仪式匕首、黄水晶灵摆、知识载体、神秘粉尘等模组专属物品 */
+    public static final Supplier<CreativeModeTab> MOD_ITEM_TAB =
+            CREATIVE_MODE_TABS.register("mod_item_tab", () -> CreativeModeTab.builder()
+                    .icon(() -> new ItemStack(ModItems.RITUAL_DAGGER.get()))
+                    .title(Component.translatable("itemGroup.mod_item_tab"))
+                    .displayItems((parameters, output) -> {
+                        output.accept(ModItems.RITUAL_DAGGER.get());
+                        output.accept(ModItems.CITRINE_PENDULUM.get());
+                        output.accept(ModItems.KNOWLEDGE_VESSEL.get());
+                        output.accept(ModItems.MYSTIC_DUST.get());
+                    }).withTabsBefore(ResourceLocation.fromNamespaceAndPath(LordofMysteries.MODID, "natural_item_tab"))
+                    .build());
+
+    /** 模组生物蛋标签页 - 包含模组自定义实体的生物蛋 */
+    public static final Supplier<CreativeModeTab> SPAWN_EGG_TAB =
+            CREATIVE_MODE_TABS.register("spawn_egg_tab", () -> CreativeModeTab.builder()
+                    .icon(() -> new ItemStack(ModItems.LAVA_OCTOPUS_SPAWN_EGG.get()))
+                    .title(Component.translatable("itemGroup.spawn_egg_tab"))
+                    .displayItems((parameters, output) -> {
+                        output.accept(ModItems.LAVA_OCTOPUS_SPAWN_EGG.get());
+                    }).withTabsBefore(ResourceLocation.fromNamespaceAndPath(LordofMysteries.MODID, "mod_item_tab"))
                     .build());
 
     /** 全部 22 条途径的 ID 列表（与 22途径.md 一一对应） */
@@ -158,7 +177,7 @@ public class ModCreativeModeTabs {
                                 output.accept(stack);
                             }
                         }
-                    }).withTabsBefore(ResourceLocation.fromNamespaceAndPath(LordofMysteries.MODID, "natural_item_tab"))
+                    }).withTabsBefore(ResourceLocation.fromNamespaceAndPath(LordofMysteries.MODID, "spawn_egg_tab"))
                     .build());
 
     /**
