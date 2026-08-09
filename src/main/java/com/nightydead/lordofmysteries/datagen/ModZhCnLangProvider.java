@@ -273,7 +273,7 @@ public class ModZhCnLangProvider extends LanguageProvider {
         add("tooltip.lordofmysteries.potion.empty_warning", "§c空 — 无途径数据！");
 
         // ==================== 获取方式描述 ====================
-        add("acquisition.lordofmysteries.potion_recipe.fool_9", "拉瓦章鱼血液：击杀荧光鱿鱼概率掉落；星水晶：挖掘紫水晶簇概率掉落；纯水：熔炉或烟熏炉烧制水瓶；夜香草汁液、毒堇汁：酿造台酿造；金薄荷叶、龙血草粉末：合成获取");
+        add("acquisition.lordofmysteries.potion_recipe.fool_9", "拉瓦章鱼血液：在下界熔岩湖中击杀拉瓦章鱼概率掉落；星水晶：挖掘紫水晶簇概率掉落；纯水：熔炉或烟熏炉烧制水瓶；夜香草汁液、毒堇汁：酿造台酿造；金薄荷叶、龙血草粉末：合成获取");
         add("acquisition.lordofmysteries.potion_recipe.fool_8", "成年霍纳奇斯灰山羊独角结晶：击杀成年山羊概率掉落；完整的人脸玫瑰：满月夜晚破坏玫瑰丛概率掉落；纯水：熔炉或烟熏炉烧制水瓶；曼陀罗汁液、毒堇汁：酿造台酿造；黑边太阳花粉末、金斗篷草粉末：合成获取");
 
         // ==================== 非凡者系统消息 ====================
